@@ -395,7 +395,7 @@ export default function Sandbox() {
                         </div>
                       )}
 
-                      <Button onClick={handleReset} variant="outline" data-testid="button-try-again">
+                      <Button onClick={handleReset} variant="secondary" data-testid="button-try-again">
                         Try Again
                       </Button>
                     </CardContent>

@@ -369,7 +369,7 @@ export default function EvalChallenge() {
                               </div>
                             )
                           ) : (
-                            <Button onClick={handleTryAgain} variant="outline" data-testid="button-try-again">
+                            <Button onClick={handleTryAgain} variant="secondary" data-testid="button-try-again">
                               Try Again
                             </Button>
                           )}
