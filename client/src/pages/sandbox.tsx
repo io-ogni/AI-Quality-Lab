@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -68,6 +68,7 @@ export default function Sandbox() {
   const [result, setResult] = useState<CriteriaEvaluation | null>(null);
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
+  const scenarioContentRef = useRef<HTMLDivElement>(null);
   
   const checkPII = (text: string) => {
     const allText = `${criteria} ${goodExample} ${badExample} ${text}`;
@@ -138,6 +139,9 @@ export default function Sandbox() {
                   onClick={() => {
                     setSelectedScenario(scenario);
                     setResult(null);
+                    setTimeout(() => {
+                      scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
                   }}
                 />
               ))}
@@ -145,7 +149,7 @@ export default function Sandbox() {
           </div>
 
           {selectedScenario && (
-            <div className="space-y-6">
+            <div ref={scenarioContentRef} className="space-y-6 scroll-mt-4">
               <Card className="bg-muted/30">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
