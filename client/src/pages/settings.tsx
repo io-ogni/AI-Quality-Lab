@@ -308,8 +308,6 @@ export default function Settings() {
                   </p>
                 </div>
               </div>
-
-              <p className="pt-4 border-t text-xs">Made by Ioana Ognibeni with Claude & Lovable</p>
             </CardContent>
           </Card>
         </div>
