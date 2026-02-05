@@ -69,6 +69,7 @@ export default function Sandbox() {
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
   const scenarioContentRef = useRef<HTMLDivElement>(null);
+  const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
   
   const checkPII = (text: string) => {
     const allText = `${criteria} ${goodExample} ${badExample} ${text}`;
@@ -141,7 +142,8 @@ export default function Sandbox() {
                     setResult(null);
                     setTimeout(() => {
                       scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
+                      criteriaTextareaRef.current?.focus();
+                    }, 150);
                   }}
                 />
               ))}
@@ -194,6 +196,7 @@ export default function Sandbox() {
                         What makes a response GOOD? List your criteria.
                       </label>
                       <Textarea
+                        ref={criteriaTextareaRef}
                         value={criteria}
                         onChange={(e) => {
                           setCriteria(e.target.value);

@@ -1,5 +1,5 @@
 import { useParams, Link } from 'wouter';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,6 +27,7 @@ export default function EvalChallenge() {
   const [hintOpen, setHintOpen] = useState(false);
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
+  const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const challenge = challenges[evalId];
   const dimensionInfo = qualityDimensions.find(d => d.id === evalId);
@@ -46,6 +47,9 @@ export default function EvalChallenge() {
     setUserCriteria('');
     setResult(null);
     setHintOpen(false);
+    setTimeout(() => {
+      criteriaTextareaRef.current?.focus();
+    }, 100);
   }, [currentLevel, evalId]);
 
   if (!challenge || !dimensionInfo) {
@@ -213,6 +217,7 @@ export default function EvalChallenge() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <Textarea
+                        ref={criteriaTextareaRef}
                         value={userCriteria}
                         onChange={(e) => {
                           const value = e.target.value;
