@@ -170,6 +170,17 @@ CRITICAL: NEVER HALLUCINATE. You can ONLY report matches for text that ACTUALLY 
 The "user_version" field MUST be a direct quote or very close paraphrase from their actual input.
 When in doubt, DO NOT claim a match — it's better to miss a match than to invent one.
 
+EXAMPLES OF NON-MATCHES (DO NOT MATCH THESE):
+- "be helpful" — too vague, doesn't match anything specific
+- "respond nicely" — too vague
+- "say something about revenue" vs "accurately cites the revenue figure" — VAGUE vs SPECIFIC, not a match
+- "mention the date" vs "correctly states the founding date" — user didn't specify accuracy
+- "talk about the context" vs "only uses information from context" — user didn't specify constraint
+- "include numbers" vs "cites exact figures from the document" — user didn't require exactness
+
+VAGUE MENTIONS ≠ SPECIFIC REQUIREMENTS:
+If the expert criterion requires ACCURACY, EXACTNESS, or CONSTRAINT (e.g., "accurately cites", "correctly states", "only uses", "does not add"), the user's criterion must also imply that requirement. Phrases like "say something about", "mention", "include", "talk about" are too vague to match criteria requiring precision.
+
 SCENARIO:
 - Bot type: ${levelData.scenario.botContext}
 - System prompt: ${levelData.scenario.systemPrompt}

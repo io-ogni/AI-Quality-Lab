@@ -271,10 +271,23 @@ export const synonymTable: Record<string, CriteriaSynonyms> = {
   },
   
   'groundedness-1': {
-    'only_provided': ['only provided', 'from context', 'given information', 'based on document', 'from the text'],
-    'no_made_up': ['not make up', "doesn't invent", 'no fabricat', 'not hallucinate'],
-    'accurate_cite': ['cite', 'reference', '5.2 million', 'accurately'],
-    'acknowledge_limits': ['acknowledge limit', 'doesn\'t embellish', 'no outside knowledge']
+    // NOTE: "say something about" or "mention" alone should NOT match - must imply constraint
+    'only_provided': [
+      'only provided', 'only from context', 'only use', 'only information',
+      'stick to context', 'from the context only', 'given information only',
+      'based only on', 'nothing outside', 'no external', 'just the context'
+    ],
+    // NOTE: Requires accuracy language, not just "mention" or "say something about"
+    'no_made_up': [
+      'not make up', "doesn't invent", 'no fabricat', 'not hallucinate',
+      'accurate', 'correctly state', 'exact figure', 'precise',
+      'cite correctly', 'right number', 'correct date', 'verify'
+    ],
+    'accurate_cite': [
+      'cite source', 'reference the', 'according to the context',
+      'quote from', 'as stated in', '5.2 million', 'accurately cite'
+    ],
+    'acknowledge_limits': ['acknowledge limit', "doesn't embellish", 'no outside knowledge', 'say if unknown']
   },
   
   'groundedness-2': {

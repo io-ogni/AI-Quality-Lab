@@ -1,0 +1,69 @@
+# Delta: Fix Vague Matching in Groundedness Challenges
+
+Date: 2026-02-05
+Issue: "say something about revenue" incorrectly matched "Accurately cites the revenue figure ($5.2 million)"
+
+---
+
+## Change 1: Added explicit NON-MATCH examples
+
+Location: Judge prompt matching rules (around line 1473)
+
+  **Examples of NON-MATCHES:**
+  - "be helpful" — too vague, doesn't match anything specific
+  - "beautiful must be in the answer" vs "does not contain beautiful" — OPPOSITE meaning, not a match
+  - "respond nicely" — too vague
++ - "say something about revenue" vs "accurately cites the revenue figure" — VAGUE vs SPECIFIC, not a match
++ - "mention the date" vs "correctly states the founding date" — user didn't specify accuracy
++ - "talk about the context" vs "only uses information from context" — user didn't specify constraint
++ - "include numbers" vs "cites exact figures from the document" — user didn't require exactness
++
++ **VAGUE MENTIONS ≠ SPECIFIC REQUIREMENTS:**
++ If the expert criterion requires ACCURACY, EXACTNESS, or CONSTRAINT (e.g., "accurately cites", "correctly states", "only uses", "does not add"), the user's criterion must also imply that requirement. Phrases like "say something about", "mention", "include", "talk about" are too vague to match criteria requiring precision.
+
+---
+
+## Change 2: Tightened Groundedness-1 synonym patterns
+
+Location: Deterministic synonym table for groundedness-1 (around line 2027)
+
+  "groundedness-1": {
+    // Expert: "Only uses provided information"
++   // NOTE: "say something about" or "mention" alone should NOT match - must imply constraint
+    "only_provided": [
+-     "only provided", "from context", "given information",
+-     "based on document", "from the text"
++     "only provided", "only from context", "only use", "only information",
++     "stick to context", "from the context only", "given information only",
++     "based only on", "nothing outside", "no external", "just the context"
+    ],
+    // Expert: "Doesn't make up facts" / "Accurately cites figures"
++   // NOTE: Requires accuracy language, not just "mention" or "say something about"
+    "no_made_up": [
+-     "not make up", "doesn't invent", "no fabricat", "not hallucinate"
++     "not make up", "doesn't invent", "no fabricat", "not hallucinate",
++     "accurate", "correctly state", "exact figure", "precise",
++     "cite correctly", "right number", "correct date", "verify"
+    ],
+    // Expert: "Cites sources when available"
+    "cite_sources": [
+-     "cite", "reference", "source", "according to"
++     "cite source", "reference the", "according to the context",
++     "quote from", "as stated in"
+    ],
+    // Expert: "Acknowledges limitations"
+    "acknowledge_limits": [
+-     "acknowledge limit", "admit don't know", "not sure"
++     "acknowledge limit", "admit don't know", "not sure", "say if unknown"
+    ]
+  },
+
+---
+
+## Result
+
+"say something about revenue" will NO LONGER match "accurately cites the revenue figure" because:
+
+1. The new NON-MATCH examples explicitly call out this pattern
+2. The synonym table now requires accuracy-related words ("accurate", "correctly", "exact", etc.)
+3. The new rule states: vague mentions ≠ specific requirements
