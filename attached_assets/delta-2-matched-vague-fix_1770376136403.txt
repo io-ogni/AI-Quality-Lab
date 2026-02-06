@@ -1,0 +1,50 @@
+# Delta 2: Fix "Matched AND Vague" Contradiction
+
+Date: 2026-02-06
+Issue: Same criterion appears as both "✓ matched" AND "⚠️ too vague" (e.g., "tone is professional")
+
+---
+
+## Change 1: Added MUTUALLY EXCLUSIVE rule to judge prompt
+
+Location: Before JSON response format (around line 1499)
+
++ 🚨 **CRITICAL RULE: MATCHES AND VAGUE ARE MUTUALLY EXCLUSIVE**
++
++ A user criterion is EITHER:
++ - A MATCH (it successfully matched an expert criterion) — goes in `matches[]`
++ - OR VAGUE (it didn't match anything and is too vague to count) — goes in `vague_criteria[]`
++
++ **NEVER put the same text in both arrays.** If a user criterion matched an expert criterion, it is NOT vague — the user got it right. Only put criteria in `vague_criteria[]` if they:
++ 1. Did NOT match any expert criterion, AND
++ 2. Are too vague to be useful (e.g., "be helpful", "respond nicely")
+
+---
+
+## Change 2: Added post-processing safeguard in code
+
+Location: Final Assembly section (around line 1353)
+
+```javascript
++ // 🚨 CRITICAL: Remove any vague_criteria that appear in matches
++ // This prevents the bug where something is shown as both "matched" AND "too vague"
++ const matchedUserVersions = allMatches.map(m => m.user_version.toLowerCase());
++ const cleanedVagueCriteria = (llmResult?.vague_criteria || []).filter(vague => {
++   const vagueLower = vague.toLowerCase();
++   // Remove if this text (or similar) appears in any match
++   return !matchedUserVersions.some(matched =>
++     matched.includes(vagueLower) || vagueLower.includes(matched)
++   );
++ });
+```
+
+---
+
+## Result
+
+With these changes:
+- "tone is professional" → ✓ MATCHED (will NOT appear in vague)
+- "each step contains 15 words max" → ✓ MATCHED (will NOT appear in vague)
+- "pro tip is contained in every recipe" → ✓ MATCHED (will NOT appear in vague)
+
+The rule: **If it matched, it's not vague.** Vague is only for user criteria that didn't contribute to any match.

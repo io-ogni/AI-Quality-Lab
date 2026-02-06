@@ -190,6 +190,14 @@ ${levelData.scenario.contextDocument ? `- Context document: ${levelData.scenario
 EXPERT CRITERIA TO CHECK (not already matched):
 ${needsLLMEval.map((c, i) => `${i + 1}. ${c.text}`).join('\n')}
 
+CRITICAL RULE: MATCHES AND VAGUE ARE MUTUALLY EXCLUSIVE.
+A user criterion is EITHER:
+- A MATCH (it successfully matched an expert criterion) — goes in matches[]
+- OR VAGUE (it didn't match anything and is too vague to count) — goes in vague_criteria[]
+NEVER put the same text in both arrays. If a user criterion matched an expert criterion, it is NOT vague. Only put criteria in vague_criteria[] if they:
+1. Did NOT match any expert criterion, AND
+2. Are too vague to be useful (e.g., "be helpful", "respond nicely")
+
 Respond in JSON format only:
 {
   "matches": [
@@ -248,6 +256,14 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       .filter(c => !matchedExperts.has(c.text))
       .map(c => c.text);
 
+    const matchedUserVersions = allMatches.map(m => m.userVersion.toLowerCase());
+    const cleanedVagueCriteria = (parsed.vague_criteria || []).filter((vague: string) => {
+      const vagueLower = vague.toLowerCase();
+      return !matchedUserVersions.some((matched: string) =>
+        matched.includes(vagueLower) || vagueLower.includes(matched)
+      );
+    });
+
     const coverageScore = allMatches.length;
     const specificityScore = parsed.specificity_score || 3;
     const passed = coverageScore >= levelData.passThreshold;
@@ -256,7 +272,7 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       garbageDetected: false,
       matches: allMatches,
       missed,
-      vague: parsed.vague_criteria || [],
+      vague: cleanedVagueCriteria,
       coverageScore,
       specificityScore,
       passed,
