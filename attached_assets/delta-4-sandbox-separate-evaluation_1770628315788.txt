@@ -1,0 +1,154 @@
+# Delta 4: Sandbox & Challenges Evaluation Fixes
+
+Date: 2026-02-06
+
+---
+
+## Issue A: "Vague" definition too aggressive (Challenges)
+
+**Problem:** "the tone is formal, educational" incorrectly marked as "too vague"
+
+**Fix:** Added explicit rules for what IS and ISN'T vague:
+
+**VAGUE:**
+- "be good", "be helpful", "respond nicely", "do something"
+
+**NOT VAGUE:**
+- "the tone is formal, educational" ✓
+- "professional tone" ✓
+- "include examples" ✓
+- "keep it short" ✓
+- "don't use jargon" ✓
+
+**Rule:** If it mentions ANY specific attribute, action, or constraint → NOT vague.
+
+---
+
+## Issue B: Sandbox only evaluates criteria, not examples (Sandbox)
+
+**Problem:** Sandbox had ONE combined "example_quality" score. User could write good criteria but bad examples (or vice versa) and get confusing feedback.
+
+---
+
+## Change 1: Split EXAMPLE QUALITY into two separate scores
+
+Location: Scoring dimensions (around line 2888)
+
+**Before:**
+```
+4. **EXAMPLE QUALITY (1-5):**
+   - 1: Examples are identical, nonsense, or single words
+   - 5: Examples are detailed, realistic, clearly show contrast
+```
+
+**After:**
+```
+4. **GOOD EXAMPLE QUALITY (1-5):**
+   - 1: Nonsense, single word, or doesn't relate to scenario
+   - 5: Excellent — meets all criteria, realistic, could be a real bot response
+
+5. **BAD EXAMPLE QUALITY (1-5):**
+   - 1: Nonsense, identical to good example, or single word
+   - 5: Excellent — clearly fails criteria, realistic failure mode
+```
+
+---
+
+## Change 2: Updated JSON output structure
+
+Location: JSON response format (around line 2927)
+
+**Before:**
+```json
+"scores": {
+  "specificity": {"score": 1-5, "feedback": "..."},
+  "relevance": {"score": 1-5, "feedback": "..."},
+  "completeness": {"score": 1-5, "feedback": "..."},
+  "example_quality": {"score": 1-5, "feedback": "..."},
+  "safety": {"score": 1-5, "feedback": "..."}
+}
+```
+
+**After:**
+```json
+"scores": {
+  "criteria": {
+    "specificity": {"score": 1-5, "feedback": "..."},
+    "relevance": {"score": 1-5, "feedback": "..."},
+    "completeness": {"score": 1-5, "feedback": "..."}
+  },
+  "good_example": {
+    "score": 1-5,
+    "meets_user_criteria": true/false,
+    "is_good_for_scenario": true/false,
+    "feedback": "..."
+  },
+  "bad_example": {
+    "score": 1-5,
+    "violates_user_criteria": true/false,
+    "is_realistic_failure": true/false,
+    "feedback": "..."
+  },
+  "safety": {"score": 1-5, "feedback": "..."}
+}
+```
+
+---
+
+## Change 3: Updated Results Panel display
+
+Location: Section 2 Results Panel (around line 2751)
+
+Now shows THREE separate sections:
+
+**Part A: Your Criteria**
+- Specificity, Relevance, Completeness, Safety scores
+
+**Part B: Your Good Example**
+- Score + "Meets Your Criteria?" + "Good for Scenario?"
+
+**Part C: Your Bad Example**
+- Score + "Violates Your Criteria?" + "Realistic Failure?"
+
+---
+
+## Change 4: Two-dimensional example evaluation
+
+Examples are now evaluated on TWO dimensions:
+
+**Good Example:**
+- `meets_user_criteria`: Does it match what user asked for?
+- `is_good_for_scenario`: Is it objectively good for this scenario?
+
+**Bad Example:**
+- `violates_user_criteria`: Does it break what user asked for?
+- `is_realistic_failure`: Is it a realistic failure mode?
+
+**Why this matters:**
+User can write weak criteria but excellent examples. We should recognize:
+- "Your example is great, but your criteria don't capture why"
+- "Your example shows a real problem your criteria would miss"
+
+**Possible feedback states:**
+| Criteria Match | Scenario Quality | Meaning |
+|----------------|------------------|---------|
+| ✓ Yes | ✓ Yes | Great — consistent AND objectively good |
+| ✗ No | ✓ Yes | Example is good, criteria don't capture it (criteria gap) |
+| ✓ Yes | ✗ No | Matches criteria, but criteria may be incomplete |
+| ✗ No | ✗ No | Example needs work |
+
+---
+
+## Result
+
+Users now get clear, separate feedback on:
+1. Are your criteria good? (specific, relevant, complete)
+2. Does your good example PASS your criteria? Is it good for the scenario?
+3. Does your bad example FAIL your criteria? Is it a realistic failure?
+
+This catches issues like:
+- Weak criteria but excellent examples (criteria gap identified)
+- Good criteria but examples don't demonstrate them
+- Examples that are too similar to each other
+- Bad examples that don't show realistic failures
+- Specific criteria incorrectly marked as "vague"

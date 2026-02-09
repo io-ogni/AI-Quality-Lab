@@ -181,6 +181,16 @@ EXAMPLES OF NON-MATCHES (DO NOT MATCH THESE):
 VAGUE MENTIONS ≠ SPECIFIC REQUIREMENTS:
 If the expert criterion requires ACCURACY, EXACTNESS, or CONSTRAINT (e.g., "accurately cites", "correctly states", "only uses", "does not add"), the user's criterion must also imply that requirement. Phrases like "say something about", "mention", "include", "talk about" are too vague to match criteria requiring precision.
 
+WHAT IS AND ISN'T VAGUE for the vague_criteria array:
+VAGUE: "be good", "be helpful", "respond nicely", "do something"
+NOT VAGUE (these mention specific attributes/actions/constraints):
+- "the tone is formal, educational"
+- "professional tone"
+- "include examples"
+- "keep it short"
+- "don't use jargon"
+Rule: If it mentions ANY specific attribute, action, or constraint, it is NOT vague — do NOT put it in vague_criteria.
+
 SCENARIO:
 - Bot type: ${levelData.scenario.botContext}
 - System prompt: ${levelData.scenario.systemPrompt}
@@ -304,7 +314,7 @@ ${scenario.isSensitive ? `THIS IS A SENSITIVE TOPIC SCENARIO. Safety criteria mu
 EVALUATION RULES:
 1. AUTOMATIC FAIL (score 1-2) if:
    - Criteria is fewer than 3 distinct points
-   - Criteria uses vague phrases without specifics
+   - Criteria uses truly vague phrases without specifics
    - Good and bad examples are identical or nearly identical
    - Total submission is under 100 characters
 
@@ -314,6 +324,24 @@ EVALUATION RULES:
    - 3: Somewhat specific but missing details
    - 4: Specific and actionable
    - 5: Highly specific with measurable checkpoints
+
+3. WHAT IS AND ISN'T VAGUE:
+   VAGUE: "be good", "be helpful", "respond nicely", "do something"
+   NOT VAGUE (these mention specific attributes/actions/constraints):
+   - "the tone is formal, educational"
+   - "professional tone"
+   - "include examples"
+   - "keep it short"
+   - "don't use jargon"
+   Rule: If it mentions ANY specific attribute, action, or constraint, it is NOT vague.
+
+4. GOOD EXAMPLE QUALITY (1-5):
+   - 1: Nonsense, single word, or doesn't relate to scenario
+   - 5: Excellent — meets all criteria, realistic, could be a real bot response
+
+5. BAD EXAMPLE QUALITY (1-5):
+   - 1: Nonsense, identical to good example, or single word
+   - 5: Excellent — clearly fails criteria, realistic failure mode
 
 Respond in JSON format only:
 {
@@ -325,10 +353,23 @@ Respond in JSON format only:
     "is_safe_design": boolean
   },
   "scores": {
-    "specificity": {"score": 1-5, "feedback": "specific feedback"},
-    "relevance": {"score": 1-5, "feedback": "specific feedback"},
-    "completeness": {"score": 1-5, "feedback": "specific feedback"},
-    "example_quality": {"score": 1-5, "feedback": "specific feedback"},
+    "criteria": {
+      "specificity": {"score": 1-5, "feedback": "specific feedback"},
+      "relevance": {"score": 1-5, "feedback": "specific feedback"},
+      "completeness": {"score": 1-5, "feedback": "specific feedback"}
+    },
+    "good_example": {
+      "score": 1-5,
+      "meets_user_criteria": true/false,
+      "is_good_for_scenario": true/false,
+      "feedback": "specific feedback"
+    },
+    "bad_example": {
+      "score": 1-5,
+      "violates_user_criteria": true/false,
+      "is_realistic_failure": true/false,
+      "feedback": "specific feedback"
+    },
     "safety": {"score": 1-5, "feedback": "if sensitive scenario"}
   },
   "overall_score": 1-5,
@@ -357,14 +398,17 @@ Evaluate the quality of their criteria definition.`;
         throw new Error('No JSON found');
       }
     } catch {
+      const fallback = { score: 3, feedback: 'Unable to evaluate' };
       return {
         garbageDetected: false,
         safetyCheck: { isSensitiveTopic: scenario.isSensitive, safetyConcerns: '', isSafeDesign: true },
         scores: {
-          specificity: { score: 3, feedback: 'Unable to evaluate' },
-          relevance: { score: 3, feedback: 'Unable to evaluate' },
-          completeness: { score: 3, feedback: 'Unable to evaluate' },
-          exampleQuality: { score: 3, feedback: 'Unable to evaluate' },
+          specificity: fallback,
+          relevance: fallback,
+          completeness: fallback,
+          exampleQuality: fallback,
+          goodExample: { score: 3, feedback: 'Unable to evaluate' },
+          badExample: { score: 3, feedback: 'Unable to evaluate' },
         },
         overallScore: 3,
         passed: false,
@@ -373,6 +417,12 @@ Evaluate the quality of their criteria definition.`;
         suggestion: 'Try again with a clearer submission.',
       };
     }
+
+    const criteriaScores = parsed.scores?.criteria || parsed.scores || {};
+    const goodEx = parsed.scores?.good_example || {};
+    const badEx = parsed.scores?.bad_example || {};
+
+    const exampleQualityScore = Math.round(((goodEx.score || 3) + (badEx.score || 3)) / 2);
 
     return {
       garbageDetected: parsed.garbage_detected || false,
@@ -383,11 +433,23 @@ Evaluate the quality of their criteria definition.`;
         isSafeDesign: parsed.safety_check?.is_safe_design ?? true,
       },
       scores: {
-        specificity: parsed.scores?.specificity || { score: 3, feedback: '' },
-        relevance: parsed.scores?.relevance || { score: 3, feedback: '' },
-        completeness: parsed.scores?.completeness || { score: 3, feedback: '' },
-        exampleQuality: parsed.scores?.example_quality || { score: 3, feedback: '' },
-        safety: scenario.isSensitive ? parsed.scores?.safety : undefined,
+        specificity: criteriaScores.specificity || { score: 3, feedback: '' },
+        relevance: criteriaScores.relevance || { score: 3, feedback: '' },
+        completeness: criteriaScores.completeness || { score: 3, feedback: '' },
+        exampleQuality: { score: exampleQualityScore, feedback: '' },
+        goodExample: {
+          score: goodEx.score || 3,
+          feedback: goodEx.feedback || '',
+          meetsUserCriteria: goodEx.meets_user_criteria,
+          isGoodForScenario: goodEx.is_good_for_scenario,
+        },
+        badExample: {
+          score: badEx.score || 3,
+          feedback: badEx.feedback || '',
+          violatesUserCriteria: badEx.violates_user_criteria,
+          isRealisticFailure: badEx.is_realistic_failure,
+        },
+        safety: scenario.isSensitive ? (parsed.scores?.safety || criteriaScores.safety) : undefined,
       },
       overallScore: parsed.overall_score || 3,
       passed: parsed.passed || false,

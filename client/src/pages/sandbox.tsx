@@ -331,8 +331,8 @@ export default function Sandbox() {
 
                   <Card className={result.passed ? 'border-green-500/30' : ''}>
                     <CardHeader className="pb-4">
-                      <CardTitle className="text-lg flex items-center justify-between">
-                        <span>Your Criteria Score</span>
+                      <CardTitle className="text-lg flex items-center justify-between flex-wrap gap-2">
+                        <span>Overall Score</span>
                         <div className="flex items-center gap-2">
                           <StarRating score={result.overallScore} />
                           <Badge variant={result.passed ? 'default' : 'secondary'}>
@@ -341,38 +341,34 @@ export default function Sandbox() {
                         </div>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <div className="p-3 rounded-lg bg-muted/50">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm">Specificity</span>
-                            <span className="font-medium">{result.scores.specificity.score}/5</span>
+                    <CardContent className="space-y-6">
+                      <div>
+                        <p className="text-sm font-medium mb-3" data-testid="text-section-criteria">Your Criteria</p>
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div className="p-3 rounded-lg bg-muted/50">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm">Specificity</span>
+                              <span className="font-medium">{result.scores.specificity.score}/5</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">{result.scores.specificity.feedback}</p>
                           </div>
-                          <p className="text-xs text-muted-foreground">{result.scores.specificity.feedback}</p>
-                        </div>
-                        <div className="p-3 rounded-lg bg-muted/50">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm">Relevance</span>
-                            <span className="font-medium">{result.scores.relevance.score}/5</span>
+                          <div className="p-3 rounded-lg bg-muted/50">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm">Relevance</span>
+                              <span className="font-medium">{result.scores.relevance.score}/5</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">{result.scores.relevance.feedback}</p>
                           </div>
-                          <p className="text-xs text-muted-foreground">{result.scores.relevance.feedback}</p>
-                        </div>
-                        <div className="p-3 rounded-lg bg-muted/50">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm">Completeness</span>
-                            <span className="font-medium">{result.scores.completeness.score}/5</span>
+                          <div className="p-3 rounded-lg bg-muted/50">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-sm">Completeness</span>
+                              <span className="font-medium">{result.scores.completeness.score}/5</span>
+                            </div>
+                            <p className="text-xs text-muted-foreground">{result.scores.completeness.feedback}</p>
                           </div>
-                          <p className="text-xs text-muted-foreground">{result.scores.completeness.feedback}</p>
-                        </div>
-                        <div className="p-3 rounded-lg bg-muted/50">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-sm">Example Quality</span>
-                            <span className="font-medium">{result.scores.exampleQuality.score}/5</span>
-                          </div>
-                          <p className="text-xs text-muted-foreground">{result.scores.exampleQuality.feedback}</p>
                         </div>
                         {result.scores.safety && (
-                          <div className="p-3 rounded-lg bg-muted/50 sm:col-span-2">
+                          <div className="p-3 rounded-lg bg-muted/50 mt-3">
                             <div className="flex items-center justify-between mb-1">
                               <span className="text-sm">Safety & Appropriateness</span>
                               <span className="font-medium">{result.scores.safety.score}/5</span>
@@ -380,6 +376,62 @@ export default function Sandbox() {
                             <p className="text-xs text-muted-foreground">{result.scores.safety.feedback}</p>
                           </div>
                         )}
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <div>
+                          <p className="text-sm font-medium mb-3" data-testid="text-section-good-example">Your Good Example</p>
+                          <div className="p-3 rounded-lg bg-muted/50 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm">Score</span>
+                              <span className="font-medium">{result.scores.goodExample.score}/5</span>
+                            </div>
+                            {result.scores.goodExample.meetsUserCriteria !== undefined && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">Meets Your Criteria?</span>
+                                {result.scores.goodExample.meetsUserCriteria
+                                  ? <Check className="h-4 w-4 text-green-600" />
+                                  : <X className="h-4 w-4 text-red-500" />}
+                              </div>
+                            )}
+                            {result.scores.goodExample.isGoodForScenario !== undefined && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">Good for Scenario?</span>
+                                {result.scores.goodExample.isGoodForScenario
+                                  ? <Check className="h-4 w-4 text-green-600" />
+                                  : <X className="h-4 w-4 text-red-500" />}
+                              </div>
+                            )}
+                            <p className="text-xs text-muted-foreground">{result.scores.goodExample.feedback}</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-sm font-medium mb-3" data-testid="text-section-bad-example">Your Bad Example</p>
+                          <div className="p-3 rounded-lg bg-muted/50 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm">Score</span>
+                              <span className="font-medium">{result.scores.badExample.score}/5</span>
+                            </div>
+                            {result.scores.badExample.violatesUserCriteria !== undefined && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">Violates Your Criteria?</span>
+                                {result.scores.badExample.violatesUserCriteria
+                                  ? <Check className="h-4 w-4 text-green-600" />
+                                  : <X className="h-4 w-4 text-red-500" />}
+                              </div>
+                            )}
+                            {result.scores.badExample.isRealisticFailure !== undefined && (
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-muted-foreground">Realistic Failure?</span>
+                                {result.scores.badExample.isRealisticFailure
+                                  ? <Check className="h-4 w-4 text-green-600" />
+                                  : <X className="h-4 w-4 text-red-500" />}
+                              </div>
+                            )}
+                            <p className="text-xs text-muted-foreground">{result.scores.badExample.feedback}</p>
+                          </div>
+                        </div>
                       </div>
 
                       {result.strengths.length > 0 && (

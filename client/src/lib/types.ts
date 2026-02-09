@@ -78,6 +78,15 @@ export interface SandboxScenario {
   sensitiveNote?: string;
 }
 
+export interface ExampleScore {
+  score: number;
+  feedback: string;
+  meetsUserCriteria?: boolean;
+  isGoodForScenario?: boolean;
+  violatesUserCriteria?: boolean;
+  isRealisticFailure?: boolean;
+}
+
 export interface CriteriaEvaluation {
   garbageDetected: boolean;
   garbageReason?: string;
@@ -91,6 +100,8 @@ export interface CriteriaEvaluation {
     relevance: { score: number; feedback: string };
     completeness: { score: number; feedback: string };
     exampleQuality: { score: number; feedback: string };
+    goodExample: ExampleScore;
+    badExample: ExampleScore;
     safety?: { score: number; feedback: string };
   };
   overallScore: number;
