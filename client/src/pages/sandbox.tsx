@@ -59,7 +59,7 @@ function StarRating({ score }: { score: number }) {
   );
 }
 
-type ScenarioDraft = { criteria: string; goodExample: string; badExample: string };
+type ScenarioDraft = { criteria: string; goodExample: string; badExample: string; result: CriteriaEvaluation | null };
 
 export default function Sandbox() {
   const [selectedScenario, setSelectedScenario] = useState<SandboxScenario | null>(null);
@@ -113,9 +113,6 @@ export default function Sandbox() {
     setCriteria('');
     setGoodExample('');
     setBadExample('');
-    if (selectedScenario) {
-      delete draftsRef.current[selectedScenario.id];
-    }
   };
 
   return (
@@ -145,18 +142,24 @@ export default function Sandbox() {
                   selected={selectedScenario?.id === scenario.id}
                   onClick={() => {
                     if (selectedScenario) {
-                      draftsRef.current[selectedScenario.id] = { criteria, goodExample, badExample };
+                      if (result?.passed) {
+                        delete draftsRef.current[selectedScenario.id];
+                      } else {
+                        draftsRef.current[selectedScenario.id] = { criteria, goodExample, badExample, result };
+                      }
                     }
                     const draft = draftsRef.current[scenario.id];
                     setCriteria(draft?.criteria || '');
                     setGoodExample(draft?.goodExample || '');
                     setBadExample(draft?.badExample || '');
+                    setResult(draft?.result || null);
                     setPiiWarning(false);
                     setSelectedScenario(scenario);
-                    setResult(null);
                     setTimeout(() => {
                       scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      criteriaTextareaRef.current?.focus();
+                      if (!draft?.result) {
+                        criteriaTextareaRef.current?.focus();
+                      }
                     }, 150);
                   }}
                 />
