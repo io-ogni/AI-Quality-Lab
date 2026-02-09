@@ -59,6 +59,8 @@ function StarRating({ score }: { score: number }) {
   );
 }
 
+type ScenarioDraft = { criteria: string; goodExample: string; badExample: string };
+
 export default function Sandbox() {
   const [selectedScenario, setSelectedScenario] = useState<SandboxScenario | null>(null);
   const [criteria, setCriteria] = useState('');
@@ -70,6 +72,7 @@ export default function Sandbox() {
   const [piiWarning, setPiiWarning] = useState(false);
   const scenarioContentRef = useRef<HTMLDivElement>(null);
   const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const draftsRef = useRef<Record<string, ScenarioDraft>>({});
   
   const checkPII = (text: string) => {
     const allText = `${criteria} ${goodExample} ${badExample} ${text}`;
@@ -110,6 +113,9 @@ export default function Sandbox() {
     setCriteria('');
     setGoodExample('');
     setBadExample('');
+    if (selectedScenario) {
+      delete draftsRef.current[selectedScenario.id];
+    }
   };
 
   return (
@@ -138,6 +144,14 @@ export default function Sandbox() {
                   scenario={scenario}
                   selected={selectedScenario?.id === scenario.id}
                   onClick={() => {
+                    if (selectedScenario) {
+                      draftsRef.current[selectedScenario.id] = { criteria, goodExample, badExample };
+                    }
+                    const draft = draftsRef.current[scenario.id];
+                    setCriteria(draft?.criteria || '');
+                    setGoodExample(draft?.goodExample || '');
+                    setBadExample(draft?.badExample || '');
+                    setPiiWarning(false);
                     setSelectedScenario(scenario);
                     setResult(null);
                     setTimeout(() => {
