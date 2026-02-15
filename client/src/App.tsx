@@ -14,6 +14,7 @@ import EvalChallenge from "@/pages/eval-challenge";
 import Sandbox from "@/pages/sandbox";
 import ProgressPage from "@/pages/progress";
 import Settings from "@/pages/settings";
+import About from "@/pages/about";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -38,6 +39,7 @@ function Router() {
         <Route path="/sandbox" component={Sandbox} />
         <Route path="/progress" component={ProgressPage} />
         <Route path="/settings" component={Settings} />
+        <Route path="/about" component={About} />
         <Route component={NotFound} />
       </Switch>
     </>

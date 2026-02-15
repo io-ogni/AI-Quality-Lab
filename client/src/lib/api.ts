@@ -1,6 +1,7 @@
 import type { APISettings, ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
 import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
+import { preValidateSandboxSubmission, postValidateLLMResponse } from './content-moderation';
 
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
@@ -302,6 +303,28 @@ export async function evaluateSandboxCriteria(
   goodExample: string,
   badExample: string
 ): Promise<CriteriaEvaluation> {
+  const preValidation = preValidateSandboxSubmission(criteria, goodExample, badExample);
+  if (!preValidation.valid && preValidation.forcedResult) {
+    return {
+      garbageDetected: true,
+      garbageReason: preValidation.errors.map(e => e.message).join(' '),
+      safetyCheck: { isSensitiveTopic: scenario.isSensitive, safetyConcerns: '', isSafeDesign: true },
+      scores: {
+        specificity: { score: 1, feedback: 'Submission failed pre-validation checks.' },
+        relevance: { score: 1, feedback: '' },
+        completeness: { score: 1, feedback: '' },
+        exampleQuality: { score: 1, feedback: '' },
+        goodExample: { score: 1, feedback: preValidation.errors.find(e => e.field === 'good_example')?.message || '' },
+        badExample: { score: 1, feedback: preValidation.errors.find(e => e.field === 'bad_example')?.message || '' },
+      },
+      overallScore: 1,
+      passed: false,
+      strengths: [],
+      criticalGaps: preValidation.forcedResult.criticalGaps,
+      suggestion: 'Fix the issues above and try again.',
+    };
+  }
+
   const systemPrompt = `You are a STRICT evaluator helping Product Managers learn to define quality criteria. Your job is to score harshly but fairly — low-effort or vague submissions should FAIL.
 
 SCENARIO:
@@ -342,6 +365,31 @@ EVALUATION RULES:
 5. BAD EXAMPLE QUALITY (1-5):
    - 1: Nonsense, identical to good example, or single word
    - 5: Excellent — clearly fails criteria, realistic failure mode
+
+6. EXAMPLE FORMAT DETECTION (AUTOMATIC FAIL):
+   - Examples must look like BOT RESPONSES, not criteria lists
+   - If example contains bullet points (-, •, *) or numbered lists AND reads like criteria → score 1/5
+   - If example is copy-pasted from the Criteria field → score 1/5
+
+7. OFFENSIVE GOOD EXAMPLE (AUTOMATIC FAIL):
+   - If "Good Example" contains insults, profanity, or hostile language → AUTOMATIC FAIL (score 1/5)
+   - A "Good Example" that says offensive things is NEVER acceptable
+   - Flag prominently in feedback, not just in "critical_gaps"
+
+8. CROSS-FIELD VALIDATION:
+   - Bad Example = criteria copy-pasted → score 1/5, feedback: "This is not an example"
+   - Good Example = criteria copy-pasted → score 1/5
+   - Good Example would realistically be a bad response → Flag: "Your 'good' example looks like a 'bad' example"
+
+EXAMPLE OF OFFENSIVE GOOD EXAMPLE (should score 1/5):
+- Criteria: "be empathic, offer refund, stay professional"
+- Good example: "you are an idiot"
+→ CRITICAL FAILURE. Cannot pass with offensive "good" example.
+
+EXAMPLE OF COPY-PASTED CRITERIA (should score 1/5):
+- Criteria: "- be empathic\n- offer refund"
+- Bad example: "- be empathic\n- offer refund"
+→ This is not an example — user pasted their criteria.
 
 Respond in JSON format only:
 {
@@ -424,7 +472,7 @@ Evaluate the quality of their criteria definition.`;
 
     const exampleQualityScore = Math.round(((goodEx.score || 3) + (badEx.score || 3)) / 2);
 
-    return {
+    const llmResult = {
       garbageDetected: parsed.garbage_detected || false,
       garbageReason: parsed.garbage_reason,
       safetyCheck: {
@@ -457,6 +505,9 @@ Evaluate the quality of their criteria definition.`;
       criticalGaps: parsed.critical_gaps || [],
       suggestion: parsed.suggestion || '',
     };
+
+    const postValidated = postValidateLLMResponse(llmResult, criteria, goodExample, badExample);
+    return { ...llmResult, ...postValidated };
   } catch (error) {
     console.error('API error:', error);
     throw error;

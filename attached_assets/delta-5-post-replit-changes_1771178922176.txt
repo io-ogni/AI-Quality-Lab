@@ -1,0 +1,363 @@
+# Delta 5: All Changes After Delta 4 (Post-Replit Handoff)
+
+Date: 2026-02-06
+
+This file contains ALL changes made to the spec AFTER delta-4 was given to Replit.
+
+---
+
+## Change 1: Sandbox Scenario-Specific Form State
+
+**Location:** Sandbox > Criteria Form section
+
+**Problem:** When switching scenarios, the form fields kept showing content from the previous scenario.
+
+**Fix:** Each scenario has its own form state:
+
+```javascript
+// Store form state per scenario
+const [formStateByScenario, setFormStateByScenario] = useState({});
+
+// While working (not yet passed):
+// - Switching to another scenario → current scenario's fields PRESERVED
+// - Switching back → user sees what they previously wrote
+
+// After passing:
+// - User passes a scenario (validation successful)
+// - User navigates away (to another scenario OR another page)
+// - THEN clear the fields for that passed scenario
+
+function onNavigateAway(fromScenarioId) {
+  if (formStateByScenario[fromScenarioId]?.passed) {
+    setFormStateByScenario(prev => ({...prev, [fromScenarioId]: null}));
+  }
+}
+```
+
+---
+
+## Change 2: Three-Layer Validation Architecture for Sandbox
+
+**Location:** Sandbox > Eval Design Scoring Logic
+
+**Problem:** Prompt-only guardrails can be ignored by LLM or bypassed via prompt injection.
+
+**Fix:** Added code-level validation BEFORE and AFTER LLM call:
+
+```
+User submits
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────┐
+│ LAYER 1: PRE-VALIDATION (Code — runs BEFORE LLM)            │
+│ • Garbage detection (too short)                             │
+│ • Copy-paste detection (criteria → example)                 │
+│ • Identical examples detection                              │
+│ • Format detection (examples look like criteria lists)      │
+│ • Offensive content detection (TensorFlow.js or API)        │
+│                                                             │
+│ If FAIL → Return immediately, DO NOT call LLM               │
+└─────────────────────────────────────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────┐
+│ LAYER 2: LLM EVALUATION                                     │
+│ Semantic evaluation of criteria quality                     │
+└─────────────────────────────────────────────────────────────┘
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────┐
+│ LAYER 3: POST-VALIDATION (Code — runs AFTER LLM)            │
+│ • Override if LLM missed offensive content                  │
+│ • Override if LLM scored copy-pasted text too high          │
+│ • Recalculate overall score if needed                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Change 3: New Automatic Fail Conditions for Examples
+
+**Location:** Sandbox > Judge Prompt > AUTOMATIC FAIL section
+
+**Added these new rules:**
+
+### 4. Example Format Detection
+- Examples must look like BOT RESPONSES, not criteria lists
+- If example contains bullet points (-, •, *) or numbered lists → FAIL (score 1/5)
+- If example is copy-pasted from Criteria field → FAIL (score 1/5)
+
+### 5. Offensive/Inappropriate Good Example
+- If "Good Example" contains insults, profanity, hostile language → AUTOMATIC FAIL
+- A "Good Example" that says "you are an idiot" is NEVER acceptable
+- Flag prominently, not just in "To Improve"
+
+### 6. Cross-Field Validation
+- Bad Example = criteria copy-pasted → Score 1/5, "This is not an example"
+- Good Example = criteria copy-pasted → Score 1/5
+- Good Example would realistically be bad → Flag: "Your 'good' example looks like the 'bad' example"
+
+**Added explicit examples in prompt:**
+
+```
+### EXAMPLE OF OFFENSIVE GOOD EXAMPLE (should score 1/5):
+- Criteria: "be empathic, offer refund, stay professional"
+- Good example: "you are an idiot"
+- Bad example: "I apologize..."
+→ CRITICAL FAILURE. Cannot pass with offensive "good" example.
+
+### EXAMPLE OF COPY-PASTED CRITERIA (should score 1/5):
+- Criteria: "- be empathic\n- offer refund"
+- Bad example: "- be empathic\n- offer refund"
+→ This is not an example — user pasted their criteria.
+```
+
+---
+
+## Change 4: Privacy-First Content Moderation
+
+**Location:** Sandbox > Pre-validation > Offensive Content Detection
+
+**Problem:** Regex blocklists don't catch variations like "d1ck", "fück", "a$$".
+
+**Solution:** Layered approach with TensorFlow.js as primary (no API calls):
+
+### Option A: TensorFlow.js Toxicity Model (RECOMMENDED)
+
+```bash
+npm install @tensorflow/tfjs @tensorflow-models/toxicity
+```
+
+```javascript
+import * as toxicity from '@tensorflow-models/toxicity';
+
+// Load once at app start
+let toxicityModel = null;
+toxicity.load(0.85).then(model => {
+  toxicityModel = model;
+});
+
+// In pre-validation:
+const predictions = await toxicityModel.classify([criteria, goodExample, badExample]);
+
+// Check for toxic categories: severe_toxicity, toxicity, insult, threat, obscene
+for (const prediction of predictions) {
+  if (prediction.results[i].match) {
+    // Text flagged
+  }
+}
+```
+
+**Benefits:**
+- Runs 100% client-side (browser)
+- No API calls, no data sent anywhere
+- Catches variations (trained on real data)
+- Free
+- ~15MB model download (one-time, cached)
+
+### Option B: API Fallback (if TensorFlow.js unavailable)
+
+**OpenAI users:** Their key → OpenAI Moderation API (FREE)
+```javascript
+const result = await fetch('https://api.openai.com/v1/moderations', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${userApiKey}` },
+  body: JSON.stringify({ input: textsToCheck })
+});
+```
+
+**Anthropic users:** Their key → Claude Haiku quick check (~$0.0001)
+```javascript
+const result = await fetch('https://api.anthropic.com/v1/messages', {
+  method: 'POST',
+  headers: { 'x-api-key': userApiKey },
+  body: JSON.stringify({
+    model: "claude-3-haiku-20240307",
+    max_tokens: 20,
+    messages: [{
+      role: "user",
+      content: `Check these texts for offensive content. Reply "1", "2", "3" if offensive, or "OK"...`
+    }]
+  })
+});
+```
+
+### Option C: Regex Fallback (last resort)
+```javascript
+const offensivePatterns = [
+  /\b(idiot|stupid|moron|fuck|shit|ass|dick|bitch|cunt|retard)\b/i,
+  /kill yourself/i
+];
+```
+
+---
+
+## Change 5: Pre-validation Code
+
+**Full implementation added:**
+
+```javascript
+async function preValidateSandboxSubmission(criteria, goodExample, badExample) {
+  const errors = [];
+  const warnings = [];
+
+  // 1. GARBAGE DETECTION
+  if (criteria.trim().length < 20) errors.push({field: "criteria", issue: "too_short"});
+  if (goodExample.trim().length < 10) errors.push({field: "good_example", issue: "too_short"});
+  if (badExample.trim().length < 10) errors.push({field: "bad_example", issue: "too_short"});
+
+  // 2. COPY-PASTE DETECTION
+  if (similarity(goodExample, criteria) > 0.8) errors.push({field: "good_example", issue: "copy_paste"});
+  if (similarity(badExample, criteria) > 0.8) errors.push({field: "bad_example", issue: "copy_paste"});
+  if (similarity(goodExample, badExample) > 0.9) errors.push({field: "both", issue: "identical"});
+
+  // 3. FORMAT DETECTION (examples shouldn't look like bullet lists)
+  const bulletPattern = /^[\s]*[-•*]\s+/m;
+  if (bulletPattern.test(goodExample)) warnings.push({field: "good_example", issue: "looks_like_criteria"});
+  if (bulletPattern.test(badExample)) warnings.push({field: "bad_example", issue: "looks_like_criteria"});
+
+  // 4. OFFENSIVE CONTENT DETECTION
+  // Use TensorFlow.js, or API fallback, or regex (see Change 4 above)
+
+  // 5. RETURN
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    forcedScores: errors.length > 0 ? { overall_score: 1, passed: false } : null
+  };
+}
+
+function similarity(a, b) {
+  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+  const wordsB = new Set(b.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+  const intersection = [...wordsA].filter(w => wordsB.has(w)).length;
+  const union = new Set([...wordsA, ...wordsB]).size;
+  return union > 0 ? intersection / union : 0;
+}
+```
+
+---
+
+## Change 6: Post-validation Code
+
+**Added code to override LLM if it missed issues:**
+
+```javascript
+function postValidateLLMResponse(llmResult, criteria, goodExample, badExample) {
+  // Override if LLM gave high score to offensive good example
+  if (llmResult.scores.good_example.score > 2) {
+    if (/idiot|stupid|moron|fuck/i.test(goodExample)) {
+      llmResult.scores.good_example.score = 1;
+      llmResult.scores.good_example.feedback = "CRITICAL: Offensive language.";
+    }
+  }
+
+  // Override if LLM gave high score to copy-pasted bad example
+  if (llmResult.scores.bad_example.score > 2) {
+    if (similarity(badExample, criteria) > 0.7) {
+      llmResult.scores.bad_example.score = 1;
+      llmResult.scores.bad_example.feedback = "This is not an example — you pasted criteria.";
+    }
+  }
+
+  // Recalculate overall
+  const avgScore = (specificity + relevance + completeness + good_example + bad_example) / 5;
+  llmResult.overall_score = Math.round(avgScore);
+  llmResult.passed = llmResult.overall_score >= 3;
+
+  return llmResult;
+}
+```
+
+---
+
+## Change 7: New Page — About This App (How It Works)
+
+**Location:** New Page 7, Route: /about
+
+**Purpose:** Educational page explaining HOW the app's AI evaluation works — what's deterministic vs AI, the three-layer architecture, and lessons for building AI features.
+
+**Navigation Updated:**
+- Nav links now: "Learn", "Challenges", "Sandbox", "Progress", "About", "Settings"
+
+**Page Structure:**
+
+### Section 1: The Challenge
+- Explains why we can't just use keyword matching
+- Introduces the problem: LLMs can be unreliable, hallucinate, or be tricked
+- Solution: "Don't trust the LLM alone. Use code + LLM + code."
+
+### Section 2: The Architecture
+- Visual diagram showing three layers:
+  1. CODE PRE-VALIDATION (garbage detection, copy-paste, offensive content)
+  2. LLM EVALUATION (semantic matching, quality judgment)
+  3. CODE POST-VALIDATION (hallucination check, override bad scores)
+
+### Section 3: What's Deterministic vs AI
+Table showing who does what:
+| Task | Who Does It | Why |
+|------|-------------|-----|
+| Check if input is too short | Code | Simple rule, 100% reliable |
+| Detect copy-pasted text | Code | String comparison, no AI needed |
+| Detect offensive content | Local AI model | Catches variations without API calls |
+| Match "polite" to "professional" | LLM | Requires semantic understanding |
+| Judge if criteria are complete | LLM | Requires domain knowledge |
+| Verify LLM didn't hallucinate | Code | Check if claimed text exists in input |
+| Calculate final score | Code | Math, not judgment |
+
+### Section 4: Challenges Mode — Deterministic Matching First
+- Explains synonym tables for the 30 fixed challenges
+- Why: Instant, free, 100% reliable, consistent
+
+### Section 5: Content Moderation — Privacy First
+- TensorFlow.js toxicity model runs IN THE BROWSER
+- No data sent to external servers for moderation
+- Catches variations like "1diot", "f*ck"
+
+### Section 6: Why This Matters for Your Work
+Key lessons:
+1. Don't trust LLMs alone — validate
+2. Use code for what code does best
+3. Use AI for what AI does best
+4. Validate inputs BEFORE the LLM
+5. Validate outputs AFTER the LLM
+6. Privacy matters — use local models when possible
+
+### Section 7: The Tech Stack
+| Component | Technology |
+|-----------|------------|
+| Frontend | React + TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| LLM Calls | OpenAI API or Anthropic API (user's key) |
+| Content Moderation | TensorFlow.js (local) |
+| Storage | Browser localStorage/sessionStorage |
+
+### Footer CTA
+Links back to Challenges and Sandbox
+
+---
+
+## Summary of All Changes
+
+| Change | What | Why |
+|--------|------|-----|
+| 1 | Scenario-specific form state | Fields don't carry over between scenarios |
+| 2 | 3-layer validation architecture | Code guardrails can't be bypassed like prompts |
+| 3 | New automatic fail conditions | Catch copy-paste, offensive content, wrong format |
+| 4 | TensorFlow.js toxicity model | Privacy-first, no API calls, catches variations |
+| 5 | Pre-validation code | Runs BEFORE LLM, fails fast |
+| 6 | Post-validation code | Runs AFTER LLM, overrides if LLM missed issues |
+| 7 | About This App page | Educational page explaining the architecture |
+
+---
+
+## Files Modified
+
+- `ai-quality-lab-lovable-spec.txt` — Main spec file (all changes above)
+
+## Dependencies to Add
+
+```bash
+npm install @tensorflow/tfjs @tensorflow-models/toxicity
+```

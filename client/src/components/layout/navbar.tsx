@@ -26,6 +26,7 @@ const navLinks = [
   { href: '/challenges', label: 'Challenges' },
   { href: '/sandbox', label: 'Sandbox' },
   { href: '/progress', label: 'Progress' },
+  { href: '/about', label: 'About' },
   { href: '/settings', label: 'Settings' },
 ];
 

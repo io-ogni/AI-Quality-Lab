@@ -20,7 +20,8 @@ client/
 │   │   ├── challenges-data.ts  # 30 challenge scenarios with expert criteria
 │   │   ├── api.ts              # Direct browser-to-API integration
 │   │   ├── synonyms.ts         # Deterministic synonym matching tables
-│   │   └── pii-detection.ts    # PII pattern detection
+│   │   ├── pii-detection.ts    # PII pattern detection
+│   │   └── content-moderation.ts # Pre/post validation, offensive detection
 │   └── pages/
 │       ├── home.tsx            # Learning path landing page
 │       ├── learn.tsx           # Educational content
@@ -28,6 +29,7 @@ client/
 │       ├── eval-challenge.tsx  # Level-based challenge playground
 │       ├── sandbox.tsx         # Custom scenario practice
 │       ├── progress.tsx        # Progress tracking dashboard
+│       ├── about.tsx           # How the app works (architecture)
 │       └── settings.tsx        # API key management
 server/
 ├── index.ts                    # Express server entry
@@ -40,10 +42,15 @@ server/
 - **sessionStorage**: API keys (auto-deleted on tab close for security)
 - **localStorage**: Progress tracking, completed levels, achievements
 
-### Three-Layer Matching System
+### Three-Layer Matching System (Challenges)
 1. **Garbage Detection**: Filters random/invalid input
 2. **Deterministic Synonym Matching**: Fast, accurate keyword matching from synonym tables
 3. **LLM Validation**: Fallback for complex semantic matching with hallucination prevention
+
+### Three-Layer Validation Pipeline (Sandbox)
+1. **Pre-Validation (Code)**: Garbage, copy-paste, identical examples, format, offensive content detection — runs BEFORE LLM
+2. **LLM Evaluation**: Semantic quality scoring with automatic fail conditions
+3. **Post-Validation (Code)**: Override LLM scores if it missed offensive content, copy-paste, or hallucination — runs AFTER LLM
 
 ### Quality Dimensions (10 total, 3 levels each = 30 challenges)
 1. Instruction Following
