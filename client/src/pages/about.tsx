@@ -188,7 +188,7 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6 space-y-4">
                 <p className="text-muted-foreground">
-                  The 30 challenge levels use a special optimization: <strong>synonym tables</strong>. 
+                  The 33 challenge levels use a special optimization: <strong>synonym tables</strong>. 
                   Each expert criterion has a pre-built list of equivalent phrases, so matching is instant, free, and 100% consistent.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">

@@ -1,7 +1,7 @@
 # AI Quality Lab
 
 ## Overview
-A gamified learning application for Product Managers to master evaluations (evals) and guardrails for AI products. Users learn to define success criteria for AI outputs through 30 progressive challenges across 10 quality dimensions.
+A gamified learning application for Product Managers to master evaluations (evals) and guardrails for AI products. Users learn to define success criteria for AI outputs through 33 progressive challenges across 11 quality dimensions.
 
 ## Project Structure
 ```
@@ -17,7 +17,7 @@ client/
 │   ├── lib/
 │   │   ├── types.ts            # TypeScript interfaces
 │   │   ├── storage.ts          # localStorage/sessionStorage helpers
-│   │   ├── challenges-data.ts  # 30 challenge scenarios with expert criteria
+│   │   ├── challenges-data.ts  # 33 challenge scenarios with expert criteria
 │   │   ├── api.ts              # Direct browser-to-API integration
 │   │   ├── synonyms.ts         # Deterministic synonym matching tables
 │   │   ├── pii-detection.ts    # PII pattern detection
@@ -51,17 +51,11 @@ server/
 2. **LLM Evaluation**: Semantic quality scoring with automatic fail conditions
 3. **Post-Validation (Code)**: Override LLM scores if it missed offensive content, copy-paste, or hallucination — runs AFTER LLM
 
-### Quality Dimensions (10 total, 3 levels each = 30 challenges)
-1. Instruction Following
-2. Format Compliance  
-3. Toxicity Detection
-4. Relevance
-5. Completeness
-6. Tone & Style
-7. Consistency
-8. Groundedness
-9. Factual Accuracy
-10. Refusal Handling
+### Quality Dimensions (11 total, 3 levels each = 33 challenges)
+**Eval + Runtime:** Instruction Following, Format Compliance, Toxicity Detection
+**Eval-Focused:** Relevance, Completeness, Tone & Style, Consistency
+**Requires System Design:** Groundedness, Factual Accuracy (Advanced), Refusal Handling
+**Security:** Adversarial Robustness
 
 ### API Integration
 - Direct browser-to-OpenAI/Anthropic API calls
@@ -75,5 +69,6 @@ server/
 ## Important Notes
 - First-use disclaimer modal warns against entering real/sensitive data
 - PII detection warns users when entering email, phone, SSN, or credit card patterns
-- All 30 challenges have expert criteria with difficulty progression
+- All 33 challenges have expert criteria with difficulty progression
+- Factual Accuracy marked as "Advanced" with note to focus on Groundedness instead
 - Progress is persisted locally; API keys are session-only

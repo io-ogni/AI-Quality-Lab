@@ -18,7 +18,7 @@ const pathStops = [
     href: '/challenges',
     icon: Target,
     label: 'Challenges',
-    sublabel: '30 hands-on exercises',
+    sublabel: '33 hands-on exercises',
     badge: null,
     badgeVariant: 'secondary' as const,
   },
@@ -50,7 +50,7 @@ export default function Home() {
   const getStopBadge = (index: number) => {
     if (index === 0) return 'Start here';
     if (index === 1 && progress.totalCompleted > 0) {
-      return `${progress.totalCompleted}/30 complete`;
+      return `${progress.totalCompleted}/33 complete`;
     }
     return null;
   };

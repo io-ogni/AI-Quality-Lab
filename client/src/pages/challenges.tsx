@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Info, CheckSquare, Code, ShieldAlert, Target, ListChecks, MessageCircle, RefreshCw, Anchor, BookCheck, ShieldCheck, Check, Trophy, ChevronDown, ChevronUp } from 'lucide-react';
+import { Info, CheckSquare, Code, ShieldAlert, Target, ListChecks, MessageCircle, RefreshCw, Anchor, BookCheck, ShieldCheck, Shield, Check, Trophy, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { APIKeyRequired } from '@/components/api-key-required';
 import { qualityDimensions, groupInfo } from '@/lib/challenges-data';
 import { getLevelProgress, getProgress, clearProgress } from '@/lib/storage';
@@ -34,6 +34,7 @@ const iconMap: Record<string, any> = {
   Anchor,
   BookCheck,
   ShieldCheck,
+  Shield,
 };
 
 function ChallengeCard({ dimension }: { dimension: typeof qualityDimensions[0] }) {
@@ -73,10 +74,21 @@ function ChallengeCard({ dimension }: { dimension: typeof qualityDimensions[0] }
                 }`} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold leading-tight">{dimension.name}</h3>
+                <h3 className="font-semibold leading-tight flex items-center gap-1.5">
+                  {dimension.name}
+                  {dimension.isAdvanced && (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-amber-500/50 text-amber-600 dark:text-amber-400">
+                      <AlertTriangle className="h-2.5 w-2.5 mr-0.5" />
+                      Advanced
+                    </Badge>
+                  )}
+                </h3>
                 <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
                   {dimension.description}
                 </p>
+                {dimension.advancedNote && (
+                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">{dimension.advancedNote}</p>
+                )}
               </div>
             </div>
             
@@ -150,7 +162,7 @@ function ProgressSection() {
     });
   };
 
-  const totalProgress = (progress.totalCompleted / 30) * 100;
+  const totalProgress = (progress.totalCompleted / 33) * 100;
 
   return (
     <Card data-testid="card-progress-section">
@@ -165,7 +177,7 @@ function ProgressSection() {
               <Trophy className="h-4 w-4 text-amber-600" />
               Your Progress
               <Badge variant="secondary" className="font-normal text-xs">
-                {progress.totalCompleted}/30
+                {progress.totalCompleted}/33
               </Badge>
             </span>
             {expanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
@@ -184,7 +196,7 @@ function ProgressSection() {
                 <Target className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-xs text-muted-foreground">Challenges Completed</p>
-                  <p className="text-xl font-bold" data-testid="text-challenges-completed">{progress.totalCompleted}/30</p>
+                  <p className="text-xl font-bold" data-testid="text-challenges-completed">{progress.totalCompleted}/33</p>
                 </div>
               </div>
             </div>
@@ -193,7 +205,7 @@ function ProgressSection() {
                 <Trophy className="h-5 w-5 text-amber-600" />
                 <div>
                   <p className="text-xs text-muted-foreground">Dimensions Mastered</p>
-                  <p className="text-xl font-bold" data-testid="text-dimensions-mastered">{progress.dimensionsMastered}/10</p>
+                  <p className="text-xl font-bold" data-testid="text-dimensions-mastered">{progress.dimensionsMastered}/11</p>
                 </div>
               </div>
             </div>
@@ -260,6 +272,7 @@ export default function Challenges() {
   const evalRuntime = qualityDimensions.filter(d => d.group === 'eval-runtime');
   const evalFocused = qualityDimensions.filter(d => d.group === 'eval-focused');
   const requiresSystem = qualityDimensions.filter(d => d.group === 'requires-system-design');
+  const security = qualityDimensions.filter(d => d.group === 'security');
 
   return (
     <div className="min-h-[calc(100vh-8rem)]">
@@ -282,6 +295,7 @@ export default function Challenges() {
           <DimensionGroup group="eval-runtime" dimensions={evalRuntime} />
           <DimensionGroup group="eval-focused" dimensions={evalFocused} />
           <DimensionGroup group="requires-system-design" dimensions={requiresSystem} />
+          <DimensionGroup group="security" dimensions={security} />
         </div>
       </section>
     </div>

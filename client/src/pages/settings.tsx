@@ -287,7 +287,7 @@ export default function Settings() {
                 Once you master these concepts, you'll be able to write better AI feature specs 
                 and know what questions to ask about quality.
               </p>
-              <p>Complete all 30 challenges to master the fundamentals.</p>
+              <p>Complete all 33 challenges to master the fundamentals.</p>
               <p>Built for learning. Your data stays in your browser.</p>
               
               <div className="pt-4 border-t space-y-3">

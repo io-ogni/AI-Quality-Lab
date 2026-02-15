@@ -161,7 +161,7 @@ export default function Learn() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold mb-6">The Quality Dimensions</h2>
           <p className="text-muted-foreground mb-6">
-            There are 10 key dimensions to evaluate AI output quality. Learn to recognize and define criteria for each:
+            There are 11 key dimensions to evaluate AI output quality. Learn to recognize and define criteria for each:
           </p>
           
           <div className="space-y-4">
@@ -202,8 +202,24 @@ export default function Learn() {
                 </h3>
                 <ul className="text-sm text-muted-foreground space-y-2">
                   <li><strong>Groundedness:</strong> Does it stick to provided sources?</li>
-                  <li><strong>Factual Accuracy:</strong> Is the general knowledge correct?</li>
+                  <li><strong>Factual Accuracy:</strong> Is the general knowledge correct? <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Advanced</span></li>
                   <li><strong>Refusal Handling:</strong> Does it refuse when it should — but not over-refuse?</li>
+                </ul>
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-3">
+                  Note: Factual Accuracy is hard to verify without external fact-checking systems.
+                  For most use cases, focus on Groundedness instead — ensuring the bot sticks to the sources YOU provide is more actionable than verifying general world knowledge.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-5">
+                <h3 className="font-medium mb-3 flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-red-600" />
+                  Security
+                </h3>
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  <li><strong>Adversarial Robustness:</strong> Can the bot handle users trying to break it?</li>
                 </ul>
               </CardContent>
             </Card>

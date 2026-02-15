@@ -8,9 +8,10 @@ export type QualityDimension =
   | 'consistency'
   | 'groundedness'
   | 'factual-accuracy'
-  | 'refusal-handling';
+  | 'refusal-handling'
+  | 'adversarial-robustness';
 
-export type DimensionGroup = 'eval-runtime' | 'eval-focused' | 'requires-system-design';
+export type DimensionGroup = 'eval-runtime' | 'eval-focused' | 'requires-system-design' | 'security';
 
 export interface QualityDimensionInfo {
   id: QualityDimension;
@@ -18,6 +19,8 @@ export interface QualityDimensionInfo {
   description: string;
   icon: string;
   group: DimensionGroup;
+  isAdvanced?: boolean;
+  advancedNote?: string;
 }
 
 export interface ExpertCriterion {
