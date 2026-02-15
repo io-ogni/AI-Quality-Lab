@@ -23,7 +23,7 @@ const pathStops = [
     badgeVariant: 'secondary' as const,
   },
   {
-    href: '/progress',
+    href: '/challenges',
     icon: BarChart3,
     label: 'Progress',
     sublabel: 'Track your learning',

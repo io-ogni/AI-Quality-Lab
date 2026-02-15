@@ -25,7 +25,6 @@ const navLinks = [
   { href: '/learn', label: 'Learn' },
   { href: '/challenges', label: 'Challenges' },
   { href: '/sandbox', label: 'Sandbox' },
-  { href: '/progress', label: 'Progress' },
   { href: '/about', label: 'About' },
   { href: '/settings', label: 'Settings' },
 ];

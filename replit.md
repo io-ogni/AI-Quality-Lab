@@ -28,7 +28,6 @@ client/
 │       ├── challenges.tsx      # Challenge grid view
 │       ├── eval-challenge.tsx  # Level-based challenge playground
 │       ├── sandbox.tsx         # Custom scenario practice
-│       ├── progress.tsx        # Progress tracking dashboard
 │       ├── about.tsx           # How the app works (architecture)
 │       └── settings.tsx        # API key management
 server/
