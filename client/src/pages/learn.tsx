@@ -490,16 +490,6 @@ export default function Learn() {
             </CardContent>
           </Card>
 
-          <div className="mt-8 text-center">
-            <p className="text-muted-foreground mb-4">
-              Now you know how to define quality AND make shipping decisions. Ready to practice?
-            </p>
-            <Link href="/challenges">
-              <Button data-testid="button-section-cta-challenges">
-                Go to Challenges
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
