@@ -115,7 +115,7 @@ export default function Home() {
                 const badge = getStopBadge(index);
                 
                 return (
-                  <div key={stop.href}>
+                  <div key={stop.label}>
                     <Link href={stop.href} className="block" data-testid={`card-path-${stop.label.toLowerCase()}`}>
                       <Card className="relative hover-elevate active-elevate-2 transition-all cursor-pointer group">
                         <div className="absolute left-1/2 -top-3 -translate-x-1/2 hidden sm:block">

@@ -116,6 +116,7 @@ export interface CriteriaEvaluation {
 
 export interface ChallengeResult {
   garbageDetected: boolean;
+  wrongInputType?: boolean;
   matches: {
     expertCriterion: string;
     userVersion: string;
