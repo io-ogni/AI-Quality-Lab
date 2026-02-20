@@ -22,7 +22,7 @@ import {
 import type { APISettings } from '@/lib/types';
 
 const openaiModels = ['gpt-4o', 'gpt-4o-mini'];
-const anthropicModels = ['claude-3-5-sonnet-20241022', 'claude-3-haiku-20240307'];
+const anthropicModels = ['claude-sonnet-4-20250217', 'claude-haiku-4-5-20251001'];
 
 export default function Settings() {
   const [provider, setProvider] = useState<'openai' | 'anthropic'>('openai');
@@ -43,7 +43,7 @@ export default function Settings() {
   }, []);
 
   useEffect(() => {
-    setModel(provider === 'openai' ? 'gpt-4o' : 'claude-3-5-sonnet-20241022');
+    setModel(provider === 'openai' ? 'gpt-4o' : 'claude-sonnet-4-20250217');
   }, [provider]);
 
   const handleSave = () => {

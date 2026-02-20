@@ -29,7 +29,7 @@ export function getAPISettings(): APISettings | null {
   return {
     apiKey,
     provider,
-    model: model || (provider === 'openai' ? 'gpt-4o' : 'claude-3-5-sonnet-20241022'),
+    model: model || (provider === 'openai' ? 'gpt-4o' : 'claude-sonnet-4-20250217'),
   };
 }
 
