@@ -223,7 +223,7 @@ export default function EvalChallenge() {
                       </p>
                     </div>
                     {next && nextInfo ? (
-                      <Link href={`/challenge/${next}`}>
+                      <Link href={`/eval/${next}`}>
                         <Button size="sm" data-testid="button-next-challenge">
                           Next: {nextInfo.name}
                           <ChevronRight className="h-4 w-4 ml-1" />
