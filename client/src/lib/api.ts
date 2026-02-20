@@ -1,4 +1,5 @@
-import type { APISettings, ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
+import type { ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
+import { MODEL_FOR_PROVIDER } from './types';
 import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
 import { preValidateSandboxSubmission, postValidateLLMResponse } from './content-moderation';
@@ -111,7 +112,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
           'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: settings.model,
+          model: MODEL_FOR_PROVIDER[settings.provider],
           max_tokens: 2000,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
@@ -126,7 +127,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
           'Authorization': `Bearer ${settings.apiKey}`,
         },
         body: JSON.stringify({
-          model: settings.model,
+          model: MODEL_FOR_PROVIDER[settings.provider],
           max_tokens: 2000,
           messages: [
             { role: 'system', content: systemPrompt },
@@ -176,7 +177,8 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
   }
 }
 
-export async function testAPIConnection(settings: APISettings): Promise<{ success: boolean; message: string }> {
+export async function testAPIConnection(settings: { provider: 'openai' | 'anthropic'; apiKey: string }): Promise<{ success: boolean; message: string }> {
+  const model = MODEL_FOR_PROVIDER[settings.provider];
   try {
     let response: Response;
 
@@ -190,7 +192,7 @@ export async function testAPIConnection(settings: APISettings): Promise<{ succes
           'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: settings.model,
+          model,
           max_tokens: 10,
           messages: [{ role: 'user', content: 'Hi' }],
         }),
@@ -203,7 +205,7 @@ export async function testAPIConnection(settings: APISettings): Promise<{ succes
           'Authorization': `Bearer ${settings.apiKey}`,
         },
         body: JSON.stringify({
-          model: settings.model,
+          model,
           max_tokens: 10,
           messages: [{ role: 'user', content: 'Hi' }],
         }),

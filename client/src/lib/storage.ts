@@ -6,7 +6,6 @@ const SAVED_CRITERIA_KEY = 'aiQualityLab_savedCriteria';
 
 const API_KEY_KEY = 'aiQualityLab_apiKey';
 const API_PROVIDER_KEY = 'aiQualityLab_provider';
-const API_MODEL_KEY = 'aiQualityLab_model';
 const DISCLAIMER_KEY = 'aiQualityLab_hasSeenDisclaimer';
 
 export function getHasSeenDisclaimer(): boolean {
@@ -20,29 +19,22 @@ export function setHasSeenDisclaimer(): void {
 export function getAPISettings(): APISettings | null {
   const apiKey = sessionStorage.getItem(API_KEY_KEY);
   const provider = sessionStorage.getItem(API_PROVIDER_KEY) as 'openai' | 'anthropic' | null;
-  const model = sessionStorage.getItem(API_MODEL_KEY);
 
   if (!apiKey || !provider) {
     return null;
   }
 
-  return {
-    apiKey,
-    provider,
-    model: model || (provider === 'openai' ? 'gpt-4.1' : 'claude-sonnet-4-6'),
-  };
+  return { apiKey, provider };
 }
 
 export function setAPISettings(settings: APISettings): void {
   sessionStorage.setItem(API_KEY_KEY, settings.apiKey);
   sessionStorage.setItem(API_PROVIDER_KEY, settings.provider);
-  sessionStorage.setItem(API_MODEL_KEY, settings.model);
 }
 
 export function clearAPIKey(): void {
   sessionStorage.removeItem(API_KEY_KEY);
   sessionStorage.removeItem(API_PROVIDER_KEY);
-  sessionStorage.removeItem(API_MODEL_KEY);
 }
 
 export function hasAPIKey(): boolean {

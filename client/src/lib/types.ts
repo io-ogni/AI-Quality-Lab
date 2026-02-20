@@ -68,8 +68,12 @@ export interface UserProgress {
 export interface APISettings {
   provider: 'openai' | 'anthropic';
   apiKey: string;
-  model: string;
 }
+
+export const MODEL_FOR_PROVIDER: Record<'openai' | 'anthropic', string> = {
+  openai: 'gpt-4o',
+  anthropic: 'claude-sonnet-4-6',
+};
 
 export interface SandboxScenario {
   id: string;

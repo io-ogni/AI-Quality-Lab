@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Lock, Eye, EyeOff, Check, X, Loader2, Lightbulb, Info, AlertTriangle } from 'lucide-react';
+import { Lock, Eye, EyeOff, Check, X, Loader2, Lightbulb, Info } from 'lucide-react';
 import { getAPISettings, setAPISettings, clearAPIKey, clearProgress } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { testAPIConnection } from '@/lib/api';
@@ -19,15 +19,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import type { APISettings } from '@/lib/types';
-
-const openaiModels = ['gpt-4.1', 'gpt-4.1-mini', 'gpt-4o', 'gpt-4o-mini'];
-const anthropicModels = ['claude-sonnet-4-6', 'claude-haiku-4-5'];
-
 export default function Settings() {
   const [provider, setProvider] = useState<'openai' | 'anthropic'>('openai');
   const [apiKey, setApiKey] = useState('');
-  const [model, setModel] = useState('gpt-4o');
   const [showKey, setShowKey] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
@@ -38,13 +32,8 @@ export default function Settings() {
     if (settings) {
       setProvider(settings.provider);
       setApiKey(settings.apiKey);
-      setModel(settings.model);
     }
   }, []);
-
-  useEffect(() => {
-    setModel(provider === 'openai' ? 'gpt-4.1' : 'claude-sonnet-4-6');
-  }, [provider]);
 
   const handleSave = () => {
     if (!apiKey.trim()) {
@@ -56,8 +45,7 @@ export default function Settings() {
       return;
     }
 
-    const settings: APISettings = { provider, apiKey, model };
-    setAPISettings(settings);
+    setAPISettings({ provider, apiKey });
     setTestResult(null);
     
     toast({
@@ -80,7 +68,7 @@ export default function Settings() {
     setTestResult(null);
     
     try {
-      const result = await testAPIConnection({ provider, apiKey, model });
+      const result = await testAPIConnection({ provider, apiKey });
       setTestResult(result);
     } catch (error) {
       setTestResult({ success: false, message: 'Connection failed. Check your key.' });
@@ -183,20 +171,6 @@ export default function Settings() {
                 <p className="text-xs text-muted-foreground">
                   Key is stored in session only — will be cleared when you close the tab
                 </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="model">Model</Label>
-                <Select value={model} onValueChange={setModel}>
-                  <SelectTrigger id="model" data-testid="select-model">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {(provider === 'openai' ? openaiModels : anthropicModels).map((m) => (
-                      <SelectItem key={m} value={m}>{m}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
 
               <Button onClick={handleSave} data-testid="button-save-settings">
