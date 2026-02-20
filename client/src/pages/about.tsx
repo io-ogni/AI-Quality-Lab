@@ -28,9 +28,9 @@ const deterministicVsAI = [
   },
   {
     task: "Detect offensive content",
-    who: "Local AI (TensorFlow.js)",
-    icon: Shield,
-    why: 'Runs in browser, catches variations like "1diot" and "f*ck", no data sent to servers',
+    who: "Code",
+    icon: Code2,
+    why: 'Pattern matching in browser — catches variations like "1diot" and "f*ck", no data sent anywhere',
   },
   {
     task: 'Match "polite" to "professional"',
@@ -67,7 +67,7 @@ const techStack = [
   },
   {
     component: "Content Moderation",
-    technology: "TensorFlow.js Toxicity Model (local)",
+    technology: "Pattern matching (runs locally in browser)",
   },
   { component: "Storage", technology: "Browser localStorage" },
 ];
@@ -95,9 +95,9 @@ const lessons = [
     description: "The LLM might miss things. Have a safety net.",
   },
   {
-    title: "Privacy matters — use local models when possible",
+    title: "Privacy matters — keep checks local when possible",
     description:
-      "TensorFlow.js runs in the browser. No API calls needed for content moderation.",
+      "Pattern matching runs in the browser. No API calls needed for content moderation.",
   },
 ];
 
@@ -186,7 +186,7 @@ export default function About() {
                         <li>
                           Format detection (examples look like bullet lists?)
                         </li>
-                        <li>Offensive content detection (TensorFlow.js)</li>
+                        <li>Offensive content detection (pattern matching)</li>
                       </ul>
                       <p className="text-xs text-muted-foreground mt-2 italic">
                         If FAIL — Return immediately, don't call the LLM.
@@ -352,7 +352,7 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6 space-y-4">
                 <p className="text-muted-foreground">
-                  We use TensorFlow.js to detect offensive content. This is
+                  We use pattern matching to detect offensive content. This is
                   important:
                 </p>
                 <ul className="text-sm text-muted-foreground space-y-2">
@@ -366,15 +366,11 @@ export default function About() {
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                    Catches variations users may try (like "1diot" or "f*ck")
+                    Catches common variations (like "1diot" or "f*ck")
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                    Trained on real toxic content patterns
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                    ~15MB model, downloaded once and cached
+                    Instant, no network requests needed
                   </li>
                 </ul>
                 <p className="text-sm text-muted-foreground">
@@ -457,8 +453,8 @@ export default function About() {
                 <p className="text-muted-foreground">
                   Content moderation (offensive language detection) works best
                   for English text. Non-English offensive content may not be
-                  detected, as the TensorFlow.js toxicity model is primarily
-                  trained on English.
+                  detected, as the pattern matching is built around English
+                  patterns.
                 </p>
               </CardContent>
             </Card>
