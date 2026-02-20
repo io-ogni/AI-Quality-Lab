@@ -1,7 +1,7 @@
 import type { APISettings, ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
 import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
-import { preValidateSandboxSubmission, postValidateLLMResponse } from './content-moderation';
+import { preValidateSandboxSubmission, postValidateLLMResponse, validateExampleLogic } from './content-moderation';
 
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
@@ -510,13 +510,43 @@ EVALUATION RULES:
    - "don't use jargon"
    Rule: If it mentions ANY specific attribute, action, or constraint, it is NOT vague.
 
-4. GOOD EXAMPLE QUALITY (1-5):
-   - 1: Nonsense, single word, or doesn't relate to scenario
-   - 5: Excellent — meets all criteria, realistic, could be a real bot response
+4. EVALUATING THE GOOD EXAMPLE:
+   CRITICAL: A good example must MEET the user's criteria, not just "sound good."
+   Step-by-step:
+   a. List each criterion the user provided
+   b. For each criterion, check: Does this example meet it?
+   c. If the example VIOLATES any criterion, it FAILS as a good example → score 1
+   
+   Example of WRONG evaluation:
+   - Criteria: "do not give advice, recommend professionals"
+   - Good example: "Just go for it!"
+   - WRONG: "This sounds confident" → Pass
+   - RIGHT: "This gives direct advice, violating 'do not give advice'" → Fail (score 1)
 
-5. BAD EXAMPLE QUALITY (1-5):
-   - 1: Nonsense, identical to good example, or single word
-   - 5: Excellent — clearly fails criteria, realistic failure mode
+   Scoring:
+   - 1: Violates ANY of the user's criteria, nonsense, or doesn't relate to scenario
+   - 2-3: Meets some criteria but misses others
+   - 4: Meets all criteria with minor issues
+   - 5: Meets ALL criteria, realistic, could be a real bot response
+
+5. EVALUATING THE BAD EXAMPLE:
+   CRITICAL: A bad example must VIOLATE the user's criteria, not just "sound bad."
+   Step-by-step:
+   a. List each criterion the user provided
+   b. For each criterion, check: Does this example violate it?
+   c. If the example MEETS all criteria, it FAILS as a bad example → score 1
+   
+   Example of WRONG evaluation:
+   - Criteria: "do not give advice, recommend professionals"
+   - Bad example: "You should talk to a financial advisor"
+   - WRONG: "This is helpful advice" → Pass as bad example
+   - RIGHT: "This MEETS the criteria (recommends professional), so it's not a valid BAD example" → Fail (score 1)
+
+   Scoring:
+   - 1: Meets ALL of the user's criteria (not a valid bad example), nonsense, or identical to good
+   - 2-3: Violates some criteria but accidentally follows others
+   - 4: Clearly violates at least one criterion
+   - 5: Clearly violates criteria, realistic failure mode
 
 6. EXAMPLE FORMAT DETECTION (AUTOMATIC FAIL):
    - Examples must look like BOT RESPONSES, not criteria lists
@@ -532,6 +562,11 @@ EVALUATION RULES:
    - Bad Example = criteria copy-pasted → score 1/5, feedback: "This is not an example"
    - Good Example = criteria copy-pasted → score 1/5
    - Good Example would realistically be a bad response → Flag: "Your 'good' example looks like a 'bad' example"
+
+EXAMPLE OF SWAPPED EXAMPLES (both should score 1):
+- Criteria: "do not give advice, recommend professionals"
+- Good example: "I'd say, just go for it!" → FAIL: gives advice, violating criteria
+- Bad example: "I think you should talk to someone with more experience" → FAIL: follows criteria (recommends someone experienced)
 
 EXAMPLE OF OFFENSIVE GOOD EXAMPLE (should score 1/5):
 - Criteria: "be empathic, offer refund, stay professional"
@@ -560,15 +595,21 @@ Respond in JSON format only:
     },
     "good_example": {
       "score": 1-5,
+      "criteria_check": [
+        {"criterion": "extracted criterion text", "met": true/false, "reason": "why met or not met"}
+      ],
       "meets_user_criteria": true/false,
       "is_good_for_scenario": true/false,
-      "feedback": "specific feedback"
+      "feedback": "specific feedback explaining criterion-by-criterion analysis"
     },
     "bad_example": {
       "score": 1-5,
+      "criteria_check": [
+        {"criterion": "extracted criterion text", "met": true/false, "reason": "why met or not met"}
+      ],
       "violates_user_criteria": true/false,
       "is_realistic_failure": true/false,
-      "feedback": "specific feedback"
+      "feedback": "specific feedback explaining criterion-by-criterion analysis"
     },
     "safety": {"score": 1-5, "feedback": "if sensitive scenario"}
   },
@@ -642,12 +683,14 @@ Evaluate the quality of their criteria definition.`;
           feedback: goodEx.feedback || '',
           meetsUserCriteria: goodEx.meets_user_criteria,
           isGoodForScenario: goodEx.is_good_for_scenario,
+          criteriaCheck: Array.isArray(goodEx.criteria_check) ? goodEx.criteria_check : undefined,
         },
         badExample: {
           score: badEx.score || 3,
           feedback: badEx.feedback || '',
           violatesUserCriteria: badEx.violates_user_criteria,
           isRealisticFailure: badEx.is_realistic_failure,
+          criteriaCheck: Array.isArray(badEx.criteria_check) ? badEx.criteria_check : undefined,
         },
         safety: scenario.isSensitive ? (parsed.scores?.safety || criteriaScores.safety) : undefined,
       },
@@ -659,7 +702,50 @@ Evaluate the quality of their criteria definition.`;
     };
 
     const postValidated = postValidateLLMResponse(llmResult, criteria, goodExample, badExample);
-    return { ...llmResult, ...postValidated };
+    const exampleWarnings = validateExampleLogic(criteria, goodExample, badExample);
+
+    const finalResult = { ...llmResult, ...postValidated };
+
+    if (exampleWarnings.length > 0) {
+      const hasCriteriaCheck = (finalResult.scores.goodExample.criteriaCheck?.length ?? 0) > 0 ||
+                                (finalResult.scores.badExample.criteriaCheck?.length ?? 0) > 0;
+
+      if (!hasCriteriaCheck) {
+        for (const w of exampleWarnings) {
+          if (w.field === 'good_example' && finalResult.scores.goodExample.score > 2) {
+            finalResult.scores.goodExample = {
+              ...finalResult.scores.goodExample,
+              score: 1,
+              meetsUserCriteria: false,
+              feedback: w.message,
+            };
+          }
+          if (w.field === 'bad_example' && finalResult.scores.badExample.score > 2) {
+            finalResult.scores.badExample = {
+              ...finalResult.scores.badExample,
+              score: 1,
+              violatesUserCriteria: false,
+              feedback: w.message,
+            };
+          }
+        }
+
+        const avgScore = Math.round(
+          (finalResult.scores.specificity.score + finalResult.scores.relevance.score +
+           finalResult.scores.completeness.score + finalResult.scores.goodExample.score +
+           finalResult.scores.badExample.score) / 5
+        );
+        finalResult.overallScore = Math.min(finalResult.overallScore, avgScore);
+        finalResult.passed = finalResult.overallScore >= 3;
+      }
+    }
+
+    finalResult.scores.exampleQuality = {
+      score: Math.round((finalResult.scores.goodExample.score + finalResult.scores.badExample.score) / 2),
+      feedback: finalResult.scores.exampleQuality?.feedback || '',
+    };
+
+    return { ...finalResult, exampleWarnings: exampleWarnings.length > 0 ? exampleWarnings : undefined };
   } catch (error) {
     console.error('API error:', error);
     throw error;

@@ -1,4 +1,4 @@
-import type { CriteriaEvaluation } from './types';
+import type { CriteriaEvaluation, ExampleValidationWarning } from './types';
 
 const OFFENSIVE_PATTERNS = [
   /\b(idiot|stupid|moron|imbecile|dumb\s*ass)\b/i,
@@ -197,6 +197,56 @@ export function postValidateLLMResponse(
     };
   }
 
+  if (result.scores.goodExample.meetsUserCriteria === false && result.scores.goodExample.score > 2) {
+    result.scores.goodExample = {
+      ...result.scores.goodExample,
+      score: 1,
+      feedback: result.scores.goodExample.feedback || 'Your good example does not meet your criteria.',
+    };
+  }
+
+  if (result.scores.badExample.violatesUserCriteria === false && result.scores.badExample.score > 2) {
+    result.scores.badExample = {
+      ...result.scores.badExample,
+      score: 1,
+      feedback: result.scores.badExample.feedback || 'Your bad example meets your criteria instead of violating them.',
+    };
+  }
+
+  if (result.scores.goodExample.criteriaCheck && result.scores.goodExample.criteriaCheck.length > 0) {
+    const anyNotMet = result.scores.goodExample.criteriaCheck.some(cc => !cc.met);
+    if (anyNotMet && result.scores.goodExample.score > 2) {
+      const failedCriteria = result.scores.goodExample.criteriaCheck
+        .filter(cc => !cc.met)
+        .map(cc => cc.criterion)
+        .join(', ');
+      result.scores.goodExample = {
+        ...result.scores.goodExample,
+        score: 1,
+        meetsUserCriteria: false,
+        feedback: `Your good example violates your own criteria (${failedCriteria}). A good example must meet ALL your criteria.`,
+      };
+      if (!result.criticalGaps.some(g => g.includes('good example') && g.includes('violat'))) {
+        result.criticalGaps.push('Your good example violates your criteria — it should demonstrate what a correct response looks like.');
+      }
+    }
+  }
+
+  if (result.scores.badExample.criteriaCheck && result.scores.badExample.criteriaCheck.length > 0) {
+    const allMet = result.scores.badExample.criteriaCheck.every(cc => cc.met);
+    if (allMet && result.scores.badExample.score > 2) {
+      result.scores.badExample = {
+        ...result.scores.badExample,
+        score: 1,
+        violatesUserCriteria: false,
+        feedback: `Your bad example actually meets all your criteria. A bad example should VIOLATE at least one criterion to show what a wrong response looks like.`,
+      };
+      if (!result.criticalGaps.some(g => g.includes('bad example') && g.includes('meets'))) {
+        result.criticalGaps.push('Your bad example follows your criteria — it should demonstrate what a wrong response looks like.');
+      }
+    }
+  }
+
   const scores = result.scores;
   const avgScore = Math.round(
     (scores.specificity.score + scores.relevance.score + scores.completeness.score +
@@ -206,4 +256,82 @@ export function postValidateLLMResponse(
   result.passed = result.overallScore >= 3;
 
   return result;
+}
+
+export function validateExampleLogic(
+  criteria: string,
+  goodExample: string,
+  badExample: string
+): ExampleValidationWarning[] {
+  const warnings: ExampleValidationWarning[] = [];
+
+  const advicePhrases = [
+    /\bjust (do|go|try|get|buy|sell|invest)\b/i,
+    /\byou should\b/i,
+    /\bi('d| would) (say|suggest|recommend)\b/i,
+    /\bgo for it\b/i,
+    /\bmy advice\b/i,
+    /\bi (think|believe) you should\b/i,
+    /\bdefinitely (do|go|try|buy|sell|invest)\b/i,
+  ];
+
+  const noAdviceCriteria = /\b(don'?t|do not|never|avoid|must not|should not|shouldn'?t).{0,15}(give|offer|provide|make).{0,10}(advice|recommendation|suggestion)\b/i;
+
+  if (noAdviceCriteria.test(criteria)) {
+    for (const phrase of advicePhrases) {
+      if (phrase.test(goodExample)) {
+        warnings.push({
+          field: 'good_example',
+          issue: 'contains_advice',
+          message: 'Your good example appears to give advice, but your criteria says not to. A good example should follow ALL your criteria.'
+        });
+        break;
+      }
+    }
+  }
+
+  const recommendProfessionalCriteria = /\brecommend.{0,15}(professional|expert|advisor|specialist|planner|counselor|therapist)\b/i;
+  const professionalPhrases = [
+    /\btalk to (a |an |someone |).*?(professional|expert|advisor|specialist|experienced|planner|counselor|therapist)\b/i,
+    /\bseek (professional |expert |)?advice\b/i,
+    /\bconsult (a |an |with )?(professional|expert|advisor|specialist|planner)\b/i,
+    /\bspeak (to |with )(a |an )?(professional|expert|advisor|specialist|planner)\b/i,
+  ];
+
+  if (recommendProfessionalCriteria.test(criteria)) {
+    for (const phrase of professionalPhrases) {
+      if (phrase.test(badExample)) {
+        warnings.push({
+          field: 'bad_example',
+          issue: 'follows_criteria',
+          message: 'Your bad example appears to recommend a professional, which follows your criteria. A bad example should violate your criteria.'
+        });
+        break;
+      }
+    }
+  }
+
+  const dontBlameCriteria = /\b(don'?t|do not|never|avoid|must not|should not|shouldn'?t).{0,15}(blame|fault|accuse)\b/i;
+  const blamePhrases = [
+    /\bif you had\b/i,
+    /\byou should have\b/i,
+    /\bthat'?s your (fault|problem|mistake)\b/i,
+    /\byou caused\b/i,
+    /\byou'?re the one who\b/i,
+  ];
+
+  if (dontBlameCriteria.test(criteria)) {
+    for (const phrase of blamePhrases) {
+      if (phrase.test(goodExample)) {
+        warnings.push({
+          field: 'good_example',
+          issue: 'contains_advice',
+          message: 'Your good example appears to blame the user, but your criteria says not to. A good example should follow ALL your criteria.'
+        });
+        break;
+      }
+    }
+  }
+
+  return warnings;
 }
