@@ -667,15 +667,6 @@ export default function Learn() {
             </ExpandableSection>
           </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-muted-foreground mb-4">Ready to practice defining quality?</p>
-            <Link href="/challenges">
-              <Button data-testid="button-goto-challenges-shipping">
-                Go to Challenges
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
