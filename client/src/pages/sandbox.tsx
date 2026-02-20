@@ -10,6 +10,7 @@ import { sandboxScenarios } from '@/lib/challenges-data';
 import { hasAPIKey } from '@/lib/storage';
 import { evaluateSandboxCriteria, APIError } from '@/lib/api';
 import type { APIErrorType } from '@/lib/api';
+import { preValidateSandboxSubmission } from '@/lib/content-moderation';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { CriteriaEvaluation, SandboxScenario } from '@/lib/types';
 import { useEffect } from 'react';
@@ -73,6 +74,7 @@ export default function Sandbox() {
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
   const [apiError, setApiError] = useState<{ errorType: APIErrorType; message: string } | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const scenarioContentRef = useRef<HTMLDivElement>(null);
   const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
   const draftsRef = useRef<Record<string, ScenarioDraft>>({});
@@ -91,10 +93,23 @@ export default function Sandbox() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!selectedScenario || !criteria.trim() || !goodExample.trim() || !badExample.trim() || !hasKey) {
+    if (!selectedScenario || !hasKey) {
       return;
     }
 
+    const validation = preValidateSandboxSubmission(criteria, goodExample, badExample);
+    if (!validation.valid) {
+      const errorMap: Record<string, string> = {};
+      validation.errors.forEach(e => {
+        const key = e.field === 'good_example' ? 'goodExample' : e.field === 'bad_example' ? 'badExample' : e.field === 'both' ? 'goodExample' : e.field;
+        if (!errorMap[key]) errorMap[key] = e.message;
+        if (e.field === 'both' && !errorMap['badExample']) errorMap['badExample'] = e.message;
+      });
+      setFieldErrors(errorMap);
+      return;
+    }
+
+    setFieldErrors({});
     setIsSubmitting(true);
     setApiError(null);
     try {
@@ -119,6 +134,7 @@ export default function Sandbox() {
   const handleReset = () => {
     setResult(null);
     setApiError(null);
+    setFieldErrors({});
     setCriteria('');
     setGoodExample('');
     setBadExample('');
@@ -164,6 +180,7 @@ export default function Sandbox() {
                     setResult(draft?.result || null);
                     setPiiWarning(false);
                     setApiError(null);
+                    setFieldErrors({});
                     setSelectedScenario(scenario);
                     setTimeout(() => {
                       scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -238,6 +255,9 @@ export default function Sandbox() {
                         data-testid="textarea-criteria"
                       />
                       <p className="text-xs text-muted-foreground mt-1">Be specific and measurable. What would you check for?</p>
+                      {fieldErrors.criteria && (
+                        <p className="text-sm text-red-500 mt-1" data-testid="error-criteria">{fieldErrors.criteria}</p>
+                      )}
                     </div>
 
                     <div>
@@ -256,6 +276,9 @@ export default function Sandbox() {
                         data-gramm="false"
                         data-testid="textarea-good-example"
                       />
+                      {fieldErrors.goodExample && (
+                        <p className="text-sm text-red-500 mt-1" data-testid="error-good-example">{fieldErrors.goodExample}</p>
+                      )}
                     </div>
 
                     <div>
@@ -274,6 +297,9 @@ export default function Sandbox() {
                         data-gramm="false"
                         data-testid="textarea-bad-example"
                       />
+                      {fieldErrors.badExample && (
+                        <p className="text-sm text-red-500 mt-1" data-testid="error-bad-example">{fieldErrors.badExample}</p>
+                      )}
                     </div>
 
                     {piiWarning && (
@@ -288,7 +314,7 @@ export default function Sandbox() {
                         <span className="inline-block">
                           <Button
                             onClick={handleSubmit}
-                            disabled={!criteria.trim() || !goodExample.trim() || !badExample.trim() || !hasKey || isSubmitting}
+                            disabled={!hasKey || isSubmitting}
                             className="w-full sm:w-auto"
                             data-testid="button-run-evaluation"
                           >

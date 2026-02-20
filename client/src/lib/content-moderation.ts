@@ -41,9 +41,27 @@ function hasBulletFormat(text: string): boolean {
   return bulletLines.length >= 2 && bulletLines.length / lines.length > 0.5;
 }
 
+const PLACEHOLDER_PATTERNS = [
+  /^-+$/,
+  /^\.+$/,
+  /^n\/?a$/i,
+  /^none$/i,
+  /^todo$/i,
+  /^tbd$/i,
+  /^placeholder$/i,
+  /^test$/i,
+  /^xxx+$/i,
+  /^asdf/i,
+];
+
+function isPlaceholder(text: string): boolean {
+  const trimmed = text.trim();
+  return !trimmed || PLACEHOLDER_PATTERNS.some(pattern => pattern.test(trimmed));
+}
+
 export interface PreValidationError {
   field: 'criteria' | 'good_example' | 'bad_example' | 'both';
-  issue: 'too_short' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive';
+  issue: 'too_short' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive' | 'placeholder';
   message: string;
 }
 
@@ -72,14 +90,24 @@ export function preValidateSandboxSubmission(
   const errors: PreValidationError[] = [];
   const warnings: PreValidationWarning[] = [];
 
-  if (criteria.trim().length < 20) {
-    errors.push({ field: 'criteria', issue: 'too_short', message: 'Criteria is too short. Write at least 3 distinct points.' });
+  if (isPlaceholder(criteria)) {
+    errors.push({ field: 'criteria', issue: 'placeholder', message: 'Please enter your quality criteria.' });
+  } else if (criteria.trim().length < 20) {
+    errors.push({ field: 'criteria', issue: 'too_short', message: 'Criteria is too short. Please describe what makes a good response.' });
+  } else if (criteria.trim().split(/\s+/).length < 3) {
+    errors.push({ field: 'criteria', issue: 'too_short', message: 'Please provide more detailed criteria (at least a few words).' });
   }
-  if (goodExample.trim().length < 10) {
-    errors.push({ field: 'good_example', issue: 'too_short', message: 'Good example is too short. Write a realistic bot response.' });
+
+  if (isPlaceholder(goodExample)) {
+    errors.push({ field: 'good_example', issue: 'placeholder', message: 'Please enter a good example response.' });
+  } else if (goodExample.trim().length < 10) {
+    errors.push({ field: 'good_example', issue: 'too_short', message: 'Good example is too short. Show what a good bot response looks like.' });
   }
-  if (badExample.trim().length < 10) {
-    errors.push({ field: 'bad_example', issue: 'too_short', message: 'Bad example is too short. Write a realistic bot response.' });
+
+  if (isPlaceholder(badExample)) {
+    errors.push({ field: 'bad_example', issue: 'placeholder', message: 'Please enter a bad example response.' });
+  } else if (badExample.trim().length < 10) {
+    errors.push({ field: 'bad_example', issue: 'too_short', message: 'Bad example is too short. Show what a problematic bot response looks like.' });
   }
 
   if (wordSimilarity(goodExample, criteria) > 0.8) {
