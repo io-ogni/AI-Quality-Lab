@@ -290,6 +290,22 @@ export default function About() {
             </Card>
           </div>
 
+          <div>
+            <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2" data-testid="text-section-limitations">
+              <Shield className="h-6 w-6 text-primary" />
+              Known Limitations
+            </h2>
+            <Card className="bg-card/50">
+              <CardContent className="p-6">
+                <p className="text-muted-foreground">
+                  Content moderation (offensive language detection) works best for
+                  English text. Non-English offensive content may not be detected,
+                  as the TensorFlow.js toxicity model is primarily trained on English.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
           <div className="pt-4 pb-8">
             <Card className="bg-primary/5 border-primary/20">
               <CardContent className="p-6 text-center space-y-4">
