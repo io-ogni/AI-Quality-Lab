@@ -103,27 +103,6 @@ export default function Learn() {
         </div>
       </section>
 
-      <section className="py-8">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h3 className="text-lg font-semibold mb-2">Video: The 11 Dimensions</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            A tour of the foundational quality dimensions. These are your
-            starting vocabulary — the common ways teams think about AI output
-            quality across industries.
-          </p>
-          <div className="aspect-video rounded-lg overflow-hidden border bg-black">
-            <iframe
-              src="https://www.youtube.com/embed/PLACEHOLDER_DIMENSIONS"
-              title="The 11 Dimensions"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              data-testid="video-dimensions"
-            />
-          </div>
-        </div>
-      </section>
-
       <section className="py-12">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold mb-6">Two Ways to Control AI Quality</h2>
