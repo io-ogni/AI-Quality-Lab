@@ -132,14 +132,15 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6 space-y-4">
                 <p className="text-muted-foreground">
-                  You can't just use keyword matching to evaluate AI responses.
-                  "Be professional" and "maintain a formal tone" mean the same
-                  thing — but a keyword check would miss that.
+                  How do we evaluate what you write? Simple text matching won't
+                  work — if you write "be professional" and the expert answer
+                  says "maintain a formal tone," a keyword check would mark you
+                  wrong.
                 </p>
                 <p className="text-muted-foreground">
-                  But LLMs alone aren't reliable either. They can be
-                  inconsistent, hallucinate scores, or be tricked by prompt
-                  injection.
+                  But we can't blindly trust an LLM to judge either — they can
+                  be inconsistent or manipulated, or they can easily
+                  hallucinate. So we combine both.
                 </p>
                 <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                   <p className="font-medium text-sm">
@@ -365,7 +366,7 @@ export default function About() {
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
-                    Catches variations humans try (like "1diot" or "f*ck")
+                    Catches variations users may try (like "1diot" or "f*ck")
                   </li>
                   <li className="flex items-start gap-2">
                     <Shield className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
@@ -474,7 +475,9 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6">
                 <p className="text-muted-foreground">
-                  I would love to hear from you! Whether it's a bug, a suggestion, or just a thought on your experience — all feedback is welcome. Reach out to me on{' '}
+                  I would love to hear from you! Whether it's a bug, a
+                  suggestion, or just a thought on your experience — all
+                  feedback is welcome. Reach out to me on{" "}
                   <a
                     href="https://www.linkedin.com/in/ioanamarinescu/"
                     target="_blank"
@@ -483,7 +486,8 @@ export default function About() {
                     data-testid="link-linkedin"
                   >
                     LinkedIn
-                  </a>.
+                  </a>
+                  .
                 </p>
               </CardContent>
             </Card>
