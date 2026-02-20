@@ -48,8 +48,12 @@ export default function EvalChallenge() {
   };
 
   useEffect(() => {
-    setCompletedLevels(getLevelProgress(evalId));
+    const progress = getLevelProgress(evalId);
+    setCompletedLevels(progress);
     setHasKey(hasAPIKey());
+
+    const nextLevel = progress.includes(1) ? (progress.includes(2) ? 3 : 2) : 1;
+    setCurrentLevel(nextLevel as 1 | 2 | 3);
     
     const interval = setInterval(() => {
       setHasKey(hasAPIKey());
