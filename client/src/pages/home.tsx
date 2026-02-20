@@ -65,7 +65,7 @@ export default function Home() {
             </div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4" data-testid="text-hero-title">
-            AI Quality Lab
+            AI Quality Lab <span className="text-base font-medium text-muted-foreground align-middle">v1</span>
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto" data-testid="text-hero-subtitle">
             Master the basics of evals and guardrails for AI products
