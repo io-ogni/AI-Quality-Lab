@@ -246,16 +246,24 @@ export default function Sandbox() {
                         ref={criteriaTextareaRef}
                         value={criteria}
                         onChange={(e) => {
-                          setCriteria(e.target.value);
-                          checkPII(e.target.value);
+                          if (e.target.value.length <= 1000) {
+                            setCriteria(e.target.value);
+                            checkPII(e.target.value);
+                          }
                         }}
+                        maxLength={1000}
                         placeholder={`e.g.,\n- Addresses the user's actual question\n- Stays within the bot's scope\n- Uses an appropriate tone`}
                         className="min-h-[120px] resize-none"
                         autoComplete="off"
                         data-gramm="false"
                         data-testid="textarea-criteria"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">Be specific and measurable. What would you check for?</p>
+                      <div className="flex justify-between items-start mt-1">
+                        <p className="text-xs text-muted-foreground">Be specific and measurable. What would you check for?</p>
+                        {criteria.length >= 1000 ? (
+                          <p className="text-xs text-red-500 shrink-0">Limit reached</p>
+                        ) : null}
+                      </div>
                       {fieldErrors.criteria && (
                         <p className="text-sm text-red-500 mt-1" data-testid="error-criteria">{fieldErrors.criteria}</p>
                       )}
@@ -268,15 +276,21 @@ export default function Sandbox() {
                       <Textarea
                         value={goodExample}
                         onChange={(e) => {
-                          setGoodExample(e.target.value);
-                          checkPII(e.target.value);
+                          if (e.target.value.length <= 2000) {
+                            setGoodExample(e.target.value);
+                            checkPII(e.target.value);
+                          }
                         }}
+                        maxLength={2000}
                         placeholder="Show what a response meeting your criteria looks like..."
                         className="min-h-[100px] resize-none"
                         autoComplete="off"
                         data-gramm="false"
                         data-testid="textarea-good-example"
                       />
+                      {goodExample.length >= 2000 && (
+                        <p className="text-xs text-red-500 mt-1">Limit reached</p>
+                      )}
                       {fieldErrors.goodExample && (
                         <p className="text-sm text-red-500 mt-1" data-testid="error-good-example">{fieldErrors.goodExample}</p>
                       )}
@@ -289,15 +303,21 @@ export default function Sandbox() {
                       <Textarea
                         value={badExample}
                         onChange={(e) => {
-                          setBadExample(e.target.value);
-                          checkPII(e.target.value);
+                          if (e.target.value.length <= 2000) {
+                            setBadExample(e.target.value);
+                            checkPII(e.target.value);
+                          }
                         }}
+                        maxLength={2000}
                         placeholder="Show what a response that fails your criteria looks like..."
                         className="min-h-[100px] resize-none"
                         autoComplete="off"
                         data-gramm="false"
                         data-testid="textarea-bad-example"
                       />
+                      {badExample.length >= 2000 && (
+                        <p className="text-xs text-red-500 mt-1">Limit reached</p>
+                      )}
                       {fieldErrors.badExample && (
                         <p className="text-sm text-red-500 mt-1" data-testid="error-bad-example">{fieldErrors.badExample}</p>
                       )}

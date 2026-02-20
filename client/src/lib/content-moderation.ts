@@ -61,7 +61,7 @@ function isPlaceholder(text: string): boolean {
 
 export interface PreValidationError {
   field: 'criteria' | 'good_example' | 'bad_example' | 'both';
-  issue: 'too_short' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive' | 'placeholder';
+  issue: 'too_short' | 'too_long' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive' | 'placeholder';
   message: string;
 }
 
@@ -90,7 +90,9 @@ export function preValidateSandboxSubmission(
   const errors: PreValidationError[] = [];
   const warnings: PreValidationWarning[] = [];
 
-  if (isPlaceholder(criteria)) {
+  if (criteria.length > 1000) {
+    errors.push({ field: 'criteria', issue: 'too_long', message: 'Criteria exceeds the 1,000 character limit.' });
+  } else if (isPlaceholder(criteria)) {
     errors.push({ field: 'criteria', issue: 'placeholder', message: 'Please enter your quality criteria.' });
   } else if (criteria.trim().length < 20) {
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Criteria is too short. Please describe what makes a good response.' });
@@ -98,13 +100,17 @@ export function preValidateSandboxSubmission(
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Please provide more detailed criteria (at least a few words).' });
   }
 
-  if (isPlaceholder(goodExample)) {
+  if (goodExample.length > 2000) {
+    errors.push({ field: 'good_example', issue: 'too_long', message: 'Good example exceeds the 2,000 character limit.' });
+  } else if (isPlaceholder(goodExample)) {
     errors.push({ field: 'good_example', issue: 'placeholder', message: 'Please enter a good example response.' });
   } else if (goodExample.trim().length < 10) {
     errors.push({ field: 'good_example', issue: 'too_short', message: 'Good example is too short. Show what a good bot response looks like.' });
   }
 
-  if (isPlaceholder(badExample)) {
+  if (badExample.length > 2000) {
+    errors.push({ field: 'bad_example', issue: 'too_long', message: 'Bad example exceeds the 2,000 character limit.' });
+  } else if (isPlaceholder(badExample)) {
     errors.push({ field: 'bad_example', issue: 'placeholder', message: 'Please enter a bad example response.' });
   } else if (badExample.trim().length < 10) {
     errors.push({ field: 'bad_example', issue: 'too_short', message: 'Bad example is too short. Show what a problematic bot response looks like.' });
