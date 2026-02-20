@@ -180,6 +180,22 @@ export default function Settings() {
               <Button onClick={handleSave} data-testid="button-save-settings">
                 Save Settings
               </Button>
+
+              <div className="flex items-start gap-2 pt-2">
+                <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
+                <p className="text-xs text-muted-foreground">
+                  Each evaluation uses {provider === 'anthropic' ? 'Claude Sonnet' : 'GPT-4o'}. Monitor your usage at{' '}
+                  {provider === 'anthropic' ? (
+                    <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                      console.anthropic.com/settings/billing
+                    </a>
+                  ) : (
+                    <a href="https://platform.openai.com/usage" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                      platform.openai.com/usage
+                    </a>
+                  )}
+                </p>
+              </div>
             </CardContent>
           </Card>
 
