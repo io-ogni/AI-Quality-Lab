@@ -214,8 +214,14 @@ export async function testAPIConnection(settings: APISettings): Promise<{ succes
       return { success: true, message: 'Connected successfully' };
     }
 
+    let detail = '';
+    try {
+      const body = await response.json();
+      if (body?.error?.message) detail = body.error.message;
+    } catch {}
+
     const err = handleHttpError(response.status);
-    return { success: false, message: err.userMessage };
+    return { success: false, message: detail ? `${err.userMessage} (${detail})` : err.userMessage };
   } catch (error) {
     if (error instanceof TypeError && error.message.includes('fetch')) {
       return { success: false, message: 'Network error. Check your internet connection.' };
