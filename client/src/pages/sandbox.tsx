@@ -167,9 +167,11 @@ export default function Sandbox() {
                     setSelectedScenario(scenario);
                     setTimeout(() => {
                       scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      if (!draft?.result) {
-                        criteriaTextareaRef.current?.focus();
-                      }
+                      setTimeout(() => {
+                        if (!draft?.result) {
+                          criteriaTextareaRef.current?.focus({ preventScroll: true });
+                        }
+                      }, 400);
                     }, 150);
                   }}
                 />
