@@ -151,7 +151,6 @@ export default function EvalChallenge() {
                 const locked = isLevelLocked(level);
                 const completed = completedLevels.includes(level);
                 const active = currentLevel === level;
-                const labels = ['Beginner', 'Intermediate', 'Advanced'];
 
                 return (
                   <button
@@ -167,7 +166,7 @@ export default function EvalChallenge() {
                     }}
                     data-testid={`tab-level-${level}`}
                     className={`
-                      relative flex flex-col items-center gap-1 rounded-lg px-3 py-3 text-sm font-medium transition-all border-2
+                      relative flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all border-2
                       ${completed && !active
                         ? 'border-green-500/40 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400'
                         : active
@@ -178,25 +177,20 @@ export default function EvalChallenge() {
                       }
                     `}
                   >
-                    <div className="flex items-center gap-1.5">
-                      {completed ? (
-                        <div className="flex items-center justify-center h-5 w-5 rounded-full bg-green-500 text-white">
-                          <Check className="h-3 w-3" />
-                        </div>
-                      ) : locked ? (
-                        <div className="flex items-center justify-center h-5 w-5 rounded-full bg-muted-foreground/20">
-                          <Lock className="h-3 w-3" />
-                        </div>
-                      ) : (
-                        <div className={`flex items-center justify-center h-5 w-5 rounded-full text-xs font-bold ${active ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
-                          {level}
-                        </div>
-                      )}
-                      <span>Level {level}</span>
-                    </div>
-                    <span className={`text-[11px] ${completed ? 'text-green-600 dark:text-green-400' : locked ? 'text-muted-foreground/40' : 'text-muted-foreground'}`}>
-                      {completed ? 'Completed' : locked ? 'Locked' : labels[level - 1]}
-                    </span>
+                    {completed ? (
+                      <div className="flex items-center justify-center h-5 w-5 rounded-full bg-green-500 text-white">
+                        <Check className="h-3 w-3" />
+                      </div>
+                    ) : locked ? (
+                      <div className="flex items-center justify-center h-5 w-5 rounded-full bg-muted-foreground/20">
+                        <Lock className="h-3 w-3" />
+                      </div>
+                    ) : (
+                      <div className={`flex items-center justify-center h-5 w-5 rounded-full text-xs font-bold ${active ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
+                        {level}
+                      </div>
+                    )}
+                    <span>Level {level}</span>
                   </button>
                 );
               })}
