@@ -10,6 +10,7 @@ import {
   Layers,
   Eye,
   Lock,
+  MessageCircle,
 } from "lucide-react";
 
 const deterministicVsAI = [
@@ -457,6 +458,32 @@ export default function About() {
                   for English text. Non-English offensive content may not be
                   detected, as the TensorFlow.js toxicity model is primarily
                   trained on English.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-4">
+            <h2
+              className="text-xl font-semibold flex items-center gap-2"
+              data-testid="text-section-feedback"
+            >
+              <MessageCircle className="h-6 w-6 text-primary" />
+              Any Feedback?
+            </h2>
+            <Card className="bg-card/50">
+              <CardContent className="p-6">
+                <p className="text-muted-foreground">
+                  I would love to hear from you! Whether it's a bug, a suggestion, or just a thought on your experience — all feedback is welcome. Reach out to me on{' '}
+                  <a
+                    href="https://www.linkedin.com/in/ioanamarinescu/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline underline-offset-2 hover:text-primary/80"
+                    data-testid="link-linkedin"
+                  >
+                    LinkedIn
+                  </a>.
                 </p>
               </CardContent>
             </Card>
