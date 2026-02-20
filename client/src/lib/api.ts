@@ -415,13 +415,27 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       if (words.length === 0) return false;
       const matchedWords = words.filter((w: string) => actualLower.includes(w));
       return matchedWords.length / words.length >= 0.5;
-    }).map((m: any) => ({
-      expertCriterion: m.expert_criterion,
-      userVersion: m.user_version,
-      matchType: 'llm_validated' as const,
-    }));
+    }).map((m: any) => {
+      const llmExpert = (m.expert_criterion || '').toLowerCase().trim();
+      const realCriterion = needsLLMEval.find(c =>
+        c.text.toLowerCase().trim() === llmExpert ||
+        c.text.toLowerCase().includes(llmExpert) ||
+        llmExpert.includes(c.text.toLowerCase())
+      );
+      return {
+        expertCriterion: realCriterion ? realCriterion.text : m.expert_criterion,
+        userVersion: m.user_version,
+        matchType: 'llm_validated' as const,
+      };
+    });
 
-    const allMatches = [...deterministicMatches, ...llmMatches];
+    const combinedMatches = [...deterministicMatches, ...llmMatches];
+    const seen = new Set<string>();
+    const allMatches = combinedMatches.filter(m => {
+      if (seen.has(m.expertCriterion)) return false;
+      seen.add(m.expertCriterion);
+      return true;
+    });
     const matchedExperts = new Set(allMatches.map((m) => m.expertCriterion));
     const missed = levelData.expertCriteria
       .filter(c => !matchedExperts.has(c.text))
@@ -435,7 +449,7 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       );
     });
 
-    const coverageScore = allMatches.length;
+    const coverageScore = matchedExperts.size;
     const specificityScore = parsed.specificity_score || 3;
     const passed = coverageScore >= levelData.passThreshold;
 
