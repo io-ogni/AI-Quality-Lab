@@ -22,7 +22,7 @@ import {
 import type { APISettings } from '@/lib/types';
 
 const openaiModels = ['gpt-4o', 'gpt-4o-mini'];
-const anthropicModels = ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'];
+const anthropicModels = ['claude-sonnet-4-6', 'claude-haiku-4-5'];
 
 export default function Settings() {
   const [provider, setProvider] = useState<'openai' | 'anthropic'>('openai');
