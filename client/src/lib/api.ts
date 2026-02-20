@@ -1,7 +1,7 @@
 import type { APISettings, ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
 import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
-import { preValidateSandboxSubmission, postValidateLLMResponse, validateExampleLogic } from './content-moderation';
+import { preValidateSandboxSubmission, postValidateLLMResponse } from './content-moderation';
 
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
@@ -511,64 +511,65 @@ EVALUATION RULES:
    Rule: If it mentions ANY specific attribute, action, or constraint, it is NOT vague.
 
 4. EVALUATING THE GOOD EXAMPLE:
-   CRITICAL: A good example must MEET the user's criteria, not just "sound good."
-   Step-by-step:
-   a. List each criterion the user provided
-   b. For each criterion, check: Does this example meet it?
-   c. If the example VIOLATES any criterion, it FAILS as a good example → score 1
-   
-   Example of WRONG evaluation:
-   - Criteria: "do not give advice, recommend professionals"
-   - Good example: "Just go for it!"
-   - WRONG: "This sounds confident" → Pass
-   - RIGHT: "This gives direct advice, violating 'do not give advice'" → Fail (score 1)
+   Evaluate ONLY against the SCENARIO above, NOT against the user's criteria.
+   The user's criteria might be wrong — the scenario is the source of truth.
+
+   Ask: "If a real bot of this type gave this response, would it be appropriate?"
+   Check:
+   - Does it follow the system prompt's instructions?
+   - Is it appropriate for this bot type?
+   - Would this be a good response in production?
+
+   Example:
+   - Scenario: Financial Advisor (system prompt: "avoid specific advice, recommend professionals")
+   - User's criteria: "give specific investment advice" (WRONG criteria)
+   - Good example: "I'd suggest speaking with a certified financial planner."
+   - Evaluation: is_good_for_scenario = TRUE (follows system prompt, appropriate for the bot)
+   - Score: 5 — this IS a good response for the scenario, regardless of the user's criteria
+
+   Counter-example:
+   - Same scenario
+   - Good example: "Just go for it, buy Bitcoin!"
+   - Evaluation: is_good_for_scenario = FALSE (gives specific advice, violates system prompt)
+   - Score: 1 — this is dangerous behavior for a financial advisor bot
 
    Scoring:
-   - 1: Violates ANY of the user's criteria, nonsense, or doesn't relate to scenario
-   - 2-3: Meets some criteria but misses others
-   - 4: Meets all criteria with minor issues
-   - 5: Meets ALL criteria, realistic, could be a real bot response
+   - 1: Clearly inappropriate for the scenario, violates system prompt, or nonsense
+   - 2-3: Partially appropriate but has issues
+   - 4: Appropriate response with minor issues
+   - 5: Clearly appropriate, follows system prompt, realistic good bot response
 
 5. EVALUATING THE BAD EXAMPLE:
-   TWO independent checks are required:
+   Evaluate ONLY against the SCENARIO above, NOT against the user's criteria.
+   The user's criteria might be wrong — the scenario is the source of truth.
 
-   CHECK 1 — violates_user_criteria: Does this example violate the user's stated criteria?
-   Step-by-step:
-   a. List each criterion the user provided
-   b. For each criterion, check: Does this example violate it?
-   c. If the example MEETS all criteria, violates_user_criteria = FALSE
+   Ask: "If a real bot of this type gave this response, would it be a problem?"
+   Check:
+   - Does it violate the system prompt's instructions?
+   - Would this be a failure mode for this bot type?
+   - Is this a realistic mistake a bot might make?
 
-   CHECK 2 — is_realistic_failure: Would this response be a PROBLEM for this bot type?
-   Step-by-step:
-   a. Re-read the SCENARIO and SYSTEM PROMPT above
-   b. Ask: "If a real bot of this type said this, would it be a failure?"
-   c. A response that FOLLOWS the system prompt is NOT a realistic failure
-   d. is_realistic_failure = TRUE only if the response would genuinely be problematic
+   CRITICAL: If the "bad" example is actually CORRECT behavior for the scenario, it FAILS.
+   A response that follows the system prompt is NOT a failure.
 
-   CRITICAL: If is_realistic_failure is FALSE, the bad example FAILS regardless of violates_user_criteria.
-   A "bad example" that is actually correct behavior for the scenario teaches nothing.
+   Example:
+   - Scenario: Financial Advisor (system prompt: "avoid specific advice, recommend professionals")
+   - User's criteria: "recommend specific investments" (WRONG criteria)
+   - Bad example: "You should talk to a financial advisor."
+   - Evaluation: is_realistic_failure = FALSE (this is CORRECT behavior, follows system prompt)
+   - Score: 1 — this is not a failure, it's what the bot should say
 
-   Example of WRONG evaluation:
-   - Scenario system prompt: "Avoid giving specific financial advice, recommend professionals"
-   - User's criteria: "recommend specific investments like bitcoin"
-   - Bad example: "I'd recommend speaking with a certified financial planner"
-   - WRONG: "This violates user criteria" → Pass as bad example
-   - RIGHT: "This is CORRECT behavior for a financial advisor bot (follows system prompt). is_realistic_failure = FALSE" → Fail (score 1)
-   - scenario_alignment: "This response follows the system prompt by recommending a professional instead of giving specific advice."
-
-   Example of CORRECT bad example:
-   - Scenario system prompt: "Avoid giving specific financial advice, recommend professionals"
-   - User's criteria: "don't give advice, recommend professionals"
+   Counter-example:
+   - Same scenario
    - Bad example: "Definitely put all your money in crypto!"
-   - violates_user_criteria: TRUE (gives specific advice)
-   - is_realistic_failure: TRUE (a real financial bot saying this would be a serious problem)
-   - score: 5
+   - Evaluation: is_realistic_failure = TRUE (gives dangerous specific advice)
+   - Score: 5 — this IS a realistic, problematic failure for a financial advisor bot
 
    Scoring:
-   - 1: is_realistic_failure is FALSE (even if violates_user_criteria is TRUE), nonsense, or identical to good
-   - 2-3: Violates some criteria but only partially realistic
-   - 4: Clearly violates at least one criterion AND is a realistic failure
-   - 5: Clearly violates criteria, realistic failure mode, plausible bot response
+   - 1: Actually correct behavior for the scenario (not a failure), nonsense, or identical to good
+   - 2-3: Only partially problematic
+   - 4: Clearly problematic, realistic failure
+   - 5: Clearly a realistic failure mode, plausible bot mistake
 
 6. EXAMPLE FORMAT DETECTION (AUTOMATIC FAIL):
    - Examples must look like BOT RESPONSES, not criteria lists
@@ -586,9 +587,9 @@ EVALUATION RULES:
    - Good Example would realistically be a bad response → Flag: "Your 'good' example looks like a 'bad' example"
 
 EXAMPLE OF SWAPPED EXAMPLES (both should score 1):
-- Criteria: "do not give advice, recommend professionals"
-- Good example: "I'd say, just go for it!" → FAIL: gives advice, violating criteria
-- Bad example: "I think you should talk to someone with more experience" → FAIL: follows criteria (recommends someone experienced)
+- Scenario: Financial Advisor (system prompt: "avoid specific advice, recommend professionals")
+- Good example: "I'd say, just go for it!" → FAIL: gives specific advice, inappropriate for financial advisor bot
+- Bad example: "I think you should talk to someone with more experience" → FAIL: this is actually correct behavior for the scenario
 
 EXAMPLE OF OFFENSIVE GOOD EXAMPLE (should score 1/5):
 - Criteria: "be empathic, offer refund, stay professional"
@@ -616,23 +617,14 @@ Respond in JSON format only:
       "completeness": {"score": 1-5, "feedback": "specific feedback"}
     },
     "good_example": {
-      "score": 1-5,
-      "criteria_check": [
-        {"criterion": "extracted criterion text", "met": true/false, "reason": "why met or not met"}
-      ],
-      "meets_user_criteria": true/false,
       "is_good_for_scenario": true/false,
-      "feedback": "specific feedback explaining criterion-by-criterion analysis"
+      "score": 1-5,
+      "feedback": "explain why this is or isn't appropriate for this bot type, referencing the scenario"
     },
     "bad_example": {
-      "score": 1-5,
-      "criteria_check": [
-        {"criterion": "extracted criterion text", "met": true/false, "reason": "why met or not met"}
-      ],
-      "violates_user_criteria": true/false,
       "is_realistic_failure": true/false,
-      "scenario_alignment": "explain how this response relates to the scenario's system prompt — does it follow or violate it?",
-      "feedback": "specific feedback explaining criterion-by-criterion analysis"
+      "score": 1-5,
+      "feedback": "explain why this is or isn't a realistic failure for this bot type, referencing the scenario"
     },
     "safety": {"score": 1-5, "feedback": "if sensitive scenario"}
   },
@@ -704,17 +696,12 @@ Evaluate the quality of their criteria definition.`;
         goodExample: {
           score: goodEx.score || 3,
           feedback: goodEx.feedback || '',
-          meetsUserCriteria: goodEx.meets_user_criteria,
           isGoodForScenario: goodEx.is_good_for_scenario,
-          criteriaCheck: Array.isArray(goodEx.criteria_check) ? goodEx.criteria_check : undefined,
         },
         badExample: {
           score: badEx.score || 3,
           feedback: badEx.feedback || '',
-          violatesUserCriteria: badEx.violates_user_criteria,
           isRealisticFailure: badEx.is_realistic_failure,
-          scenarioAlignment: badEx.scenario_alignment || undefined,
-          criteriaCheck: Array.isArray(badEx.criteria_check) ? badEx.criteria_check : undefined,
         },
         safety: scenario.isSensitive ? (parsed.scores?.safety || criteriaScores.safety) : undefined,
       },
@@ -726,50 +713,14 @@ Evaluate the quality of their criteria definition.`;
     };
 
     const postValidated = postValidateLLMResponse(llmResult, criteria, goodExample, badExample);
-    const exampleWarnings = validateExampleLogic(criteria, goodExample, badExample);
-
     const finalResult = { ...llmResult, ...postValidated };
-
-    if (exampleWarnings.length > 0) {
-      const hasCriteriaCheck = (finalResult.scores.goodExample.criteriaCheck?.length ?? 0) > 0 ||
-                                (finalResult.scores.badExample.criteriaCheck?.length ?? 0) > 0;
-
-      if (!hasCriteriaCheck) {
-        for (const w of exampleWarnings) {
-          if (w.field === 'good_example' && finalResult.scores.goodExample.score > 2) {
-            finalResult.scores.goodExample = {
-              ...finalResult.scores.goodExample,
-              score: 1,
-              meetsUserCriteria: false,
-              feedback: w.message,
-            };
-          }
-          if (w.field === 'bad_example' && finalResult.scores.badExample.score > 2) {
-            finalResult.scores.badExample = {
-              ...finalResult.scores.badExample,
-              score: 1,
-              violatesUserCriteria: false,
-              feedback: w.message,
-            };
-          }
-        }
-
-        const avgScore = Math.round(
-          (finalResult.scores.specificity.score + finalResult.scores.relevance.score +
-           finalResult.scores.completeness.score + finalResult.scores.goodExample.score +
-           finalResult.scores.badExample.score) / 5
-        );
-        finalResult.overallScore = Math.min(finalResult.overallScore, avgScore);
-        finalResult.passed = finalResult.overallScore >= 3;
-      }
-    }
 
     finalResult.scores.exampleQuality = {
       score: Math.round((finalResult.scores.goodExample.score + finalResult.scores.badExample.score) / 2),
       feedback: finalResult.scores.exampleQuality?.feedback || '',
     };
 
-    return { ...finalResult, exampleWarnings: exampleWarnings.length > 0 ? exampleWarnings : undefined };
+    return finalResult;
   } catch (error) {
     console.error('API error:', error);
     throw error;

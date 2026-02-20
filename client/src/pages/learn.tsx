@@ -104,7 +104,7 @@ export default function Learn() {
                 <p className="font-medium mb-2">What Production Adds:</p>
                 <p className="text-sm text-muted-foreground mb-2">
                   In the real world, you'll also discover criteria specific to
-                  YOUR product:
+                  your product:
                 </p>
                 <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
                   <li>A real estate bot might need "client persona match"</li>

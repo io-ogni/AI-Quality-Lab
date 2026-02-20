@@ -1,54 +1,62 @@
-import { Link } from 'wouter';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { BookOpen, Target, BarChart3, FlaskConical, ArrowDown } from 'lucide-react';
-import { getProgress } from '@/lib/storage';
-import { useEffect, useState } from 'react';
+import { Link } from "wouter";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  BookOpen,
+  Target,
+  BarChart3,
+  FlaskConical,
+  ArrowDown,
+} from "lucide-react";
+import { getProgress } from "@/lib/storage";
+import { useEffect, useState } from "react";
 
 const pathStops = [
   {
-    href: '/learn',
+    href: "/learn",
     icon: BookOpen,
-    label: 'Learn',
-    sublabel: 'Understand evals & guardrails',
-    badge: 'Start here',
-    badgeVariant: 'default' as const,
+    label: "Learn",
+    sublabel: "Understand evals & guardrails",
+    badge: "Start here",
+    badgeVariant: "default" as const,
   },
   {
-    href: '/challenges',
+    href: "/challenges",
     icon: Target,
-    label: 'Challenges',
-    sublabel: '33 hands-on exercises',
+    label: "Challenges",
+    sublabel: "33 hands-on exercises",
     badge: null,
-    badgeVariant: 'secondary' as const,
+    badgeVariant: "secondary" as const,
   },
   {
-    href: '/challenges',
+    href: "/challenges",
     icon: BarChart3,
-    label: 'Progress',
-    sublabel: 'Track your learning',
+    label: "Progress",
+    sublabel: "Track your learning",
     badge: null,
-    badgeVariant: 'secondary' as const,
+    badgeVariant: "secondary" as const,
   },
   {
-    href: '/sandbox',
+    href: "/sandbox",
     icon: FlaskConical,
-    label: 'Sandbox',
-    sublabel: 'Practice with real scenarios',
+    label: "Sandbox",
+    sublabel: "Practice with real scenarios",
     badge: null,
-    badgeVariant: 'secondary' as const,
+    badgeVariant: "secondary" as const,
   },
 ];
 
 export default function Home() {
-  const [progress, setProgress] = useState<{ totalCompleted: number }>({ totalCompleted: 0 });
+  const [progress, setProgress] = useState<{ totalCompleted: number }>({
+    totalCompleted: 0,
+  });
 
   useEffect(() => {
     setProgress(getProgress());
   }, []);
 
   const getStopBadge = (index: number) => {
-    if (index === 0) return 'Start here';
+    if (index === 0) return "Start here";
     if (index === 1 && progress.totalCompleted > 0) {
       return `${progress.totalCompleted}/33 complete`;
     }
@@ -64,10 +72,19 @@ export default function Home() {
               <FlaskConical className="h-10 w-10 text-primary" />
             </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4" data-testid="text-hero-title">
-            AI Quality Lab <span className="text-base font-medium text-muted-foreground align-middle">v1</span>
+          <h1
+            className="text-4xl sm:text-5xl font-bold tracking-tight mb-4"
+            data-testid="text-hero-title"
+          >
+            AI Quality Lab{" "}
+            <span className="text-base font-medium text-muted-foreground align-middle">
+              v1
+            </span>
           </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto" data-testid="text-hero-subtitle">
+          <p
+            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto"
+            data-testid="text-hero-subtitle"
+          >
             Master the basics of evals and guardrails for AI products
           </p>
         </div>
@@ -80,15 +97,24 @@ export default function Home() {
               <h2 className="font-semibold text-lg mb-3">What is this?</h2>
               <div className="space-y-3 text-muted-foreground">
                 <p className="font-medium text-foreground">
-                  A basic introduction to AI quality control — for Product Managers.
+                  A basic introduction to AI quality control — for Product
+                  Managers.
                 </p>
                 <p>
-                  If you're a PM working on AI features and wondering "what even are evals?" — this is for you.
+                  If you're a PM wanting to know more about delivering AI
+                  features and wondering "what even are evals?" — this is for
+                  you.
                 </p>
-                <p>This app teaches the <strong className="text-foreground">basic concepts</strong> you need to:</p>
+                <p>
+                  This app teaches the{" "}
+                  <strong className="text-foreground">basic concepts</strong>{" "}
+                  you need to:
+                </p>
                 <ul className="list-disc pl-6 space-y-1">
                   <li>Write better specs for AI features</li>
-                  <li>Have informed conversations with engineering about quality</li>
+                  <li>
+                    Have informed conversations with engineering about quality
+                  </li>
                   <li>Know what questions to ask about evals and guardrails</li>
                 </ul>
                 <p className="text-sm pt-2 border-t border-border/50">
@@ -105,18 +131,22 @@ export default function Home() {
           <h2 className="text-center text-lg font-medium text-muted-foreground mb-8">
             Your Learning Path
           </h2>
-          
+
           <div className="relative">
             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/40 via-primary/20 to-primary/5 -translate-x-1/2 hidden sm:block" />
-            
+
             <div className="space-y-6">
               {pathStops.map((stop, index) => {
                 const Icon = stop.icon;
                 const badge = getStopBadge(index);
-                
+
                 return (
                   <div key={stop.label}>
-                    <Link href={stop.href} className="block" data-testid={`card-path-${stop.label.toLowerCase()}`}>
+                    <Link
+                      href={stop.href}
+                      className="block"
+                      data-testid={`card-path-${stop.label.toLowerCase()}`}
+                    >
                       <Card className="relative hover-elevate active-elevate-2 transition-all cursor-pointer group">
                         <div className="absolute left-1/2 -top-3 -translate-x-1/2 hidden sm:block">
                           <div className="w-6 h-6 rounded-full border-2 border-primary bg-background flex items-center justify-center">
@@ -132,18 +162,25 @@ export default function Home() {
                               <div className="flex items-center gap-2 flex-wrap">
                                 <h3 className="font-semibold">{stop.label}</h3>
                                 {badge && (
-                                  <Badge variant={index === 0 ? 'default' : 'secondary'} className="text-xs">
+                                  <Badge
+                                    variant={
+                                      index === 0 ? "default" : "secondary"
+                                    }
+                                    className="text-xs"
+                                  >
                                     {badge}
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground">{stop.sublabel}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {stop.sublabel}
+                              </p>
                             </div>
                           </div>
                         </CardContent>
                       </Card>
                     </Link>
-                    
+
                     {index < pathStops.length - 1 && (
                       <div className="flex justify-center py-2 sm:hidden">
                         <ArrowDown className="h-4 w-4 text-muted-foreground/50" />

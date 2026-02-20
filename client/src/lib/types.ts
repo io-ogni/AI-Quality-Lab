@@ -81,27 +81,11 @@ export interface SandboxScenario {
   sensitiveNote?: string;
 }
 
-export interface CriteriaCheck {
-  criterion: string;
-  met: boolean;
-  reason: string;
-}
-
 export interface ExampleScore {
   score: number;
   feedback: string;
-  meetsUserCriteria?: boolean;
   isGoodForScenario?: boolean;
-  violatesUserCriteria?: boolean;
   isRealisticFailure?: boolean;
-  scenarioAlignment?: string;
-  criteriaCheck?: CriteriaCheck[];
-}
-
-export interface ExampleValidationWarning {
-  field: 'good_example' | 'bad_example';
-  issue: 'contains_advice' | 'follows_criteria' | 'swapped_examples';
-  message: string;
 }
 
 export interface CriteriaEvaluation {
@@ -126,7 +110,6 @@ export interface CriteriaEvaluation {
   strengths: string[];
   criticalGaps: string[];
   suggestion: string;
-  exampleWarnings?: ExampleValidationWarning[];
 }
 
 export interface ChallengeResult {
