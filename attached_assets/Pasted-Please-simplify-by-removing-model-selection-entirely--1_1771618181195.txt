@@ -1,0 +1,21 @@
+Please simplify by removing model selection entirely:                                                
+                                                                                                       
+  1. Remove the model dropdown from Settings page                                                      
+                                                                                                       
+  2. Hardcode the models:                                                                              
+     - Anthropic: always use "claude-sonnet-4-6"                                                       
+     - OpenAI: always use "gpt-4o"                                                                     
+                                                                                                       
+  3. Settings page should only have:                                                                   
+     - Provider dropdown (Anthropic / OpenAI)                                                          
+     - API key input field                                                                             
+     - Test Connection button                                                                          
+     - Clear API Key button                                                                            
+                                                                                                       
+  4. When making API calls, use the hardcoded model for the selected provider.                         
+     Do not read model from sessionStorage or state — just use the constant.                           
+                                                                                                       
+  5. Update the Test Connection to use the same hardcoded model.                                       
+                                                                                                       
+  This removes the bug and simplifies the UX. Users don't need to choose models — we use the best one  
+  for accurate evaluation.  
