@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { BarChart3, Shield, Lightbulb, CheckCircle2, AlertCircle, HelpCircle, ChevronRight, ChevronDown, Zap, CheckSquare } from 'lucide-react';
+import { BarChart3, Shield, Lightbulb, CheckCircle2, AlertCircle, HelpCircle, ChevronRight, ChevronDown, Zap, ArrowRight } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -32,24 +32,93 @@ export default function Learn() {
       <section className="py-12 sm:py-16 border-b">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3" data-testid="text-learn-title">
-            AI Quality for Product Managers
+            The Quality Dimensions
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Let's start with the fundamentals.
+          <p className="text-lg text-muted-foreground mb-4">
+            11 foundational ways to think about AI output quality.
           </p>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            These dimensions give you vocabulary and mental models. In production,
+            you'll also discover criteria specific to your use case — and you'll
+            define them using the same skill you're building here.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-semibold mb-6" data-testid="text-what-youre-learning">What You're Learning</h2>
+          <Card className="bg-card/50">
+            <CardContent className="p-6 space-y-5">
+              <p className="text-muted-foreground">
+                This app teaches you to think systematically about AI quality.
+              </p>
+              <div>
+                <p className="font-medium mb-2">The Foundation (what we teach):</p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li><strong>Vocabulary</strong> — words to describe what's wrong with an AI output</li>
+                  <li><strong>Mental models</strong> — 11 lenses to examine quality through</li>
+                  <li><strong>The skill</strong> — articulating what "good" looks like for a given scenario</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-medium mb-2">What Production Adds:</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  In the real world, you'll also discover criteria specific to YOUR product:
+                </p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li>A real estate bot might need "client persona match"</li>
+                  <li>A finance bot might need "regulatory disclaimer present"</li>
+                  <li>A support bot might need "escalation timing"</li>
+                </ul>
+                <p className="text-sm text-muted-foreground mt-3">
+                  These custom criteria aren't replacements for the 11 dimensions —
+                  they're additions. And you'll define them using exactly the skill
+                  you're practicing here: looking at outputs and articulating what
+                  makes them good or bad.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       <section className="py-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h3 className="text-lg font-semibold mb-2">Video: What is AI Quality?</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Why you can't just ask "is this good?" — and how breaking quality
+            into specific dimensions makes it actionable.
+          </p>
           <div className="aspect-video rounded-lg overflow-hidden border bg-black">
             <iframe
               src="https://www.youtube.com/embed/se3F91Esueg"
-              title="AI Evals and Guardrails for Product Managers"
+              title="What is AI Quality?"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full"
               data-testid="video-intro"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h3 className="text-lg font-semibold mb-2">Video: The 11 Dimensions</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            A tour of the foundational quality dimensions. These are your
+            starting vocabulary — the common ways teams think about AI output
+            quality across industries.
+          </p>
+          <div className="aspect-video rounded-lg overflow-hidden border bg-black">
+            <iframe
+              src="https://www.youtube.com/embed/PLACEHOLDER_DIMENSIONS"
+              title="The 11 Dimensions"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+              data-testid="video-dimensions"
             />
           </div>
         </div>
@@ -183,7 +252,7 @@ export default function Learn() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold mb-6">The Quality Dimensions</h2>
           <p className="text-muted-foreground mb-6">
-            There are 11 key dimensions to evaluate AI output quality. Learn to recognize and define criteria for each:
+            11 foundational dimensions to evaluate AI output quality. These give you vocabulary and mental models — in production, you'll add more specific to your use case.
           </p>
           
           <div className="space-y-4">
@@ -251,194 +320,324 @@ export default function Learn() {
 
       <section className="py-12 bg-muted/30">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-semibold mb-6" data-testid="text-common-questions">Common Quality Questions</h2>
+          <Card className="bg-card/50">
+            <CardContent className="p-6 space-y-5">
+              <p className="text-muted-foreground mb-2">When reviewing an AI output, you might ask:</p>
+
+              <div>
+                <p className="font-medium mb-2">About the basics:</p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li>Did it follow my instructions? → <strong>Instruction Following</strong></li>
+                  <li>Is the format right? → <strong>Format Compliance</strong></li>
+                  <li>Is it safe/appropriate? → <strong>Toxicity</strong></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="font-medium mb-2">About the content:</p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li>Did it answer the right question? → <strong>Relevance</strong></li>
+                  <li>Did it cover everything needed? → <strong>Completeness</strong></li>
+                  <li>Is the information correct? → <strong>Groundedness, Factual Accuracy</strong></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="font-medium mb-2">About the style:</p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li>Does it sound right for the context? → <strong>Tone & Style</strong></li>
+                  <li>Is it consistent throughout? → <strong>Consistency</strong></li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="font-medium mb-2">About the behavior:</p>
+                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                  <li>Does it handle edge cases well? → <strong>Refusal Handling</strong></li>
+                  <li>Can users trick or break it? → <strong>Adversarial Robustness</strong></li>
+                </ul>
+              </div>
+
+              <p className="text-sm text-muted-foreground pt-2 italic">
+                In production, you'll also ask questions specific to YOUR product
+                that don't fit neatly here — and that's expected.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-semibold mb-6" data-testid="text-learning-to-production">From Learning to Production</h2>
+          <Card className="bg-card/50">
+            <CardContent className="p-6 space-y-5">
+              <p className="text-muted-foreground">
+                The gap between this app and production evals is smaller than you think.
+              </p>
+
+              <div>
+                <p className="font-medium mb-3">Same skill, different data:</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left py-2 pr-4 font-medium">Here</th>
+                        <th className="text-left py-2 font-medium">Production</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-muted-foreground">
+                      <tr className="border-b">
+                        <td className="py-2 pr-4">You look at scenario + bot response</td>
+                        <td className="py-2">You look at real user queries + bot responses</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-2 pr-4">You articulate what's good/bad</td>
+                        <td className="py-2">You articulate what's good/bad</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-2 pr-4">You write criteria</td>
+                        <td className="py-2">You write criteria (which become evaluators)</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 pr-4">We evaluate your criteria</td>
+                        <td className="py-2">Your evaluators run on every response</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <p className="font-medium mb-3">What changes in production:</p>
+                <ol className="text-sm text-muted-foreground space-y-3 list-decimal pl-5">
+                  <li>
+                    <strong className="text-foreground">You discover custom criteria</strong> — Through "error analysis" (reviewing
+                    real outputs and noting patterns), you'll find failure modes specific
+                    to your product.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">You build evaluators</strong> — Your criteria become code checks or
+                    LLM-as-judge prompts that run automatically.
+                  </li>
+                  <li>
+                    <strong className="text-foreground">You use pass/fail</strong> — Production evals typically use binary
+                    (pass/fail) rather than 1-5 scales, because it forces clearer thinking.
+                  </li>
+                </ol>
+              </div>
+
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                <p className="text-sm">
+                  <strong>The foundation stays the same:</strong> The skill of looking at an output and articulating "this is wrong
+                  because X" — that's what you're practicing here. That's what you'll
+                  do in production. The vocabulary of these 11 dimensions gives you
+                  a head start.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="py-12 bg-muted/30">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold mb-2" data-testid="text-shipping-decisions-title">Beyond Quality — Shipping Decisions</h2>
-          <p className="text-lg font-medium text-muted-foreground mb-4">Quality Isn't Everything</p>
-          <p className="text-muted-foreground mb-8">
-            You've learned to define quality. But shipping AI means balancing three things:
-            quality, speed, and cost. Most teams optimize for one and ignore the others.
-            Smart PMs understand the tradeoffs.
-          </p>
+          <p className="text-lg font-medium text-muted-foreground mb-6">Quality Isn't Everything</p>
+
+          <Card className="bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800 mb-8" data-testid="card-the-loop">
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-green-800 dark:text-green-300 mb-4">The Loop</h3>
+              <p className="text-muted-foreground mb-4">
+                Forget big upfront planning. Here's how shipping AI actually works:
+              </p>
+              <ol className="space-y-2.5 text-sm text-green-800 dark:text-green-300">
+                {[
+                  'Start with the smallest model that might work',
+                  'Define "good enough" — your best hypothesis',
+                  'Build a few evals early (even 5-10 test cases)',
+                  'Ship to a small audience fast (5% rollout, beta, dogfooding)',
+                  'Watch real behavior — latency, cost, quality in the wild',
+                  'Adjust based on data — upgrade or downgrade as needed',
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="font-semibold text-green-600 dark:text-green-400 shrink-0">{i + 1}.</span>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+              <p className="text-sm text-green-700 dark:text-green-400 mt-4 italic">
+                You won't know the right model, the right latency budget, or the
+                right quality bar until you try. The goal is to learn fast, not
+                plan perfectly.
+              </p>
+            </CardContent>
+          </Card>
 
           <div className="mb-8">
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
               <Zap className="h-5 w-5 text-primary" />
-              Watch: The Quality-Speed-Cost Triangle
+              Watch: Ship Fast, Learn Fast
             </h3>
             <div className="aspect-video rounded-lg overflow-hidden border bg-black">
               <iframe
                 src="https://www.youtube.com/embed/PLACEHOLDER_SHIPPING"
-                title="The Quality-Speed-Cost Triangle"
+                title="Ship Fast, Learn Fast"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="w-full h-full"
                 data-testid="video-shipping-decisions"
               />
             </div>
-            <p className="text-sm text-muted-foreground mt-3">Prefer reading? Expand the sections below.</p>
+            <p className="text-sm text-muted-foreground mt-3">Want the details? Expand the sections below.</p>
           </div>
 
           <div className="space-y-3">
-            <ExpandableSection title="Quality vs Speed vs Cost — Pick Two" testId="section-triangle">
+            <ExpandableSection title="Why Start With the Smallest Model?" testId="section-why-start-small">
               <div className="space-y-4 text-sm text-muted-foreground">
-                <p>Think of it like ordering food:</p>
-                <div className="space-y-3">
-                  <div className="p-3 rounded-lg bg-muted/50">
-                    <p className="font-medium text-foreground">Fine dining (GPT-4, Claude Opus)</p>
-                    <p>Excellent quality, but slow and expensive</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50">
-                    <p className="font-medium text-foreground">Fast casual (GPT-4o, Claude Sonnet)</p>
-                    <p>Good quality, reasonable speed and price</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50">
-                    <p className="font-medium text-foreground">Fast food (GPT-4o-mini, Claude Haiku)</p>
-                    <p>Quick and cheap, but simpler output</p>
-                  </div>
+                <p>Because you don't know what you need yet.</p>
+                <p>
+                  Most teams start with the biggest model "just to be safe" and
+                  never optimize. Smart teams start small and upgrade WHERE needed.
+                </p>
+                <div>
+                  <p className="font-medium text-foreground mb-2">The discovery process:</p>
+                  <ol className="list-decimal pl-5 space-y-1">
+                    <li>Ship with a small/cheap model (Haiku, GPT-4o-mini)</li>
+                    <li>Watch where it fails</li>
+                    <li>Upgrade ONLY the parts that need it</li>
+                    <li>Keep the cheap model for everything else</li>
+                  </ol>
                 </div>
-                <p>None of these is "wrong." It depends on your use case.</p>
+                <div>
+                  <p className="font-medium text-foreground mb-2">You might discover:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>80% of requests work fine with the small model</li>
+                    <li>Only complex queries need the big model</li>
+                    <li>Some failures are prompt problems, not model problems</li>
+                  </ul>
+                </div>
+                <p className="italic">You can't discover this by planning. You discover it by shipping.</p>
               </div>
             </ExpandableSection>
 
-            <ExpandableSection title="Actual Latency and Cost Numbers" testId="section-numbers">
+            <ExpandableSection title="Model Tiers: A Quick Reference" testId="section-model-tiers">
               <div className="space-y-4 text-sm">
+                <p className="text-muted-foreground">When you need to pick a starting point or consider an upgrade:</p>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse">
                     <thead>
                       <tr className="border-b">
-                        <th className="text-left py-2 pr-4 font-medium">Model Tier</th>
-                        <th className="text-left py-2 pr-4 font-medium">Latency</th>
-                        <th className="text-left py-2 pr-4 font-medium">Cost per 1K calls*</th>
-                        <th className="text-left py-2 font-medium">Quality</th>
+                        <th className="text-left py-2 pr-4 font-medium">Tier</th>
+                        <th className="text-left py-2 pr-4 font-medium">Models</th>
+                        <th className="text-left py-2 pr-4 font-medium">Typical Use</th>
+                        <th className="text-left py-2 font-medium">Rough Cost*</th>
                       </tr>
                     </thead>
                     <tbody className="text-muted-foreground">
                       <tr className="border-b">
-                        <td className="py-2 pr-4">Small (Haiku, GPT-4o-mini)</td>
-                        <td className="py-2 pr-4">100-300ms</td>
-                        <td className="py-2 pr-4">$0.10-0.50</td>
-                        <td className="py-2">70-80%</td>
+                        <td className="py-2 pr-4">Small</td>
+                        <td className="py-2 pr-4">Haiku, GPT-4o-mini</td>
+                        <td className="py-2 pr-4">High-volume, speed-critical</td>
+                        <td className="py-2">$0.10-0.50/1K calls</td>
                       </tr>
                       <tr className="border-b">
-                        <td className="py-2 pr-4">Medium (Sonnet, GPT-4o)</td>
-                        <td className="py-2 pr-4">200-500ms</td>
-                        <td className="py-2 pr-4">$1-5</td>
-                        <td className="py-2">85-92%</td>
+                        <td className="py-2 pr-4">Medium</td>
+                        <td className="py-2 pr-4">Sonnet, GPT-4o</td>
+                        <td className="py-2 pr-4">Balanced quality/cost</td>
+                        <td className="py-2">$1-5/1K calls</td>
                       </tr>
                       <tr>
-                        <td className="py-2 pr-4">Large (Opus, GPT-4)</td>
-                        <td className="py-2 pr-4">500ms-2s</td>
-                        <td className="py-2 pr-4">$10-30</td>
-                        <td className="py-2">92-98%</td>
+                        <td className="py-2 pr-4">Large</td>
+                        <td className="py-2 pr-4">Opus, GPT-4</td>
+                        <td className="py-2 pr-4">Complex reasoning, high-stakes</td>
+                        <td className="py-2">$10-30/1K calls</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <p className="text-xs text-muted-foreground">*Assuming ~500 tokens per call. Prices change — check current rates.</p>
+                <p className="text-xs text-muted-foreground">*Assuming ~500 tokens/call. Prices change constantly.</p>
                 <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <p className="text-sm">
-                    <strong>Key insight:</strong> The gap between "medium" and "large" is often smaller than you'd think. That last 5% of quality might cost 10x more.
+                  <p className="text-sm text-muted-foreground">
+                    <strong className="text-foreground">Don't use this table to pick your model upfront.</strong> Use it when you've shipped, seen real data, and are deciding whether to upgrade or downgrade.
                   </p>
                 </div>
               </div>
             </ExpandableSection>
 
-            <ExpandableSection title="Which Model for Which Feature?" testId="section-scenarios">
+            <ExpandableSection title="How Different Products Landed" testId="section-real-examples">
               <div className="space-y-5 text-sm text-muted-foreground">
+                <p>These teams didn't plan their way here. They shipped and learned.</p>
                 <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">Scenario 1: Customer support chatbot</p>
+                  <p className="font-medium text-foreground mb-2">Customer support chatbot</p>
                   <ul className="space-y-1">
-                    <li>Users expect instant responses</li>
-                    <li>Volume: 100,000 messages/month</li>
-                    <li>Quality bar: Understand intent, be helpful</li>
+                    <li><strong>Started with:</strong> Sonnet (playing it safe)</li>
+                    <li><strong>Discovered:</strong> 85% of queries were simple FAQs</li>
+                    <li><strong>Ended with:</strong> Haiku for FAQs, Sonnet for complex issues</li>
+                    <li><strong>Result:</strong> 60% cost reduction, same quality</li>
                   </ul>
-                  <p className="mt-2 font-medium text-primary">Best fit: Small model (Haiku/GPT-4o-mini)</p>
-                  <p className="text-xs mt-1">Users abandon slow chatbots. At 100K messages, cost difference is $50 vs $3,000/month.</p>
                 </div>
                 <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">Scenario 2: Legal document analyzer</p>
+                  <p className="font-medium text-foreground mb-2">Legal document analyzer</p>
                   <ul className="space-y-1">
-                    <li>Users wait for analysis</li>
-                    <li>Volume: 500 documents/month</li>
-                    <li>Quality bar: Cannot miss critical clauses</li>
+                    <li><strong>Started with:</strong> GPT-4o-mini (cost concerns)</li>
+                    <li><strong>Discovered:</strong> Missing critical clauses in edge cases</li>
+                    <li><strong>Ended with:</strong> GPT-4 for all analysis</li>
+                    <li><strong>Result:</strong> Higher cost, but acceptable for the use case</li>
                   </ul>
-                  <p className="mt-2 font-medium text-primary">Best fit: Large model (Opus/GPT-4)</p>
-                  <p className="text-xs mt-1">Users expect to wait for complex analysis. At 500 docs, even expensive model costs ~$150/month. Worth it.</p>
                 </div>
                 <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">Scenario 3: Email draft suggestions</p>
+                  <p className="font-medium text-foreground mb-2">Email draft suggestions</p>
                   <ul className="space-y-1">
-                    <li>Real-time as user types</li>
-                    <li>Volume: 50,000/day</li>
-                    <li>Quality bar: Helpful but user edits anyway</li>
+                    <li><strong>Started with:</strong> Sonnet</li>
+                    <li><strong>Discovered:</strong> Users edited most suggestions anyway</li>
+                    <li><strong>Ended with:</strong> Haiku</li>
+                    <li><strong>Result:</strong> Faster suggestions, users didn't notice quality drop</li>
                   </ul>
-                  <p className="mt-2 font-medium text-primary">Best fit: Small-to-medium model</p>
-                  <p className="text-xs mt-1">Need speed, but stakes are low. A/B test to find the sweet spot.</p>
                 </div>
+                <p className="italic">The pattern: Start somewhere, measure what matters, adjust.</p>
               </div>
             </ExpandableSection>
 
-            <ExpandableSection title="Before You Pick a Model" testId="section-questions">
+            <ExpandableSection title="Questions for Your Retrospective" testId="section-retrospective">
               <div className="space-y-4 text-sm text-muted-foreground">
+                <p>After you've shipped and collected data, ask:</p>
                 <div>
-                  <p className="font-medium text-foreground">1. What's the latency budget?</p>
-                  <ul className="mt-1 ml-4 space-y-0.5 list-disc">
-                    <li>Real-time (autocomplete, chat): Under 500ms</li>
-                    <li>Interactive (search, analysis): Under 2 seconds</li>
-                    <li>Background (batch, reports): Doesn't matter</li>
+                  <p className="font-medium text-foreground mb-1">About latency:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Are users abandoning because it's too slow?</li>
+                    <li>Where's the latency coming from (model? network? processing)?</li>
+                    <li>Would users wait longer for better quality?</li>
                   </ul>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">2. What's the volume?</p>
-                  <ul className="mt-1 ml-4 space-y-0.5 list-disc">
-                    <li>Under 1K calls/month — Cost barely matters, use the best</li>
-                    <li>1K-100K/month — Optimize carefully</li>
-                    <li>Over 100K/month — Every penny counts</li>
+                  <p className="font-medium text-foreground mb-1">About cost:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>What's our cost per user/session/task?</li>
+                    <li>Which queries are most expensive?</li>
+                    <li>Can we route simple queries to a cheaper model?</li>
                   </ul>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">3. What's the quality floor?</p>
-                  <ul className="mt-1 ml-4 space-y-0.5 list-disc">
-                    <li>Not "ideal" — what's the <em>minimum</em> acceptable?</li>
-                    <li>Can a smaller model clear that bar?</li>
-                    <li>Use your evals to find out!</li>
+                  <p className="font-medium text-foreground mb-1">About quality:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Where are users complaining?</li>
+                    <li>What are the actual failure modes? (not hypothetical ones)</li>
+                    <li>Would a bigger model fix this, or is it a prompt problem?</li>
                   </ul>
                 </div>
-                <div>
-                  <p className="font-medium text-foreground">4. What's the failure cost?</p>
-                  <ul className="mt-1 ml-4 space-y-0.5 list-disc">
-                    <li>Legal doc wrong — lawsuit — Use big model</li>
-                    <li>Email suggestion wrong — user deletes it — Use small model</li>
-                  </ul>
-                </div>
-              </div>
-            </ExpandableSection>
-
-            <ExpandableSection title="How Evals Help You Choose Models" testId="section-eval-driven">
-              <div className="space-y-4 text-sm text-muted-foreground">
-                <p>Here's where everything connects:</p>
-                <ol className="list-decimal pl-5 space-y-2">
-                  <li><strong className="text-foreground">Define your quality bar</strong> using the dimensions that matter</li>
-                  <li><strong className="text-foreground">Run the same evals</strong> against multiple models</li>
-                  <li><strong className="text-foreground">Find the smallest model that clears your bar</strong></li>
-                  <li><strong className="text-foreground">Monitor in production</strong> and upgrade only if needed</li>
-                </ol>
-                <p>
-                  This is "right-sizing your model." Most teams start with the biggest (easiest) and never optimize. 
-                  Smart teams start small and upgrade where needed.
-                </p>
                 <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <p>
-                    <strong>The connection:</strong> Those quality dimensions you learned? They're not just for checking quality — they're for <strong>choosing models</strong>.
-                  </p>
+                  <p><strong className="text-foreground">The key insight:</strong> These questions are unanswerable before you ship. Don't try to answer them in a planning doc.</p>
                 </div>
               </div>
             </ExpandableSection>
 
-            <ExpandableSection title="Advanced: Model Routing" testId="section-routing">
+            <ExpandableSection title="Advanced: Using Multiple Models" testId="section-model-routing">
               <div className="space-y-4 text-sm text-muted-foreground">
-                <p>Use different models for different tasks:</p>
+                <p>Once you have data, you might route different requests to different models.</p>
                 <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-3">Example: Customer support system</p>
+                  <p className="font-medium text-foreground mb-3">Example: Customer support</p>
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <Badge variant="secondary" className="shrink-0 text-xs">Tier 1</Badge>
@@ -454,42 +653,29 @@ export default function Learn() {
                     </div>
                   </div>
                 </div>
-                <p>
-                  Route requests by complexity. Average cost drops dramatically while quality stays high where it matters.
-                </p>
-                <p className="text-xs italic">You don't need this on day one. But know it exists.</p>
+                <div>
+                  <p className="font-medium text-foreground mb-2">How to get there:</p>
+                  <ol className="list-decimal pl-5 space-y-1">
+                    <li>Ship with one model</li>
+                    <li>Identify which queries fail and which succeed</li>
+                    <li>Build a classifier to route queries</li>
+                    <li>Gradually shift traffic</li>
+                  </ol>
+                </div>
+                <p className="italic">Don't design this upfront. You won't know your tiers until you've seen real traffic patterns.</p>
               </div>
             </ExpandableSection>
           </div>
 
-          <Card className="mt-8 bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800" data-testid="card-checklist">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-green-800 dark:text-green-300 mb-4 flex items-center gap-2">
-                <CheckSquare className="h-5 w-5" />
-                Your Pre-Ship Checklist
-              </h3>
-              <ul className="space-y-2.5 text-sm text-green-800 dark:text-green-300">
-                {[
-                  'What model are we using and why?',
-                  "What's the expected latency? Acceptable for the UX?",
-                  "What's the cost per call? Monthly budget at expected volume?",
-                  "What's our quality bar? What evals prove we meet it?",
-                  'What happens when the AI makes mistakes?',
-                  'Do we have monitoring for quality degradation?',
-                  'Is there a smaller/cheaper model we should test?',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-green-600 dark:text-green-400 shrink-0">&#9744;</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm font-medium text-green-700 dark:text-green-400 mt-4">
-                If you can't answer these, you're not ready to ship.
-              </p>
-            </CardContent>
-          </Card>
-
+          <div className="mt-8 text-center">
+            <p className="text-muted-foreground mb-4">Ready to practice defining quality?</p>
+            <Link href="/challenges">
+              <Button data-testid="button-goto-challenges-shipping">
+                Go to Challenges
+                <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
