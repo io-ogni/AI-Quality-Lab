@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ArrowLeft, Lock, Lightbulb, ChevronDown, Check, X, AlertTriangle, Loader2, WifiOff, KeyRound, Clock, ServerCrash } from 'lucide-react';
 import { APIKeyRequired } from '@/components/api-key-required';
@@ -145,35 +145,62 @@ export default function EvalChallenge() {
 
       <section className="py-6">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <Tabs value={`level-${currentLevel}`} onValueChange={(v) => {
-            const level = parseInt(v.replace('level-', '')) as 1 | 2 | 3;
-            if (!isLevelLocked(level)) {
-              setCurrentLevel(level);
-              setApiError(null);
-              setResult(null);
-              setAttackWarning(null);
-            }
-          }}>
-            <TabsList className="grid w-full grid-cols-3 mb-6">
+          <Tabs value={`level-${currentLevel}`}>
+            <div className="grid grid-cols-3 gap-2 mb-6">
               {[1, 2, 3].map((level) => {
                 const locked = isLevelLocked(level);
                 const completed = completedLevels.includes(level);
-                
+                const active = currentLevel === level;
+                const labels = ['Beginner', 'Intermediate', 'Advanced'];
+
                 return (
-                  <TabsTrigger
+                  <button
                     key={level}
-                    value={`level-${level}`}
                     disabled={locked}
-                    className="relative"
+                    onClick={() => {
+                      if (!locked) {
+                        setCurrentLevel(level as 1 | 2 | 3);
+                        setApiError(null);
+                        setResult(null);
+                        setAttackWarning(null);
+                      }
+                    }}
                     data-testid={`tab-level-${level}`}
+                    className={`
+                      relative flex flex-col items-center gap-1 rounded-lg px-3 py-3 text-sm font-medium transition-all border-2
+                      ${completed && !active
+                        ? 'border-green-500/40 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400'
+                        : active
+                          ? 'border-primary bg-primary/10 text-primary shadow-sm'
+                          : locked
+                            ? 'border-muted bg-muted/50 text-muted-foreground/50 cursor-not-allowed opacity-60'
+                            : 'border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/5 cursor-pointer'
+                      }
+                    `}
                   >
-                    {locked && <Lock className="h-3 w-3 mr-1.5" />}
-                    {completed && <Check className="h-3 w-3 mr-1.5 text-green-600" />}
-                    Level {level}
-                  </TabsTrigger>
+                    <div className="flex items-center gap-1.5">
+                      {completed ? (
+                        <div className="flex items-center justify-center h-5 w-5 rounded-full bg-green-500 text-white">
+                          <Check className="h-3 w-3" />
+                        </div>
+                      ) : locked ? (
+                        <div className="flex items-center justify-center h-5 w-5 rounded-full bg-muted-foreground/20">
+                          <Lock className="h-3 w-3" />
+                        </div>
+                      ) : (
+                        <div className={`flex items-center justify-center h-5 w-5 rounded-full text-xs font-bold ${active ? 'bg-primary text-primary-foreground' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
+                          {level}
+                        </div>
+                      )}
+                      <span>Level {level}</span>
+                    </div>
+                    <span className={`text-[11px] ${completed ? 'text-green-600 dark:text-green-400' : locked ? 'text-muted-foreground/40' : 'text-muted-foreground'}`}>
+                      {completed ? 'Completed' : locked ? 'Locked' : labels[level - 1]}
+                    </span>
+                  </button>
                 );
               })}
-            </TabsList>
+            </div>
 
             {[1, 2, 3].map((level) => (
               <TabsContent key={level} value={`level-${level}`} className="space-y-6">
