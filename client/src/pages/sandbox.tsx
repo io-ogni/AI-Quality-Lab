@@ -23,15 +23,15 @@ function ScenarioCard({ scenario, selected, onClick }: {
 }) {
   return (
     <Card 
-      className={`cursor-pointer hover-elevate active-elevate-2 transition-all ${
-        selected ? 'ring-2 ring-primary border-primary' : ''
+      className={`cursor-pointer hover-elevate active-elevate-2 transition-all border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/30 ${
+        selected ? 'ring-2 ring-blue-500 border-blue-400 bg-blue-100/60 dark:border-blue-700 dark:bg-blue-950/50' : ''
       }`}
       onClick={onClick}
       data-testid={`card-scenario-${scenario.id}`}
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-medium">{scenario.name}</h3>
+          <h3 className="font-medium text-blue-900 dark:text-blue-100">{scenario.name}</h3>
           {scenario.isSensitive && (
             <Badge variant="outline" className="shrink-0 text-xs">
               <AlertTriangle className="h-3 w-3 mr-1" />
@@ -144,8 +144,9 @@ export default function Sandbox() {
     <div className="min-h-[calc(100vh-8rem)]">
       <section className="py-10 border-b">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight mb-2" data-testid="text-sandbox-title">
+          <h1 className="text-3xl font-bold tracking-tight mb-2 flex items-center gap-3" data-testid="text-sandbox-title">
             Define Quality Criteria
+            <span className="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Beta</span>
           </h1>
           <p className="text-muted-foreground">
             Pick a scenario. Define what a good response looks like. We'll score how well you defined it.
