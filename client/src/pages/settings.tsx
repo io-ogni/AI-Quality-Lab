@@ -8,6 +8,7 @@ import { Lock, Eye, EyeOff, Check, X, Loader2, Lightbulb, Info } from 'lucide-re
 import { getAPISettings, setAPISettings, clearAPIKey, clearProgress } from '@/lib/storage';
 import { useToast } from '@/hooks/use-toast';
 import { testAPIConnection } from '@/lib/api';
+import { MODEL_FOR_PROVIDER } from '@/lib/types';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -143,6 +144,9 @@ export default function Settings() {
                     <SelectItem value="anthropic">Anthropic</SelectItem>
                   </SelectContent>
                 </Select>
+                <p className="text-sm text-muted-foreground mt-1.5">
+                  Model: <span className="font-medium text-foreground">{MODEL_FOR_PROVIDER[provider]}</span>
+                </p>
               </div>
 
               <div className="space-y-2">
