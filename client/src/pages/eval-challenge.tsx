@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ArrowLeft, Lock, Lightbulb, ChevronDown, Check, X, AlertTriangle, Loader2, WifiOff, KeyRound, Clock, ServerCrash } from 'lucide-react';
+import { ArrowLeft, Lock, Lightbulb, ChevronDown, Check, X, AlertTriangle, Loader2, WifiOff, KeyRound, Clock, ServerCrash, ChevronRight, Trophy } from 'lucide-react';
 import { APIKeyRequired } from '@/components/api-key-required';
 import { challenges, qualityDimensions } from '@/lib/challenges-data';
 import { getLevelProgress, hasAPIKey, markLevelComplete } from '@/lib/storage';
@@ -34,6 +34,18 @@ export default function EvalChallenge() {
 
   const challenge = challenges[evalId];
   const dimensionInfo = qualityDimensions.find(d => d.id === evalId);
+  const allThreeDone = [1, 2, 3].every(l => completedLevels.includes(l));
+
+  const getNextChallenge = (): QualityDimension | null => {
+    const dims = qualityDimensions.map(d => d.id);
+    const currentIdx = dims.indexOf(evalId);
+    for (let i = 1; i < dims.length; i++) {
+      const nextId = dims[(currentIdx + i) % dims.length];
+      const progress = getLevelProgress(nextId);
+      if (![1, 2, 3].every(l => progress.includes(l))) return nextId;
+    }
+    return null;
+  };
 
   useEffect(() => {
     setCompletedLevels(getLevelProgress(evalId));
@@ -195,6 +207,40 @@ export default function EvalChallenge() {
                 );
               })}
             </div>
+
+            {allThreeDone && (() => {
+              const next = getNextChallenge();
+              const nextInfo = next ? qualityDimensions.find(d => d.id === next) : null;
+              return (
+                <Card className="mb-6 border-green-500/30 bg-green-50 dark:bg-green-950/20">
+                  <CardContent className="p-4 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center h-8 w-8 rounded-full bg-green-500 text-white shrink-0">
+                        <Trophy className="h-4 w-4" />
+                      </div>
+                      <p className="text-sm font-medium text-green-800 dark:text-green-300">
+                        {next ? 'All 3 levels completed!' : 'All challenges completed!'}
+                      </p>
+                    </div>
+                    {next && nextInfo ? (
+                      <Link href={`/challenge/${next}`}>
+                        <Button size="sm" data-testid="button-next-challenge">
+                          Next: {nextInfo.name}
+                          <ChevronRight className="h-4 w-4 ml-1" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link href="/challenges">
+                        <Button size="sm" data-testid="button-all-challenges">
+                          All Challenges
+                          <ChevronRight className="h-4 w-4 ml-1" />
+                        </Button>
+                      </Link>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })()}
 
             {[1, 2, 3].map((level) => (
               <TabsContent key={level} value={`level-${level}`} className="space-y-6">
