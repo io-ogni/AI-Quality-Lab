@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import type { APISettings } from '@/lib/types';
 
-const openaiModels = ['gpt-4o', 'gpt-4o-mini'];
+const openaiModels = ['gpt-4.1', 'gpt-4.1-mini', 'gpt-4o', 'gpt-4o-mini'];
 const anthropicModels = ['claude-sonnet-4-6', 'claude-haiku-4-5'];
 
 export default function Settings() {
@@ -43,7 +43,7 @@ export default function Settings() {
   }, []);
 
   useEffect(() => {
-    setModel(provider === 'openai' ? 'gpt-4o' : 'claude-sonnet-4-6');
+    setModel(provider === 'openai' ? 'gpt-4.1' : 'claude-sonnet-4-6');
   }, [provider]);
 
   const handleSave = () => {
