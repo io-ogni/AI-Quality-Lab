@@ -63,63 +63,125 @@ export function detectWrongInputType(input: string): { isAttack: boolean; confid
   return null;
 }
 
+export type APIErrorType = 'NETWORK_ERROR' | 'AUTH_ERROR' | 'RATE_LIMIT' | 'SERVER_ERROR' | 'PARSE_ERROR' | 'EMPTY_RESPONSE' | 'TIMEOUT' | 'UNKNOWN_ERROR';
+
+export class APIError extends Error {
+  errorType: APIErrorType;
+  userMessage: string;
+
+  constructor(errorType: APIErrorType, userMessage: string) {
+    super(userMessage);
+    this.errorType = errorType;
+    this.userMessage = userMessage;
+  }
+}
+
+function handleHttpError(status: number): APIError {
+  const errors: Record<number, { errorType: APIErrorType; userMessage: string }> = {
+    401: { errorType: 'AUTH_ERROR', userMessage: 'Invalid API key. Check your key in Settings.' },
+    403: { errorType: 'AUTH_ERROR', userMessage: "API key doesn't have permission. Verify your key has the correct access." },
+    429: { errorType: 'RATE_LIMIT', userMessage: 'Rate limit reached. Wait a moment and try again.' },
+    500: { errorType: 'SERVER_ERROR', userMessage: 'API server error. This is not your fault — try again in a minute.' },
+    502: { errorType: 'SERVER_ERROR', userMessage: 'API service temporarily unavailable. Try again shortly.' },
+    503: { errorType: 'SERVER_ERROR', userMessage: 'API service temporarily unavailable. Try again shortly.' },
+    504: { errorType: 'SERVER_ERROR', userMessage: 'API request timed out. Try again.' },
+  };
+
+  const err = errors[status] || { errorType: 'UNKNOWN_ERROR' as APIErrorType, userMessage: `API error (${status}). Try again.` };
+  return new APIError(err.errorType, err.userMessage);
+}
+
 async function callLLM(systemPrompt: string, userPrompt: string): Promise<string> {
   const settings = getAPISettings();
-  if (!settings) throw new Error('No API settings');
+  if (!settings) throw new APIError('AUTH_ERROR', 'No API key configured. Add your key in Settings.');
 
-  if (settings.provider === 'anthropic') {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': settings.apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: settings.model,
-        max_tokens: 2000,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-      }),
-    });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+  try {
+    let response: Response;
+
+    if (settings.provider === 'anthropic') {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': settings.apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: settings.model,
+          max_tokens: 2000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }],
+        }),
+        signal: controller.signal,
+      });
+    } else {
+      response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${settings.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: settings.model,
+          max_tokens: 2000,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt },
+          ],
+        }),
+        signal: controller.signal,
+      });
     }
 
-    const data = await response.json();
-    return data.content[0].text;
-  } else {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${settings.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: settings.model,
-        max_tokens: 2000,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-      }),
-    });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      throw handleHttpError(response.status);
     }
 
-    const data = await response.json();
-    return data.choices[0].message.content;
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new APIError('PARSE_ERROR', 'Received invalid response from API. Try again.');
+    }
+
+    const content = settings.provider === 'anthropic'
+      ? data?.content?.[0]?.text
+      : data?.choices?.[0]?.message?.content;
+
+    if (!content) {
+      throw new APIError('EMPTY_RESPONSE', 'Received empty response from API. Try again.');
+    }
+
+    return content;
+  } catch (error) {
+    clearTimeout(timeoutId);
+
+    if (error instanceof APIError) throw error;
+
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new APIError('TIMEOUT', 'Request timed out. Try again.');
+    }
+
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new APIError('NETWORK_ERROR', 'Network error. Check your internet connection and try again.');
+    }
+
+    throw new APIError('NETWORK_ERROR', 'Network error. Check your internet connection and try again.');
   }
 }
 
 export async function testAPIConnection(settings: APISettings): Promise<{ success: boolean; message: string }> {
   try {
+    let response: Response;
+
     if (settings.provider === 'anthropic') {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,14 +195,8 @@ export async function testAPIConnection(settings: APISettings): Promise<{ succes
           messages: [{ role: 'user', content: 'Hi' }],
         }),
       });
-
-      if (response.ok) {
-        return { success: true, message: 'Connected successfully' };
-      } else {
-        return { success: false, message: 'Invalid key or connection error' };
-      }
     } else {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,15 +208,19 @@ export async function testAPIConnection(settings: APISettings): Promise<{ succes
           messages: [{ role: 'user', content: 'Hi' }],
         }),
       });
-
-      if (response.ok) {
-        return { success: true, message: 'Connected successfully' };
-      } else {
-        return { success: false, message: 'Invalid key or connection error' };
-      }
     }
+
+    if (response.ok) {
+      return { success: true, message: 'Connected successfully' };
+    }
+
+    const err = handleHttpError(response.status);
+    return { success: false, message: err.userMessage };
   } catch (error) {
-    return { success: false, message: 'Connection failed' };
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      return { success: false, message: 'Network error. Check your internet connection.' };
+    }
+    return { success: false, message: 'Connection failed. Check your internet connection.' };
   }
 }
 

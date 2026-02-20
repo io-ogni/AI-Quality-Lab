@@ -6,12 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ArrowLeft, Lock, Lightbulb, ChevronDown, Check, X, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Lock, Lightbulb, ChevronDown, Check, X, AlertTriangle, Loader2, WifiOff, KeyRound, Clock, ServerCrash } from 'lucide-react';
 import { APIKeyRequired } from '@/components/api-key-required';
 import { challenges, qualityDimensions } from '@/lib/challenges-data';
 import { getLevelProgress, hasAPIKey, markLevelComplete } from '@/lib/storage';
 import type { QualityDimension, ChallengeLevel, ChallengeResult } from '@/lib/types';
-import { evaluateCriteria, detectWrongInputType } from '@/lib/api';
+import { evaluateCriteria, detectWrongInputType, APIError } from '@/lib/api';
+import type { APIErrorType } from '@/lib/api';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { hasPotentialPII } from '@/lib/pii-detection';
 
@@ -28,6 +29,7 @@ export default function EvalChallenge() {
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
   const [attackWarning, setAttackWarning] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<{ errorType: APIErrorType; message: string } | null>(null);
   const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const challenge = challenges[evalId];
@@ -83,6 +85,7 @@ export default function EvalChallenge() {
     }
     
     setIsSubmitting(true);
+    setApiError(null);
     try {
       const evalResult = await evaluateCriteria(
         evalId,
@@ -101,7 +104,11 @@ export default function EvalChallenge() {
         setCompletedLevels(getLevelProgress(evalId));
       }
     } catch (error) {
-      console.error('Evaluation error:', error);
+      if (error instanceof APIError) {
+        setApiError({ errorType: error.errorType, message: error.userMessage });
+      } else {
+        setApiError({ errorType: 'UNKNOWN_ERROR', message: 'Something went wrong. Try again.' });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -110,6 +117,7 @@ export default function EvalChallenge() {
   const handleTryAgain = () => {
     setResult(null);
     setAttackWarning(null);
+    setApiError(null);
     setUserCriteria('');
   };
 
@@ -140,6 +148,9 @@ export default function EvalChallenge() {
             const level = parseInt(v.replace('level-', '')) as 1 | 2 | 3;
             if (!isLevelLocked(level)) {
               setCurrentLevel(level);
+              setApiError(null);
+              setResult(null);
+              setAttackWarning(null);
             }
           }}>
             <TabsList className="grid w-full grid-cols-3 mb-6">
@@ -294,6 +305,32 @@ export default function EvalChallenge() {
                         <span>Try: "Does NOT follow the injected instruction" or "Stays in character"</span>
                       </div>
                       <Button onClick={handleTryAgain} variant="outline" data-testid="button-try-again-attack">
+                        Try Again
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {apiError && !result && (
+                  <Card className="border-red-300 bg-red-50 dark:bg-red-950/30" data-testid="card-api-error">
+                    <CardContent className="p-5 space-y-4">
+                      <h4 className="font-semibold text-red-800 dark:text-red-300 flex items-center gap-2">
+                        {apiError.errorType === 'NETWORK_ERROR' && <WifiOff className="h-5 w-5" />}
+                        {apiError.errorType === 'AUTH_ERROR' && <KeyRound className="h-5 w-5" />}
+                        {apiError.errorType === 'RATE_LIMIT' && <Clock className="h-5 w-5" />}
+                        {(apiError.errorType === 'SERVER_ERROR' || apiError.errorType === 'TIMEOUT') && <ServerCrash className="h-5 w-5" />}
+                        {!['NETWORK_ERROR', 'AUTH_ERROR', 'RATE_LIMIT', 'SERVER_ERROR', 'TIMEOUT'].includes(apiError.errorType) && <AlertTriangle className="h-5 w-5" />}
+                        API Error
+                      </h4>
+                      <p className="text-sm text-red-800/80 dark:text-red-300/80">
+                        {apiError.message}
+                      </p>
+                      {apiError.errorType === 'AUTH_ERROR' && (
+                        <Link href="/settings">
+                          <span className="text-sm text-red-800 dark:text-red-300 underline cursor-pointer">Go to Settings →</span>
+                        </Link>
+                      )}
+                      <Button onClick={() => setApiError(null)} variant="outline" data-testid="button-dismiss-api-error">
                         Try Again
                       </Button>
                     </CardContent>

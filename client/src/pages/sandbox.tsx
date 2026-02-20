@@ -1,13 +1,15 @@
 import { useState, useRef } from 'react';
+import { Link } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Loader2, Star, Check, X, Lightbulb } from 'lucide-react';
+import { AlertTriangle, Loader2, Star, Check, X, Lightbulb, WifiOff, KeyRound, Clock, ServerCrash } from 'lucide-react';
 import { APIKeyRequired } from '@/components/api-key-required';
 import { sandboxScenarios } from '@/lib/challenges-data';
 import { hasAPIKey } from '@/lib/storage';
-import { evaluateSandboxCriteria } from '@/lib/api';
+import { evaluateSandboxCriteria, APIError } from '@/lib/api';
+import type { APIErrorType } from '@/lib/api';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { CriteriaEvaluation, SandboxScenario } from '@/lib/types';
 import { useEffect } from 'react';
@@ -70,6 +72,7 @@ export default function Sandbox() {
   const [result, setResult] = useState<CriteriaEvaluation | null>(null);
   const [hasKey, setHasKey] = useState(false);
   const [piiWarning, setPiiWarning] = useState(false);
+  const [apiError, setApiError] = useState<{ errorType: APIErrorType; message: string } | null>(null);
   const scenarioContentRef = useRef<HTMLDivElement>(null);
   const criteriaTextareaRef = useRef<HTMLTextAreaElement>(null);
   const draftsRef = useRef<Record<string, ScenarioDraft>>({});
@@ -93,6 +96,7 @@ export default function Sandbox() {
     }
 
     setIsSubmitting(true);
+    setApiError(null);
     try {
       const evalResult = await evaluateSandboxCriteria(
         selectedScenario,
@@ -102,7 +106,11 @@ export default function Sandbox() {
       );
       setResult(evalResult);
     } catch (error) {
-      console.error('Evaluation error:', error);
+      if (error instanceof APIError) {
+        setApiError({ errorType: error.errorType, message: error.userMessage });
+      } else {
+        setApiError({ errorType: 'UNKNOWN_ERROR', message: 'Something went wrong. Try again.' });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -110,6 +118,7 @@ export default function Sandbox() {
 
   const handleReset = () => {
     setResult(null);
+    setApiError(null);
     setCriteria('');
     setGoodExample('');
     setBadExample('');
@@ -154,6 +163,7 @@ export default function Sandbox() {
                     setBadExample(draft?.badExample || '');
                     setResult(draft?.result || null);
                     setPiiWarning(false);
+                    setApiError(null);
                     setSelectedScenario(scenario);
                     setTimeout(() => {
                       scenarioContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -289,6 +299,32 @@ export default function Sandbox() {
                         <TooltipContent>Add API key in Settings first</TooltipContent>
                       )}
                     </Tooltip>
+                  </CardContent>
+                </Card>
+              )}
+
+              {apiError && !result && (
+                <Card className="border-red-300 bg-red-50 dark:bg-red-950/30" data-testid="card-api-error">
+                  <CardContent className="p-5 space-y-4">
+                    <h4 className="font-semibold text-red-800 dark:text-red-300 flex items-center gap-2">
+                      {apiError.errorType === 'NETWORK_ERROR' && <WifiOff className="h-5 w-5" />}
+                      {apiError.errorType === 'AUTH_ERROR' && <KeyRound className="h-5 w-5" />}
+                      {apiError.errorType === 'RATE_LIMIT' && <Clock className="h-5 w-5" />}
+                      {(apiError.errorType === 'SERVER_ERROR' || apiError.errorType === 'TIMEOUT') && <ServerCrash className="h-5 w-5" />}
+                      {!['NETWORK_ERROR', 'AUTH_ERROR', 'RATE_LIMIT', 'SERVER_ERROR', 'TIMEOUT'].includes(apiError.errorType) && <AlertTriangle className="h-5 w-5" />}
+                      API Error
+                    </h4>
+                    <p className="text-sm text-red-800/80 dark:text-red-300/80">
+                      {apiError.message}
+                    </p>
+                    {apiError.errorType === 'AUTH_ERROR' && (
+                      <Link href="/settings">
+                        <span className="text-sm text-red-800 dark:text-red-300 underline cursor-pointer">Go to Settings →</span>
+                      </Link>
+                    )}
+                    <Button onClick={() => setApiError(null)} variant="outline" data-testid="button-dismiss-api-error">
+                      Try Again
+                    </Button>
                   </CardContent>
                 </Card>
               )}
