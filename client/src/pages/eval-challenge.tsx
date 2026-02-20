@@ -51,8 +51,9 @@ export default function EvalChallenge() {
     setResult(null);
     setAttackWarning(null);
     setHintOpen(false);
+    window.scrollTo(0, 0);
     setTimeout(() => {
-      criteriaTextareaRef.current?.focus();
+      criteriaTextareaRef.current?.focus({ preventScroll: true });
     }, 100);
   }, [currentLevel, evalId]);
 
