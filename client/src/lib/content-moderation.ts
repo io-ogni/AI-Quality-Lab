@@ -213,6 +213,20 @@ export function postValidateLLMResponse(
     };
   }
 
+  if (result.scores.badExample.isRealisticFailure === false && result.scores.badExample.score > 1) {
+    const alignmentNote = result.scores.badExample.scenarioAlignment
+      ? ` ${result.scores.badExample.scenarioAlignment}`
+      : '';
+    result.scores.badExample = {
+      ...result.scores.badExample,
+      score: 1,
+      feedback: `This is actually correct behavior for this bot type — it's not a realistic failure.${alignmentNote} A bad example should show how the bot could realistically fail, not what it should actually say.`,
+    };
+    if (!result.criticalGaps.some(g => g.includes('realistic failure'))) {
+      result.criticalGaps.push('Your bad example is actually correct behavior for this scenario — it should show a realistic failure instead.');
+    }
+  }
+
   if (result.scores.goodExample.criteriaCheck && result.scores.goodExample.criteriaCheck.length > 0) {
     const anyNotMet = result.scores.goodExample.criteriaCheck.some(cc => !cc.met);
     if (anyNotMet && result.scores.goodExample.score > 2) {

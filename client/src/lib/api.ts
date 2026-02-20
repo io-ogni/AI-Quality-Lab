@@ -530,23 +530,45 @@ EVALUATION RULES:
    - 5: Meets ALL criteria, realistic, could be a real bot response
 
 5. EVALUATING THE BAD EXAMPLE:
-   CRITICAL: A bad example must VIOLATE the user's criteria, not just "sound bad."
+   TWO independent checks are required:
+
+   CHECK 1 — violates_user_criteria: Does this example violate the user's stated criteria?
    Step-by-step:
    a. List each criterion the user provided
    b. For each criterion, check: Does this example violate it?
-   c. If the example MEETS all criteria, it FAILS as a bad example → score 1
-   
+   c. If the example MEETS all criteria, violates_user_criteria = FALSE
+
+   CHECK 2 — is_realistic_failure: Would this response be a PROBLEM for this bot type?
+   Step-by-step:
+   a. Re-read the SCENARIO and SYSTEM PROMPT above
+   b. Ask: "If a real bot of this type said this, would it be a failure?"
+   c. A response that FOLLOWS the system prompt is NOT a realistic failure
+   d. is_realistic_failure = TRUE only if the response would genuinely be problematic
+
+   CRITICAL: If is_realistic_failure is FALSE, the bad example FAILS regardless of violates_user_criteria.
+   A "bad example" that is actually correct behavior for the scenario teaches nothing.
+
    Example of WRONG evaluation:
-   - Criteria: "do not give advice, recommend professionals"
-   - Bad example: "You should talk to a financial advisor"
-   - WRONG: "This is helpful advice" → Pass as bad example
-   - RIGHT: "This MEETS the criteria (recommends professional), so it's not a valid BAD example" → Fail (score 1)
+   - Scenario system prompt: "Avoid giving specific financial advice, recommend professionals"
+   - User's criteria: "recommend specific investments like bitcoin"
+   - Bad example: "I'd recommend speaking with a certified financial planner"
+   - WRONG: "This violates user criteria" → Pass as bad example
+   - RIGHT: "This is CORRECT behavior for a financial advisor bot (follows system prompt). is_realistic_failure = FALSE" → Fail (score 1)
+   - scenario_alignment: "This response follows the system prompt by recommending a professional instead of giving specific advice."
+
+   Example of CORRECT bad example:
+   - Scenario system prompt: "Avoid giving specific financial advice, recommend professionals"
+   - User's criteria: "don't give advice, recommend professionals"
+   - Bad example: "Definitely put all your money in crypto!"
+   - violates_user_criteria: TRUE (gives specific advice)
+   - is_realistic_failure: TRUE (a real financial bot saying this would be a serious problem)
+   - score: 5
 
    Scoring:
-   - 1: Meets ALL of the user's criteria (not a valid bad example), nonsense, or identical to good
-   - 2-3: Violates some criteria but accidentally follows others
-   - 4: Clearly violates at least one criterion
-   - 5: Clearly violates criteria, realistic failure mode
+   - 1: is_realistic_failure is FALSE (even if violates_user_criteria is TRUE), nonsense, or identical to good
+   - 2-3: Violates some criteria but only partially realistic
+   - 4: Clearly violates at least one criterion AND is a realistic failure
+   - 5: Clearly violates criteria, realistic failure mode, plausible bot response
 
 6. EXAMPLE FORMAT DETECTION (AUTOMATIC FAIL):
    - Examples must look like BOT RESPONSES, not criteria lists
@@ -609,6 +631,7 @@ Respond in JSON format only:
       ],
       "violates_user_criteria": true/false,
       "is_realistic_failure": true/false,
+      "scenario_alignment": "explain how this response relates to the scenario's system prompt — does it follow or violate it?",
       "feedback": "specific feedback explaining criterion-by-criterion analysis"
     },
     "safety": {"score": 1-5, "feedback": "if sensitive scenario"}
@@ -690,6 +713,7 @@ Evaluate the quality of their criteria definition.`;
           feedback: badEx.feedback || '',
           violatesUserCriteria: badEx.violates_user_criteria,
           isRealisticFailure: badEx.is_realistic_failure,
+          scenarioAlignment: badEx.scenario_alignment || undefined,
           criteriaCheck: Array.isArray(badEx.criteria_check) ? badEx.criteria_check : undefined,
         },
         safety: scenario.isSensitive ? (parsed.scores?.safety || criteriaScores.safety) : undefined,

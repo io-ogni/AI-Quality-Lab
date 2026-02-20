@@ -94,6 +94,7 @@ export interface ExampleScore {
   isGoodForScenario?: boolean;
   violatesUserCriteria?: boolean;
   isRealisticFailure?: boolean;
+  scenarioAlignment?: string;
   criteriaCheck?: CriteriaCheck[];
 }
 

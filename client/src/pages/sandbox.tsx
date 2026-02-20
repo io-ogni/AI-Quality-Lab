@@ -497,6 +497,11 @@ export default function Sandbox() {
                                   : <X className="h-4 w-4 text-red-500" />}
                               </div>
                             )}
+                            {result.scores.badExample.isRealisticFailure === false && result.scores.badExample.scenarioAlignment && (
+                              <p className="text-xs text-yellow-700 bg-yellow-50 rounded p-1.5 mt-1" data-testid="text-scenario-alignment">
+                                {result.scores.badExample.scenarioAlignment}
+                              </p>
+                            )}
                             <p className="text-xs text-muted-foreground">{result.scores.badExample.feedback}</p>
                             {result.scores.badExample.criteriaCheck && result.scores.badExample.criteriaCheck.length > 0 && (
                               <div className="mt-2 pt-2 border-t space-y-1.5">
