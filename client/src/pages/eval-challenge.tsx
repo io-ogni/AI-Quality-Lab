@@ -155,7 +155,7 @@ export default function EvalChallenge() {
           <h1 className="text-2xl sm:text-3xl font-bold" data-testid="text-challenge-title">
             {dimensionInfo.name}
           </h1>
-          <p className="text-muted-foreground mt-1">{challenge.about}</p>
+          <p className="text-lg text-muted-foreground mt-1">{challenge.about}</p>
         </div>
       </section>
 
@@ -251,35 +251,35 @@ export default function EvalChallenge() {
                 <Card>
                   <CardHeader className="pb-4">
                     <CardTitle className="text-lg">{challenge.levels[level - 1].title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground">
                       Define the success criteria for evaluating this bot's response
                     </p>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
                       <div className="rounded-lg border bg-muted/30 p-4">
-                        <p className="text-xs uppercase font-medium text-muted-foreground mb-2">Scenario</p>
-                        <p className="text-sm font-medium mb-3">{challenge.levels[level - 1].scenario.botContext}</p>
+                        <p className="text-sm uppercase font-medium text-muted-foreground mb-2">Scenario</p>
+                        <p className="font-medium mb-3">{challenge.levels[level - 1].scenario.botContext}</p>
                         
                         <div className="space-y-3">
                           <div>
-                            <p className="text-xs uppercase font-medium text-muted-foreground mb-1">System Prompt</p>
-                            <p className="text-sm bg-background/80 rounded p-2 border">
+                            <p className="text-sm uppercase font-medium text-muted-foreground mb-1">System Prompt</p>
+                            <p className="bg-background/80 rounded p-2 border">
                               {challenge.levels[level - 1].scenario.systemPrompt}
                             </p>
                           </div>
                           
                           <div>
-                            <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Test Input</p>
-                            <p className="text-sm bg-background/80 rounded p-2 border font-medium">
+                            <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Test Input</p>
+                            <p className="bg-background/80 rounded p-2 border font-medium">
                               "{challenge.levels[level - 1].scenario.testInput}"
                             </p>
                           </div>
 
                           {challenge.levels[level - 1].scenario.contextDocument && (
                             <div>
-                              <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Context Document</p>
-                              <p className="text-sm bg-background/80 rounded p-2 border">
+                              <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Context Document</p>
+                              <p className="bg-background/80 rounded p-2 border">
                                 {challenge.levels[level - 1].scenario.contextDocument}
                               </p>
                             </div>
@@ -307,7 +307,7 @@ export default function EvalChallenge() {
                   <Card>
                     <CardHeader className="pb-4">
                       <CardTitle className="text-lg">Your Criteria</CardTitle>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground">
                         What criteria would you use to evaluate the response?
                       </p>
                     </CardHeader>
@@ -333,7 +333,7 @@ export default function EvalChallenge() {
                           <span>Possible sensitive data detected. Use fictional examples only.</span>
                         </div>
                       )}
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         Be specific. What should a passing response do?
                       </p>
                       
@@ -414,14 +414,14 @@ export default function EvalChallenge() {
                     <Card>
                       <CardHeader className="pb-4">
                         <CardTitle className="text-lg">Expert Criteria</CardTitle>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-muted-foreground">
                           Here's what matters for this scenario:
                         </p>
                       </CardHeader>
                       <CardContent>
                         <ul className="space-y-2">
                           {levelData.expertCriteria.map((criterion) => (
-                            <li key={criterion.id} className="flex items-start gap-2 text-sm">
+                            <li key={criterion.id} className="flex items-start gap-2">
                               <Check className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
                               {criterion.text}
                             </li>
@@ -438,7 +438,7 @@ export default function EvalChallenge() {
                         {result.matches.length > 0 && (
                           <div className="space-y-2">
                             {result.matches.map((match, i) => (
-                              <div key={i} className="flex items-start gap-2 text-sm p-2 rounded bg-green-500/10 border border-green-500/20">
+                              <div key={i} className="flex items-start gap-2 p-2.5 rounded bg-green-500/10 border border-green-500/20">
                                 <Check className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
                                 <div>
                                   <span className="text-green-700 dark:text-green-400">You identified:</span>{' '}
@@ -454,7 +454,7 @@ export default function EvalChallenge() {
                         {result.missed.length > 0 && (
                           <div className="space-y-2">
                             {result.missed.map((missed, i) => (
-                              <div key={i} className="flex items-start gap-2 text-sm p-2 rounded bg-red-500/10 border border-red-500/20">
+                              <div key={i} className="flex items-start gap-2 p-2.5 rounded bg-red-500/10 border border-red-500/20">
                                 <X className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
                                 <div>
                                   <span className="text-red-700 dark:text-red-400">You missed:</span>{' '}
@@ -468,7 +468,7 @@ export default function EvalChallenge() {
                         {result.vague.length > 0 && (
                           <div className="space-y-2">
                             {result.vague.map((vague, i) => (
-                              <div key={i} className="flex items-start gap-2 text-sm p-2 rounded bg-amber-500/10 border border-amber-500/20">
+                              <div key={i} className="flex items-start gap-2 p-2.5 rounded bg-amber-500/10 border border-amber-500/20">
                                 <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                                 <div>
                                   <span className="text-amber-700 dark:text-amber-400">Too vague:</span>{' '}
@@ -495,15 +495,15 @@ export default function EvalChallenge() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="text-center p-3 rounded-lg bg-muted/50">
                             <p className="text-2xl font-bold">{result.coverageScore}/{levelData.expertCriteria.length}</p>
-                            <p className="text-xs text-muted-foreground">Coverage</p>
+                            <p className="text-sm text-muted-foreground">Coverage</p>
                           </div>
                           <div className="text-center p-3 rounded-lg bg-muted/50">
                             <p className="text-2xl font-bold">{result.specificityScore}/5</p>
-                            <p className="text-xs text-muted-foreground">Specificity</p>
+                            <p className="text-sm text-muted-foreground">Specificity</p>
                           </div>
                         </div>
                         
-                        <p className="text-sm">{result.feedback}</p>
+                        <p>{result.feedback}</p>
 
                         <div className="flex flex-wrap gap-3 pt-2">
                           {result.passed ? (

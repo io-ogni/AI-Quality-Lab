@@ -77,25 +77,25 @@ function ChallengeCard({ dimension }: { dimension: typeof qualityDimensions[0] }
                 <h3 className="font-semibold leading-tight flex items-center gap-1.5">
                   {dimension.name}
                   {dimension.isAdvanced && (
-                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-amber-500/50 text-amber-600 dark:text-amber-400">
+                    <Badge variant="outline" className="text-xs px-1.5 py-0 h-5 border-amber-500/50 text-amber-600 dark:text-amber-400">
                       <AlertTriangle className="h-2.5 w-2.5 mr-0.5" />
                       Advanced
                     </Badge>
                   )}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
+                <p className="text-muted-foreground mt-0.5 line-clamp-2">
                   {dimension.description}
                 </p>
                 {dimension.advancedNote && (
-                  <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">{dimension.advancedNote}</p>
+                  <p className="text-sm text-amber-600 dark:text-amber-400 mt-1">{dimension.advancedNote}</p>
                 )}
               </div>
             </div>
             
             <div className="mt-auto pt-3 border-t">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground">Progress</span>
-                <span className="text-xs font-medium flex items-center gap-1">
+                <span className="text-sm text-muted-foreground">Progress</span>
+                <span className="text-sm font-medium flex items-center gap-1">
                   {progress}/3
                   {progress === 3 && <Check className="h-3 w-3 text-green-600" />}
                 </span>
@@ -117,7 +117,7 @@ function DimensionGroup({ group, dimensions }: {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <h3 className="text-sm font-medium text-muted-foreground">{info.title}</h3>
+        <h3 className="text-base font-medium text-muted-foreground">{info.title}</h3>
         <Tooltip>
           <TooltipTrigger>
             <Info className="h-4 w-4 text-muted-foreground/60 hover:text-muted-foreground transition-colors" />
@@ -195,8 +195,8 @@ function ProgressSection() {
               <div className="flex items-center gap-3">
                 <Target className="h-5 w-5 text-primary" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Challenges Completed</p>
-                  <p className="text-xl font-bold" data-testid="text-challenges-completed">{progress.totalCompleted}/33</p>
+                  <p className="text-sm text-muted-foreground">Challenges Completed</p>
+                  <p className="text-2xl font-bold" data-testid="text-challenges-completed">{progress.totalCompleted}/33</p>
                 </div>
               </div>
             </div>
@@ -204,15 +204,15 @@ function ProgressSection() {
               <div className="flex items-center gap-3">
                 <Trophy className="h-5 w-5 text-amber-600" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Dimensions Mastered</p>
-                  <p className="text-xl font-bold" data-testid="text-dimensions-mastered">{progress.dimensionsMastered}/11</p>
+                  <p className="text-sm text-muted-foreground">Dimensions Mastered</p>
+                  <p className="text-2xl font-bold" data-testid="text-dimensions-mastered">{progress.dimensionsMastered}/11</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <p className="text-sm font-medium">Progress by Dimension</p>
+            <p className="font-medium">Progress by Dimension</p>
             {qualityDimensions.map((dim) => {
               const completed = levelProgress[dim.id] || [];
               const progressPercent = (completed.length / 3) * 100;
@@ -220,8 +220,8 @@ function ProgressSection() {
 
               return (
                 <div key={dim.id} className="flex items-center gap-3">
-                  <div className="w-36 sm:w-44 flex items-center gap-2 shrink-0">
-                    <span className="text-sm truncate">{dim.name}</span>
+                  <div className="w-40 sm:w-48 flex items-center gap-2 shrink-0">
+                    <span className="truncate">{dim.name}</span>
                     {isMastered && (
                       <Badge variant="secondary" className="shrink-0 text-xs px-1.5 py-0">
                         <Check className="h-3 w-3" />
@@ -231,7 +231,7 @@ function ProgressSection() {
                   <div className="flex-1 min-w-0">
                     <Progress value={progressPercent} className="h-1.5" />
                   </div>
-                  <span className="w-8 text-right text-xs text-muted-foreground shrink-0">
+                  <span className="w-8 text-right text-sm text-muted-foreground shrink-0">
                     {completed.length}/3
                   </span>
                 </div>

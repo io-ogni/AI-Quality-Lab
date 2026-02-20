@@ -39,7 +39,7 @@ function ScenarioCard({ scenario, selected, onClick }: {
             </Badge>
           )}
         </div>
-        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+        <p className="text-muted-foreground mt-1 line-clamp-2">
           {scenario.context}
         </p>
       </CardContent>
@@ -159,7 +159,7 @@ export default function Sandbox() {
           <APIKeyRequired />
 
           <div>
-            <h2 className="text-lg font-medium mb-4">Choose a scenario to evaluate</h2>
+            <h2 className="text-xl font-medium mb-4">Choose a scenario to evaluate</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {sandboxScenarios.map((scenario) => (
                 <ScenarioCard
@@ -208,12 +208,12 @@ export default function Sandbox() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <p className="text-xs uppercase font-medium text-muted-foreground mb-1">System Prompt</p>
-                    <p className="text-sm bg-background/80 rounded p-2 border">{selectedScenario.systemPrompt}</p>
+                    <p className="text-sm uppercase font-medium text-muted-foreground mb-1">System Prompt</p>
+                    <p className="bg-background/80 rounded p-2 border">{selectedScenario.systemPrompt}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Test Input</p>
-                    <p className="text-sm bg-background/80 rounded p-2 border font-medium">
+                    <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Test Input</p>
+                    <p className="bg-background/80 rounded p-2 border font-medium">
                       "{selectedScenario.testInput}"
                     </p>
                   </div>
@@ -225,8 +225,8 @@ export default function Sandbox() {
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-medium text-sm mb-1">This is a sensitive topic scenario</p>
-                      <p className="text-sm text-muted-foreground">{selectedScenario.sensitiveNote}</p>
+                      <p className="font-medium mb-1">This is a sensitive topic scenario</p>
+                      <p className="text-muted-foreground">{selectedScenario.sensitiveNote}</p>
                     </div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@ export default function Sandbox() {
                   </CardHeader>
                   <CardContent className="space-y-5">
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block font-medium mb-2">
                         What makes a response GOOD? List your criteria.
                       </label>
                       <Textarea
@@ -259,9 +259,9 @@ export default function Sandbox() {
                         data-testid="textarea-criteria"
                       />
                       <div className="flex justify-between items-start mt-1">
-                        <p className="text-xs text-muted-foreground">Be specific and measurable. What would you check for?</p>
+                        <p className="text-sm text-muted-foreground">Be specific and measurable. What would you check for?</p>
                         {criteria.length >= 1000 ? (
-                          <p className="text-xs text-red-500 shrink-0">Limit reached</p>
+                          <p className="text-sm text-red-500 shrink-0">Limit reached</p>
                         ) : null}
                       </div>
                       {fieldErrors.criteria && (
@@ -270,7 +270,7 @@ export default function Sandbox() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block font-medium mb-2">
                         Write an example of a PASSING response
                       </label>
                       <Textarea
@@ -289,7 +289,7 @@ export default function Sandbox() {
                         data-testid="textarea-good-example"
                       />
                       {goodExample.length >= 2000 && (
-                        <p className="text-xs text-red-500 mt-1">Limit reached</p>
+                        <p className="text-sm text-red-500 mt-1">Limit reached</p>
                       )}
                       {fieldErrors.goodExample && (
                         <p className="text-sm text-red-500 mt-1" data-testid="error-good-example">{fieldErrors.goodExample}</p>
@@ -297,7 +297,7 @@ export default function Sandbox() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block font-medium mb-2">
                         Write an example of a FAILING response
                       </label>
                       <Textarea
@@ -316,7 +316,7 @@ export default function Sandbox() {
                         data-testid="textarea-bad-example"
                       />
                       {badExample.length >= 2000 && (
-                        <p className="text-xs text-red-500 mt-1">Limit reached</p>
+                        <p className="text-sm text-red-500 mt-1">Limit reached</p>
                       )}
                       {fieldErrors.badExample && (
                         <p className="text-sm text-red-500 mt-1" data-testid="error-bad-example">{fieldErrors.badExample}</p>
@@ -384,17 +384,17 @@ export default function Sandbox() {
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">Your Submission</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3 text-sm">
+                    <CardContent className="space-y-3">
                       <div>
-                        <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Criteria</p>
+                        <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Criteria</p>
                         <p className="bg-background/80 rounded p-2 border whitespace-pre-wrap">{criteria}</p>
                       </div>
                       <div>
-                        <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Good Example</p>
+                        <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Good Example</p>
                         <p className="bg-background/80 rounded p-2 border whitespace-pre-wrap">{goodExample}</p>
                       </div>
                       <div>
-                        <p className="text-xs uppercase font-medium text-muted-foreground mb-1">Bad Example</p>
+                        <p className="text-sm uppercase font-medium text-muted-foreground mb-1">Bad Example</p>
                         <p className="bg-background/80 rounded p-2 border whitespace-pre-wrap">{badExample}</p>
                       </div>
                     </CardContent>
@@ -405,10 +405,10 @@ export default function Sandbox() {
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
                         <div>
-                          <p className="font-medium text-sm text-red-700 dark:text-red-400 mb-1">
+                          <p className="font-medium text-red-700 dark:text-red-400 mb-1">
                             Safety Concern Detected
                           </p>
-                          <p className="text-sm">{result.safetyCheck.safetyConcerns}</p>
+                          <p>{result.safetyCheck.safetyConcerns}</p>
                         </div>
                       </div>
                     </div>
@@ -428,28 +428,28 @@ export default function Sandbox() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div>
-                        <p className="text-sm font-medium mb-3" data-testid="text-section-criteria">Your Criteria</p>
+                        <p className="font-medium mb-3" data-testid="text-section-criteria">Your Criteria</p>
                         <div className="grid gap-3 sm:grid-cols-3">
                           <div className="p-3 rounded-lg bg-muted/50">
                             <div className="flex items-center justify-between mb-1">
                               <span className="text-sm">Specificity</span>
                               <span className="font-medium">{result.scores.specificity.score}/5</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">{result.scores.specificity.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.specificity.feedback}</p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50">
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-sm">Relevance</span>
+                              <span>Relevance</span>
                               <span className="font-medium">{result.scores.relevance.score}/5</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">{result.scores.relevance.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.relevance.feedback}</p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50">
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-sm">Completeness</span>
+                              <span>Completeness</span>
                               <span className="font-medium">{result.scores.completeness.score}/5</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">{result.scores.completeness.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.completeness.feedback}</p>
                           </div>
                         </div>
                         {result.scores.safety && (
@@ -458,58 +458,58 @@ export default function Sandbox() {
                               <span className="text-sm">Safety & Appropriateness</span>
                               <span className="font-medium">{result.scores.safety.score}/5</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">{result.scores.safety.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.safety.feedback}</p>
                           </div>
                         )}
                       </div>
 
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
-                          <p className="text-sm font-medium mb-3" data-testid="text-section-good-example">Your Good Example</p>
+                          <p className="font-medium mb-3" data-testid="text-section-good-example">Your Good Example</p>
                           <div className="p-3 rounded-lg bg-muted/50 space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm">Score</span>
+                              <span>Score</span>
                               <span className="font-medium">{result.scores.goodExample.score}/5</span>
                             </div>
                             {result.scores.goodExample.isGoodForScenario !== undefined && (
                               <div className="flex items-center justify-between">
-                                <span className="text-xs text-muted-foreground">Good for Scenario?</span>
+                                <span className="text-sm text-muted-foreground">Good for Scenario?</span>
                                 {result.scores.goodExample.isGoodForScenario
                                   ? <Check className="h-4 w-4 text-green-600" />
                                   : <X className="h-4 w-4 text-red-500" />}
                               </div>
                             )}
-                            <p className="text-xs text-muted-foreground">{result.scores.goodExample.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.goodExample.feedback}</p>
                           </div>
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium mb-3" data-testid="text-section-bad-example">Your Bad Example</p>
+                          <p className="font-medium mb-3" data-testid="text-section-bad-example">Your Bad Example</p>
                           <div className="p-3 rounded-lg bg-muted/50 space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-sm">Score</span>
+                              <span>Score</span>
                               <span className="font-medium">{result.scores.badExample.score}/5</span>
                             </div>
                             {result.scores.badExample.isRealisticFailure !== undefined && (
                               <div className="flex items-center justify-between">
-                                <span className="text-xs text-muted-foreground">Realistic Failure?</span>
+                                <span className="text-sm text-muted-foreground">Realistic Failure?</span>
                                 {result.scores.badExample.isRealisticFailure
                                   ? <Check className="h-4 w-4 text-green-600" />
                                   : <X className="h-4 w-4 text-red-500" />}
                               </div>
                             )}
-                            <p className="text-xs text-muted-foreground">{result.scores.badExample.feedback}</p>
+                            <p className="text-sm text-muted-foreground">{result.scores.badExample.feedback}</p>
                           </div>
                         </div>
                       </div>
 
                       {result.strengths.length > 0 && (
                         <div>
-                          <p className="text-sm font-medium mb-2 flex items-center gap-1.5">
+                          <p className="font-medium mb-2 flex items-center gap-1.5">
                             <Check className="h-4 w-4 text-green-600" />
                             Strengths
                           </p>
-                          <ul className="text-sm text-muted-foreground space-y-1">
+                          <ul className="text-muted-foreground space-y-1.5">
                             {result.strengths.map((s, i) => (
                               <li key={i}>• {s}</li>
                             ))}
@@ -519,11 +519,11 @@ export default function Sandbox() {
 
                       {result.criticalGaps.length > 0 && (
                         <div>
-                          <p className="text-sm font-medium mb-2 flex items-center gap-1.5">
+                          <p className="font-medium mb-2 flex items-center gap-1.5">
                             <X className="h-4 w-4 text-red-600" />
                             To Improve
                           </p>
-                          <ul className="text-sm text-muted-foreground space-y-1">
+                          <ul className="text-muted-foreground space-y-1.5">
                             {result.criticalGaps.map((g, i) => (
                               <li key={i}>• {g}</li>
                             ))}
@@ -533,7 +533,7 @@ export default function Sandbox() {
 
                       {result.suggestion && (
                         <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                          <p className="text-sm flex items-start gap-2">
+                          <p className="flex items-start gap-2">
                             <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                             {result.suggestion}
                           </p>

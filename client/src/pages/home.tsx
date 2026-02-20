@@ -110,14 +110,14 @@ export default function Home() {
                   <strong className="text-foreground">basic concepts</strong>{" "}
                   you need to:
                 </p>
-                <ul className="list-disc pl-6 space-y-1">
+                <ul className="list-disc pl-6 space-y-1.5">
                   <li>Write better specs for AI features</li>
                   <li>
                     Have informed conversations with engineering about quality
                   </li>
                   <li>Know what questions to ask about evals and guardrails</li>
                 </ul>
-                <p className="text-sm pt-2 border-t border-border/50">
+                <p className="pt-2 border-t border-border/50">
                   No code. No ML background required. Just hands-on practice.
                 </p>
               </div>
@@ -128,7 +128,7 @@ export default function Home() {
 
       <section className="py-12 flex-1">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-center text-lg font-medium text-muted-foreground mb-8">
+          <h2 className="text-center text-xl font-medium text-muted-foreground mb-8">
             Your Learning Path
           </h2>
 
@@ -172,7 +172,7 @@ export default function Home() {
                                   </Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-muted-foreground">
                                 {stop.sublabel}
                               </p>
                             </div>

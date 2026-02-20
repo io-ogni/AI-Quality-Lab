@@ -114,13 +114,13 @@ export default function Settings() {
                 <Lock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                 <div className="space-y-2">
                   <h3 className="font-medium">Your API Key Security</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+                  <ul className="text-muted-foreground space-y-1.5">
                     <li>• Your key is stored ONLY in your browser's session storage</li>
                     <li>• Your key is NEVER sent to our servers</li>
                     <li>• Your key is AUTOMATICALLY DELETED when you close this browser tab</li>
                     <li>• API calls go directly from your browser to OpenAI/Anthropic</li>
                   </ul>
-                  <p className="text-sm font-medium pt-2">
+                  <p className="font-medium pt-2">
                     We cannot see, access, or store your API key. You're in full control.
                   </p>
                 </div>
@@ -172,7 +172,7 @@ export default function Settings() {
                     {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Key is stored in session only — will be cleared when you close the tab
                 </p>
               </div>
@@ -183,7 +183,7 @@ export default function Settings() {
 
               <div className="flex items-start gap-2 pt-2">
                 <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Each evaluation uses {provider === 'anthropic' ? 'Claude Sonnet' : 'GPT-4o'}. Monitor your usage at{' '}
                   {provider === 'anthropic' ? (
                     <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
@@ -204,7 +204,7 @@ export default function Settings() {
               <CardTitle>Test Connection</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground">
                 Make a minimal API call to verify your key works.
               </p>
               <div className="flex items-center gap-4">
@@ -275,7 +275,7 @@ export default function Settings() {
             <CardHeader className="pb-4">
               <CardTitle>Privacy & About</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <CardContent className="space-y-4 text-muted-foreground">
               <p>
                 <strong className="text-foreground">AI Quality Lab</strong> is a learning tool, not a production system. 
                 Once you master these concepts, you'll be able to write better AI feature specs 

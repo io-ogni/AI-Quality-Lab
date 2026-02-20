@@ -62,7 +62,7 @@ export default function Learn() {
           >
             The AI Quality Basic Dimensions
           </h1>
-          <p className="text-lg text-muted-foreground mb-4">
+          <p className="text-lg text-muted-foreground mb-4" data-testid="text-learn-subtitle">
             Learn to name what's wrong — and what's right.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function Learn() {
                 <p className="font-medium mb-2">
                   The Foundation (what we teach):
                 </p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>
                     <strong>Vocabulary</strong> — words to describe what's wrong
                     with an AI output
@@ -102,18 +102,18 @@ export default function Learn() {
               </div>
               <div>
                 <p className="font-medium mb-2">What Production Adds:</p>
-                <p className="text-sm text-muted-foreground mb-2">
+                <p className="text-muted-foreground mb-2">
                   In the real world, you'll also discover criteria specific to
                   your product:
                 </p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>A real estate bot might need "client persona match"</li>
                   <li>
                     A finance bot might need "regulatory disclaimer present"
                   </li>
                   <li>A support bot might need "escalation timing"</li>
                 </ul>
-                <p className="text-sm text-muted-foreground mt-3">
+                <p className="text-muted-foreground mt-3">
                   These custom criteria aren't replacements for the 11
                   dimensions — they're additions. And you'll define them using
                   exactly the skill you're practicing here: looking at outputs
@@ -130,7 +130,7 @@ export default function Learn() {
           <h3 className="text-lg font-semibold mb-2">
             Video: What is AI Quality?
           </h3>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4">
             Why you can't just ask "is this good?" — and how breaking quality
             into specific dimensions makes it actionable.
           </p>
@@ -182,7 +182,7 @@ export default function Learn() {
                   Guardrails = Enforcing quality (runtime)
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground pt-2">
+              <p className="text-muted-foreground pt-2">
                 Both use the same quality dimensions — like "is it accurate?" or
                 "is it safe?" — but apply them differently.
               </p>
@@ -209,7 +209,7 @@ export default function Learn() {
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2">
                   <p>
                     <strong>When:</strong> During development, testing, and
                     monitoring
@@ -224,10 +224,10 @@ export default function Learn() {
                   </p>
                 </div>
                 <div className="pt-3 border-t">
-                  <p className="text-sm font-medium mb-2">
+                  <p className="font-medium mb-2">
                     PM uses evals to answer:
                   </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+                  <ul className="text-muted-foreground space-y-1.5">
                     <li className="flex items-start gap-2">
                       <HelpCircle className="h-4 w-4 mt-0.5 shrink-0" />
                       "Is our AI ready to ship?"
@@ -242,7 +242,7 @@ export default function Learn() {
                     </li>
                   </ul>
                 </div>
-                <div className="bg-muted/50 rounded-md p-3 text-sm">
+                <div className="bg-muted/50 rounded-md p-3">
                   <strong>Example:</strong> Run 500 test conversations, measure
                   what percentage follow instructions correctly. Result: 94%
                   pass rate.
@@ -261,7 +261,7 @@ export default function Learn() {
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2">
                   <p>
                     <strong>When:</strong> In production, real-time, on every
                     response
@@ -276,10 +276,10 @@ export default function Learn() {
                   </p>
                 </div>
                 <div className="pt-3 border-t">
-                  <p className="text-sm font-medium mb-2">
+                  <p className="font-medium mb-2">
                     PM uses guardrails to answer:
                   </p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+                  <ul className="text-muted-foreground space-y-1.5">
                     <li className="flex items-start gap-2">
                       <HelpCircle className="h-4 w-4 mt-0.5 shrink-0" />
                       "How do we prevent toxic responses?"
@@ -294,7 +294,7 @@ export default function Learn() {
                     </li>
                   </ul>
                 </div>
-                <div className="bg-muted/50 rounded-md p-3 text-sm">
+                <div className="bg-muted/50 rounded-md p-3">
                   <strong>Example:</strong> Before showing any response, check
                   if it contains unverified medical claims. If yes, show a
                   disclaimer or block it.
@@ -306,7 +306,7 @@ export default function Learn() {
           <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/20">
             <div className="flex items-start gap-3">
               <Lightbulb className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-              <p className="text-sm">
+              <p>
                 <strong>The connection:</strong> Both use the same quality
                 dimensions (accuracy, safety, relevance, etc.). This app teaches
                 you those dimensions. You'll then apply them as evals OR
@@ -335,7 +335,7 @@ export default function Learn() {
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                   Eval + Runtime (Best for Guardrails)
                 </h3>
-                <ul className="text-sm text-muted-foreground space-y-2">
+                <ul className="text-muted-foreground space-y-2">
                   <li>
                     <strong>Instruction Following:</strong> Did it do exactly
                     what you asked?
@@ -358,7 +358,7 @@ export default function Learn() {
                   <BarChart3 className="h-4 w-4 text-blue-600" />
                   Eval-Focused (Best for Benchmarking)
                 </h3>
-                <ul className="text-sm text-muted-foreground space-y-2">
+                <ul className="text-muted-foreground space-y-2">
                   <li>
                     <strong>Relevance:</strong> Does it address the actual
                     question?
@@ -384,7 +384,7 @@ export default function Learn() {
                   <AlertCircle className="h-4 w-4 text-amber-600" />
                   Requires System Design
                 </h3>
-                <ul className="text-sm text-muted-foreground space-y-2">
+                <ul className="text-muted-foreground space-y-2">
                   <li>
                     <strong>Groundedness:</strong> Does it stick to provided
                     sources?
@@ -392,7 +392,7 @@ export default function Learn() {
                   <li>
                     <strong>Factual Accuracy:</strong> Is the general knowledge
                     correct?{" "}
-                    <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">
+                    <span className="text-amber-600 dark:text-amber-400 text-sm font-medium">
                       Advanced
                     </span>
                   </li>
@@ -401,7 +401,7 @@ export default function Learn() {
                     should — but not over-refuse?
                   </li>
                 </ul>
-                <p className="text-xs text-amber-600 dark:text-amber-400 mt-3">
+                <p className="text-sm text-amber-600 dark:text-amber-400 mt-3">
                   Note: Factual Accuracy is hard to verify without external
                   fact-checking systems. For most use cases, focus on
                   Groundedness instead — ensuring the bot sticks to the sources
@@ -417,7 +417,7 @@ export default function Learn() {
                   <Shield className="h-4 w-4 text-red-600" />
                   Security
                 </h3>
-                <ul className="text-sm text-muted-foreground space-y-2">
+                <ul className="text-muted-foreground space-y-2">
                   <li>
                     <strong>Adversarial Robustness:</strong> Can the bot handle
                     users trying to break it?
@@ -445,7 +445,7 @@ export default function Learn() {
 
               <div>
                 <p className="font-medium mb-2">About the basics:</p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>
                     Did it follow my instructions? →{" "}
                     <strong>Instruction Following</strong>
@@ -461,7 +461,7 @@ export default function Learn() {
 
               <div>
                 <p className="font-medium mb-2">About the content:</p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>
                     Did it answer the right question? →{" "}
                     <strong>Relevance</strong>
@@ -479,7 +479,7 @@ export default function Learn() {
 
               <div>
                 <p className="font-medium mb-2">About the style:</p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>
                     Does it sound right for the context? →{" "}
                     <strong>Tone & Style</strong>
@@ -492,7 +492,7 @@ export default function Learn() {
 
               <div>
                 <p className="font-medium mb-2">About the behavior:</p>
-                <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
                   <li>
                     Does it handle edge cases well? →{" "}
                     <strong>Refusal Handling</strong>
@@ -504,7 +504,7 @@ export default function Learn() {
                 </ul>
               </div>
 
-              <p className="text-sm text-muted-foreground pt-2 italic">
+              <p className="text-muted-foreground pt-2 italic">
                 In production, you'll also ask questions specific to YOUR
                 product that don't fit neatly here — and that's expected.
               </p>
@@ -576,7 +576,7 @@ export default function Learn() {
 
               <div>
                 <p className="font-medium mb-3">What changes in production:</p>
-                <ol className="text-sm text-muted-foreground space-y-3 list-decimal pl-5">
+                <ol className="text-muted-foreground space-y-3 list-decimal pl-5">
                   <li>
                     <strong className="text-foreground">
                       You discover custom criteria
@@ -603,7 +603,7 @@ export default function Learn() {
               </div>
 
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                <p className="text-sm">
+                <p>
                   <strong>The foundation stays the same:</strong> The skill of
                   looking at an output and articulating "this is wrong because
                   X" — that's what you're practicing here. That's what you'll do
@@ -640,7 +640,7 @@ export default function Learn() {
                 Forget big upfront planning. Here's how shipping AI actually
                 works:
               </p>
-              <ol className="space-y-2.5 text-sm text-green-800 dark:text-green-300">
+              <ol className="space-y-2.5 text-green-800 dark:text-green-300">
                 {[
                   "Start with the smallest model that might work",
                   'Define "good enough" — your best hypothesis',
@@ -657,7 +657,7 @@ export default function Learn() {
                   </li>
                 ))}
               </ol>
-              <p className="text-sm text-green-700 dark:text-green-400 mt-4 italic">
+              <p className="text-green-700 dark:text-green-400 mt-4 italic">
                 You won't know the right model, the right latency budget, or the
                 right quality bar until you try. The goal is to learn fast, not
                 plan perfectly.
@@ -680,7 +680,7 @@ export default function Learn() {
                 data-testid="video-shipping-decisions"
               />
             </div>
-            <p className="text-sm text-muted-foreground mt-3">
+            <p className="text-muted-foreground mt-3">
               Want the details? Expand the sections below.
             </p>
           </div>
@@ -690,7 +690,7 @@ export default function Learn() {
               title="Why Start With the Smallest Model?"
               testId="section-why-start-small"
             >
-              <div className="space-y-4 text-sm text-muted-foreground">
+              <div className="space-y-4 text-muted-foreground">
                 <p>Because you don't know what you need yet.</p>
                 <p>
                   Most teams start with the biggest model "just to be safe" and
@@ -731,12 +731,12 @@ export default function Learn() {
               title="Model Tiers: A Quick Reference"
               testId="section-model-tiers"
             >
-              <div className="space-y-4 text-sm">
+              <div className="space-y-4">
                 <p className="text-muted-foreground">
                   When you need to pick a starting point or consider an upgrade:
                 </p>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
+                  <table className="w-full border-collapse">
                     <thead>
                       <tr className="border-b">
                         <th className="text-left py-2 pr-4 font-medium">
@@ -779,11 +779,11 @@ export default function Learn() {
                     </tbody>
                   </table>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   *Assuming ~500 tokens/call. Prices change constantly.
                 </p>
                 <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground">
                     <strong className="text-foreground">
                       Don't use this table to pick your model upfront.
                     </strong>{" "}
@@ -798,7 +798,7 @@ export default function Learn() {
               title="How Different Products Landed"
               testId="section-real-examples"
             >
-              <div className="space-y-5 text-sm text-muted-foreground">
+              <div className="space-y-5 text-muted-foreground">
                 <p>
                   These teams didn't plan their way here. They shipped and
                   learned.
@@ -876,7 +876,7 @@ export default function Learn() {
               title="Questions for Your Retrospective"
               testId="section-retrospective"
             >
-              <div className="space-y-4 text-sm text-muted-foreground">
+              <div className="space-y-4 text-muted-foreground">
                 <p>After you've shipped and collected data, ask:</p>
                 <div>
                   <p className="font-medium text-foreground mb-1">
@@ -931,7 +931,7 @@ export default function Learn() {
               title="Advanced: Using Multiple Models"
               testId="section-model-routing"
             >
-              <div className="space-y-4 text-sm text-muted-foreground">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   Once you have data, you might route different requests to
                   different models.
