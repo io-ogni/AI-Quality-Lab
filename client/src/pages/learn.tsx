@@ -266,7 +266,7 @@ export default function Learn() {
             </h3>
             <div className="aspect-video rounded-lg overflow-hidden border bg-black">
               <iframe
-                src="https://www.youtube.com/embed/53QuLmAJtgY"
+                src="https://www.youtube.com/embed/PLACEHOLDER_SHIPPING"
                 title="The Quality-Speed-Cost Triangle"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
