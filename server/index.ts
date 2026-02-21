@@ -22,6 +22,30 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+const isProduction = process.env.NODE_ENV === "production";
+app.use((_req, res, next) => {
+  const scriptSrc = isProduction
+    ? "'self'"
+    : "'self' 'unsafe-inline'";
+  const styleSrc = "'self' 'unsafe-inline' https://fonts.googleapis.com";
+
+  res.setHeader(
+    "Content-Security-Policy",
+    [
+      `default-src 'self'`,
+      `script-src ${scriptSrc}`,
+      `style-src ${styleSrc}`,
+      `font-src 'self' https://fonts.gstatic.com`,
+      `connect-src 'self' https://api.openai.com https://api.anthropic.com`,
+      `frame-src https://www.youtube.com`,
+      `img-src 'self' data:`,
+      `object-src 'none'`,
+      `base-uri 'self'`,
+    ].join("; ")
+  );
+  next();
+});
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
