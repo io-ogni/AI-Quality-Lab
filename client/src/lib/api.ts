@@ -1,5 +1,4 @@
 import type { ChallengeLevel, ChallengeResult, CriteriaEvaluation, SandboxScenario, QualityDimension } from './types';
-import { MODEL_FOR_PROVIDER } from './types';
 import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
 import { preValidateSandboxSubmission, postValidateLLMResponse, hasEnoughRealWords } from './content-moderation';
@@ -114,7 +113,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
           'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: MODEL_FOR_PROVIDER[settings.provider],
+          model: settings.model,
           max_tokens: 2000,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
@@ -129,7 +128,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
           'Authorization': `Bearer ${settings.apiKey}`,
         },
         body: JSON.stringify({
-          model: MODEL_FOR_PROVIDER[settings.provider],
+          model: settings.model,
           max_tokens: 2000,
           messages: [
             { role: 'system', content: systemPrompt },
@@ -179,8 +178,8 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
   }
 }
 
-export async function testAPIConnection(settings: { provider: 'openai' | 'anthropic'; apiKey: string }): Promise<{ success: boolean; message: string }> {
-  const model = MODEL_FOR_PROVIDER[settings.provider];
+export async function testAPIConnection(settings: { provider: 'openai' | 'anthropic'; model: string; apiKey: string }): Promise<{ success: boolean; message: string }> {
+  const model = settings.model;
   try {
     let response: Response;
 

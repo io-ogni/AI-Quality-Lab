@@ -28,7 +28,7 @@ import {
 } from "@/lib/storage";
 import { useToast } from "@/hooks/use-toast";
 import { testAPIConnection } from "@/lib/api";
-import { MODEL_FOR_PROVIDER } from "@/lib/types";
+import { MODEL_OPTIONS, DEFAULT_MODEL } from "@/lib/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/alert-dialog";
 export default function Settings() {
   const [provider, setProvider] = useState<"openai" | "anthropic">("anthropic");
+  const [model, setModel] = useState(DEFAULT_MODEL["anthropic"]);
   const [apiKey, setApiKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
@@ -55,6 +56,7 @@ export default function Settings() {
     const settings = getAPISettings();
     if (settings) {
       setProvider(settings.provider);
+      setModel(settings.model);
       setApiKey(settings.apiKey);
     }
   }, []);
@@ -69,7 +71,7 @@ export default function Settings() {
       return;
     }
 
-    setAPISettings({ provider, apiKey });
+    setAPISettings({ provider, model, apiKey });
     setTestResult(null);
 
     toast({
@@ -93,7 +95,7 @@ export default function Settings() {
     setTestResult(null);
 
     try {
-      const result = await testAPIConnection({ provider, apiKey });
+      const result = await testAPIConnection({ provider, model, apiKey });
       setTestResult(result);
     } catch (error) {
       setTestResult({
@@ -191,9 +193,11 @@ export default function Settings() {
                 <Label htmlFor="provider">API Provider</Label>
                 <Select
                   value={provider}
-                  onValueChange={(v) =>
-                    setProvider(v as "openai" | "anthropic")
-                  }
+                  onValueChange={(v) => {
+                    const p = v as "openai" | "anthropic";
+                    setProvider(p);
+                    setModel(DEFAULT_MODEL[p]);
+                  }}
                 >
                   <SelectTrigger id="provider" data-testid="select-provider">
                     <SelectValue />
@@ -203,11 +207,27 @@ export default function Settings() {
                     <SelectItem value="anthropic">Anthropic</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-sm text-muted-foreground mt-1.5">
-                  Model:{" "}
-                  <span className="font-medium text-foreground">
-                    {MODEL_FOR_PROVIDER[provider]}
-                  </span>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="model">Model</Label>
+                <Select
+                  value={model}
+                  onValueChange={setModel}
+                >
+                  <SelectTrigger id="model" data-testid="select-model">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MODEL_OPTIONS[provider].map((m) => (
+                      <SelectItem key={m.id} value={m.id}>
+                        {m.label} {m.tier === "performance" ? "(Performance)" : "(Fast)"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  A higher-performance model gives better evaluations but uses more API credits.
                 </p>
               </div>
 
@@ -251,8 +271,7 @@ export default function Settings() {
               <div className="flex items-start gap-2 pt-2">
                 <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
                 <p className="text-sm text-muted-foreground">
-                  Each evaluation uses{" "}
-                  {provider === "anthropic" ? "Claude Haiku" : "GPT-4o"}.
+                  Each evaluation uses your selected model.
                   Monitor your usage at{" "}
                   {provider === "anthropic" ? (
                     <a
