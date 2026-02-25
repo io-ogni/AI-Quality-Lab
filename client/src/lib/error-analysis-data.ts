@@ -501,7 +501,7 @@ export const WHATS_NEXT = {
     {
       title: "How to Build AI Agents That Actually Work",
       url: "https://www.youtube.com/watch?v=N-qAOv_PNPc",
-      description: "Video",
+      description: "Video, by Teresa Torres",
     },
     {
       title: "Ship Fast, Learn Fast",
