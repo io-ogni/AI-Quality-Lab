@@ -59,35 +59,42 @@ function isPlaceholder(text: string): boolean {
   return !trimmed || PLACEHOLDER_PATTERNS.some(pattern => pattern.test(trimmed));
 }
 
-const COMMON_ENGLISH_WORDS = new Set([
-  'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
-  'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
-  'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
-  'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
-  'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
-  'when', 'make', 'can', 'like', 'no', 'just', 'him', 'know', 'take',
-  'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see',
-  'other', 'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over',
-  'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work',
-  'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these',
-  'give', 'day', 'most', 'us', 'is', 'are', 'was', 'were', 'been', 'has',
-  'had', 'did', 'does', 'should', 'must', 'need', 'may', 'might',
-  'response', 'output', 'answer', 'text', 'tone', 'format', 'user', 'query',
-  'question', 'correct', 'accurate', 'relevant', 'complete', 'clear',
-  'professional', 'appropriate', 'specific', 'concise', 'helpful', 'safe',
-  'follow', 'follows', 'include', 'includes', 'contain', 'contains',
-  'avoid', 'avoids', 'check', 'ensure', 'maintain', 'provide', 'match',
-  'criteria', 'criterion', 'quality', 'instruction', 'instructions',
-  'language', 'content', 'information', 'word', 'words', 'sentence',
-  'sentences', 'topic', 'message', 'request', 'data', 'source', 'fact',
-  'facts', 'error', 'errors', 'wrong', 'right', 'bad', 'input',
+const COMMON_WORDS_4PLUS = new Set([
+  'about', 'accuracy', 'accurate', 'action', 'actually', 'after', 'also',
+  'always', 'answer', 'appropriate', 'avoid', 'avoids', 'back', 'because',
+  'been', 'before', 'both', 'case', 'check', 'clear', 'come', 'complete',
+  'concise', 'contain', 'contains', 'content', 'correct', 'could', 'criteria',
+  'criterion', 'data', 'description', 'does', 'each', 'ensure', 'error',
+  'errors', 'eval', 'evaluate', 'even', 'every', 'example', 'fact', 'facts',
+  'fail', 'failure', 'first', 'follow', 'follows', 'format', 'from', 'give',
+  'good', 'groundedness', 'hallucination', 'harm', 'harmful', 'have', 'help',
+  'helpful', 'include', 'includes', 'information', 'input', 'instruction',
+  'instructions', 'into', 'just', 'keep', 'know', 'lack', 'language', 'like',
+  'look', 'maintain', 'make', 'match', 'message', 'might', 'model', 'more',
+  'most', 'much', 'must', 'need', 'never', 'next', 'note', 'offensive',
+  'only', 'other', 'output', 'over', 'pass', 'people', 'please', 'point',
+  'professional', 'prompt', 'provide', 'quality', 'query', 'question',
+  'relevant', 'request', 'response', 'result', 'right', 'safe', 'same',
+  'says', 'scenario', 'sentence', 'sentences', 'should', 'some', 'source',
+  'specific', 'stay', 'still', 'style', 'such', 'take', 'task', 'tell',
+  'test', 'text', 'than', 'that', 'them', 'then', 'there', 'these', 'they',
+  'thing', 'think', 'this', 'tone', 'topic', 'toxic', 'toxicity', 'true',
+  'type', 'under', 'used', 'user', 'uses', 'using', 'very', 'want', 'well',
+  'what', 'when', 'where', 'which', 'will', 'with', 'without', 'word',
+  'words', 'work', 'would', 'wrong', 'your',
 ]);
 
-function isGarbageText(text: string): boolean {
-  const words = text.trim().toLowerCase().split(/\s+/).filter(w => w.length > 1);
-  if (words.length === 0) return true;
-  const recognized = words.filter(w => COMMON_ENGLISH_WORDS.has(w.replace(/[^a-z]/g, ''))).length;
-  return recognized / words.length < 0.3;
+export function hasEnoughRealWords(text: string): boolean {
+  const words = text.trim().toLowerCase().split(/\s+/);
+  let count = 0;
+  for (const w of words) {
+    const cleaned = w.replace(/[^a-z]/g, '');
+    if (cleaned.length >= 4 && COMMON_WORDS_4PLUS.has(cleaned)) {
+      count++;
+      if (count >= 3) return true;
+    }
+  }
+  return false;
 }
 
 export interface PreValidationError {
@@ -129,7 +136,7 @@ export function preValidateSandboxSubmission(
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Criteria is too short. Please describe what makes a good response.' });
   } else if (criteria.trim().split(/\s+/).length < 3) {
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Please provide more detailed criteria (at least a few words).' });
-  } else if (isGarbageText(criteria)) {
+  } else if (!hasEnoughRealWords(criteria)) {
     errors.push({ field: 'criteria', issue: 'garbage', message: "This doesn't look like a real criterion. Try describing what makes a good or bad AI response." });
   }
 
