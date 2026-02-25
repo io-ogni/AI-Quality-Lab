@@ -579,24 +579,17 @@ function OpenTab() {
                   </div>
                 )}
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="inline-block">
-                      <Button
-                        onClick={handleSubmit}
-                        disabled={!hasKey || isSubmitting}
-                        className="w-full sm:w-auto"
-                        data-testid="button-run-evaluation"
-                      >
-                        {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                        Run Evaluation
-                      </Button>
-                    </span>
-                  </TooltipTrigger>
-                  {!hasKey && (
-                    <TooltipContent>Add API key in Settings first</TooltipContent>
-                  )}
-                </Tooltip>
+                {!hasKey && <APIKeyRequired />}
+
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!hasKey || isSubmitting}
+                  className="w-full sm:w-auto"
+                  data-testid="button-run-evaluation"
+                >
+                  {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Submit Criteria
+                </Button>
               </CardContent>
             </Card>
           )}
