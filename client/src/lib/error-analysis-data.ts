@@ -412,24 +412,14 @@ export const WHATS_NEXT = {
   ],
   resources: [
     {
-      title: "Frequently Asked Questions About AI Evals",
-      url: "https://hamel.dev/blog/posts/evals/",
-      description: "By Hamel Husain & Shreya Shankar. Practical guide covering error analysis, building automated checks, and production deployment. Written from teaching 700+ engineers and PMs. Sharp opinions, not theory.",
+      title: "Your AI Product Needs Evals",
+      url: "https://hamel.dev/blog/posts/evals-faq/",
+      description: "By Hamel Husain. Practical FAQ covering why evals matter, how to build them, and common mistakes. Written from teaching hundreds of engineers and PMs.",
     },
     {
-      title: "Error Analysis: The Highest ROI Technique in AI Engineering",
-      url: "https://www.youtube.com/watch?v=se3F91Esueg",
+      title: "How to Build AI Agents That Actually Work",
+      url: "https://www.youtube.com/watch?v=N-qAOv_PNPc",
       description: "Video",
-    },
-    {
-      title: "From Noob to Automated Evals in a Week (as a PM)",
-      url: "https://www.youtube.com/watch?v=se3F91Esueg",
-      description: "Teresa Torres, video",
-    },
-    {
-      title: "Stop Managing AI Projects Like Traditional Software",
-      url: "https://www.youtube.com/watch?v=se3F91Esueg",
-      description: "Bryan Bischof, video",
     },
   ] as WhatsNextResource[],
 };
