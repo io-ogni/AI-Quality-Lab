@@ -72,7 +72,7 @@ export interface APISettings {
 
 export const MODEL_FOR_PROVIDER: Record<'openai' | 'anthropic', string> = {
   openai: 'gpt-4o',
-  anthropic: 'claude-haiku-4-5-latest',
+  anthropic: 'claude-3-5-haiku-latest',
 };
 
 export interface SandboxScenario {
