@@ -17,7 +17,7 @@ import {
   Check,
   X,
   Loader2,
-  Lightbulb,
+  ShieldAlert,
   Info,
 } from "lucide-react";
 import {
@@ -169,12 +169,12 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          <Card className="border-amber-500/20 bg-amber-500/5">
+          <Card className="border-orange-500/30 bg-orange-500/10">
             <CardContent className="p-5">
               <div className="flex items-start gap-3">
-                <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-muted-foreground">
-                  <strong className="text-foreground">Tip:</strong> Generate a
+                <ShieldAlert className="h-5 w-5 text-orange-600 dark:text-orange-400 shrink-0 mt-0.5" />
+                <p className="text-orange-900 dark:text-orange-200">
+                  <strong>Security tip:</strong> Generate a
                   dedicated API key just for this app. Set a spending limit,
                   and delete it when you're done learning.
                 </p>
