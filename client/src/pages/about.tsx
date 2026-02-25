@@ -34,7 +34,7 @@ const deterministicVsAI = [
     why: 'Pattern matching in browser — catches variations like "1diot" and "f*ck", no data sent anywhere',
   },
   {
-    task: "Judge if a bad example is a realistic failure",
+    task: "Judge if examples match the criteria",
     who: "LLM",
     icon: Brain,
     why: "Requires understanding scenario context",
