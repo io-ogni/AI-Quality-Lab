@@ -625,28 +625,25 @@ export default function Learn() {
           >
             Recommended Resources
           </h2>
-          <div className="space-y-3">
+          <ul className="space-y-2">
             {WHATS_NEXT.resources.map((resource, i) => (
-              <a
-                key={i}
-                href={resource.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-                data-testid={`link-resource-${i}`}
-              >
-                <Card className="bg-card/50 hover:bg-accent/50 transition-colors">
-                  <CardContent className="p-4 flex items-start gap-3">
-                    <ExternalLink className="h-4 w-4 text-primary shrink-0 mt-1" />
-                    <div>
-                      <p className="font-medium">{resource.title}</p>
-                      <p className="text-sm text-muted-foreground">{resource.description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </a>
+              <li key={i} className="flex items-start gap-2">
+                <ExternalLink className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <span className="text-sm">
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline font-medium"
+                    data-testid={`link-resource-${i}`}
+                  >
+                    {resource.title}
+                  </a>
+                  {" — "}{resource.description}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

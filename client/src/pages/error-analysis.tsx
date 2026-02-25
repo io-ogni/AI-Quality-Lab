@@ -1027,26 +1027,27 @@ export default function ErrorAnalysis() {
 
               <div className="mt-8">
                 <h4 className="font-semibold mb-3">Recommended Resources</h4>
-                <div className="space-y-3">
+                <ul className="space-y-2">
                   {WHATS_NEXT.resources.map((resource) => (
-                    <a
-                      key={resource.title}
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-start gap-2 text-sm text-primary hover:underline"
-                      data-testid={`link-resource-${resource.title.substring(0, 20).toLowerCase().replace(/\s/g, "-")}`}
-                    >
-                      <ExternalLink className="h-4 w-4 mt-0.5 shrink-0" />
-                      <div>
-                        <span className="font-medium">{resource.title}</span>
+                    <li key={resource.title} className="flex items-start gap-2">
+                      <ExternalLink className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                      <span className="text-sm">
+                        <a
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline font-medium"
+                          data-testid={`link-resource-${resource.title.substring(0, 20).toLowerCase().replace(/\s/g, "-")}`}
+                        >
+                          {resource.title}
+                        </a>
                         {resource.description && (
                           <span className="text-muted-foreground"> — {resource.description}</span>
                         )}
-                      </div>
-                    </a>
+                      </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             </div>
 
