@@ -71,20 +71,9 @@ export interface APISettings {
   model: string;
 }
 
-export const MODEL_OPTIONS: Record<'openai' | 'anthropic', { id: string; label: string; tier: 'fast' | 'performance' }[]> = {
-  anthropic: [
-    { id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5', tier: 'fast' },
-    { id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', tier: 'performance' },
-  ],
-  openai: [
-    { id: 'gpt-4o-mini', label: 'GPT-4o Mini', tier: 'fast' },
-    { id: 'gpt-4o', label: 'GPT-4o', tier: 'performance' },
-  ],
-};
-
-export const DEFAULT_MODEL: Record<'openai' | 'anthropic', string> = {
-  openai: 'gpt-4o-mini',
-  anthropic: 'claude-haiku-4-5-20251001',
+export const MODEL_FOR_PROVIDER: Record<'openai' | 'anthropic', { id: string; label: string }> = {
+  anthropic: { id: 'claude-sonnet-4-6', label: 'Claude Sonnet' },
+  openai: { id: 'gpt-4o', label: 'GPT-4o' },
 };
 
 export interface SandboxScenario {
