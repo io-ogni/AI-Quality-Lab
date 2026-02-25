@@ -499,6 +499,16 @@ export async function evaluateSandboxCriteria(
     };
   }
 
+  const failureModesBlock = scenario.failureModes
+    ? `KNOWN FAILURE MODES FOR THIS SCENARIO:
+These are the specific ways a bot response can fail in this exact context.
+Use these when evaluating whether the bad example is realistic and whether the criteria would actually catch real problems.
+
+${scenario.failureModes.map((f, i) => `${i + 1}. ${f}`).join('\n')}
+
+`
+    : '';
+
   const systemPrompt = `You are a STRICT evaluator helping Product Managers learn to define quality criteria. Your job is to score harshly but fairly — low-effort or vague submissions should FAIL.
 
 SCENARIO:
@@ -506,9 +516,7 @@ SCENARIO:
 - System Prompt: ${scenario.systemPrompt}
 - Test Input: ${scenario.testInput}
 
-${scenario.isSensitive ? `THIS IS A SENSITIVE TOPIC SCENARIO. Safety criteria must be prioritized.` : ''}
-
-EVALUATION RULES:
+${scenario.isSensitive ? `THIS IS A SENSITIVE TOPIC SCENARIO. Safety criteria must be prioritized.\n` : ''}${failureModesBlock}EVALUATION RULES:
 1. AUTOMATIC FAIL (score 1-2) if:
    - Criteria is fewer than 3 distinct points
    - Criteria uses truly vague phrases without specifics
@@ -533,27 +541,21 @@ EVALUATION RULES:
    Rule: If it mentions ANY specific attribute, action, or constraint, it is NOT vague.
 
 4. EVALUATING THE GOOD EXAMPLE:
-   Evaluate ONLY against the SCENARIO above, NOT against the user's criteria.
-   The user's criteria might be wrong — the scenario is the source of truth.
+   Score it on whether it is actually a good response for this scenario, based on the system prompt and scenario context.
+   DO NOT score it lower because it doesn't match the user's criteria. The user's criteria may be incomplete.
+   Set meets_user_criteria as informational only — it helps the user understand their criteria gap, but does not affect the score.
+   Ask: "If a senior PM saw this response in production, would they consider it good?" Use the scenario system prompt as your benchmark.
 
-   Ask: "If a real bot of this type gave this response, would it be appropriate?"
+   When evaluating the good example, refer to the scenario system prompt.
+   Does this example demonstrate what that bot is supposed to do?
+   A good career advisor example should help the user think — not decide for them.
+   A good coaching example should ask a powerful question — not offer comfort.
+   You have the system prompt. Use it.
+
    Check:
    - Does it follow the system prompt's instructions?
    - Is it appropriate for this bot type?
    - Would this be a good response in production?
-
-   Example:
-   - Scenario: Financial Advisor (system prompt: "avoid specific advice, recommend professionals")
-   - User's criteria: "give specific investment advice" (WRONG criteria)
-   - Good example: "I'd suggest speaking with a certified financial planner."
-   - Evaluation: is_good_for_scenario = TRUE (follows system prompt, appropriate for the bot)
-   - Score: 5 — this IS a good response for the scenario, regardless of the user's criteria
-
-   Counter-example:
-   - Same scenario
-   - Good example: "Just go for it, buy Bitcoin!"
-   - Evaluation: is_good_for_scenario = FALSE (gives specific advice, violates system prompt)
-   - Score: 1 — this is dangerous behavior for a financial advisor bot
 
    Scoring:
    - 1: Clearly inappropriate for the scenario, violates system prompt, or nonsense
@@ -565,33 +567,22 @@ EVALUATION RULES:
    Evaluate ONLY against the SCENARIO above, NOT against the user's criteria.
    The user's criteria might be wrong — the scenario is the source of truth.
 
-   Ask: "If a real bot of this type gave this response, would it be a problem?"
-   Check:
-   - Does it violate the system prompt's instructions?
-   - Would this be a failure mode for this bot type?
-   - Is this a realistic mistake a bot might make?
+   EVALUATE ON THREE DIMENSIONS:
+   - violates_user_criteria: Does it actually fail what the user's criteria require?
+   - is_realistic_failure: Is it a realistic failure mode for this scenario? Check against the KNOWN FAILURE MODES listed above.
+   - failure_mode_matched: If the bad example matches a known failure mode, name it explicitly in feedback (e.g., "This is 'emotional bypass' — a real failure mode for coaching bots").
+
+   IMPORTANT: A bad example that demonstrates a known failure mode should be credited even if the user's criteria are weak.
+   A bad example that does NOT match any realistic failure mode (e.g., a nonsense response, random text) is low-effort — score it low.
 
    CRITICAL: If the "bad" example is actually CORRECT behavior for the scenario, it FAILS.
    A response that follows the system prompt is NOT a failure.
-
-   Example:
-   - Scenario: Financial Advisor (system prompt: "avoid specific advice, recommend professionals")
-   - User's criteria: "recommend specific investments" (WRONG criteria)
-   - Bad example: "You should talk to a financial advisor."
-   - Evaluation: is_realistic_failure = FALSE (this is CORRECT behavior, follows system prompt)
-   - Score: 1 — this is not a failure, it's what the bot should say
-
-   Counter-example:
-   - Same scenario
-   - Bad example: "Definitely put all your money in crypto!"
-   - Evaluation: is_realistic_failure = TRUE (gives dangerous specific advice)
-   - Score: 5 — this IS a realistic, problematic failure for a financial advisor bot
 
    Scoring:
    - 1: Actually correct behavior for the scenario (not a failure), nonsense, or identical to good
    - 2-3: Only partially problematic
    - 4: Clearly problematic, realistic failure
-   - 5: Clearly a realistic failure mode, plausible bot mistake
+   - 5: Clearly a realistic failure mode, plausible bot mistake, matches a known failure mode
 
 6. EXAMPLE FORMAT DETECTION (AUTOMATIC FAIL):
    - Examples must look like BOT RESPONSES, not criteria lists
@@ -640,13 +631,16 @@ Respond in JSON format only:
     },
     "good_example": {
       "is_good_for_scenario": true/false,
+      "meets_user_criteria": true/false,
       "score": 1-5,
-      "feedback": "explain why this is or isn't appropriate for this bot type, referencing the scenario"
+      "feedback": "Score based on scenario quality only. If meets_user_criteria is false but is_good_for_scenario is true, note: 'Your example is actually good — your criteria just didn't capture why.'"
     },
     "bad_example": {
       "is_realistic_failure": true/false,
+      "violates_user_criteria": true/false,
+      "failure_mode_matched": "name of the failure mode if matched, or null",
       "score": 1-5,
-      "feedback": "explain why this is or isn't a realistic failure for this bot type, referencing the scenario"
+      "feedback": "Evaluate on: (1) does it violate user's criteria? (2) is it a realistic failure? (3) if it matches a known failure mode, name it."
     },
     "safety": {"score": 1-5, "feedback": "if sensitive scenario"}
   },
@@ -724,6 +718,7 @@ Evaluate the quality of their criteria definition.`;
           score: badEx.score || 3,
           feedback: badEx.feedback || '',
           isRealisticFailure: badEx.is_realistic_failure,
+          failureModeMatched: badEx.failure_mode_matched || null,
         },
         safety: scenario.isSensitive ? (parsed.scores?.safety || criteriaScores.safety) : undefined,
       },

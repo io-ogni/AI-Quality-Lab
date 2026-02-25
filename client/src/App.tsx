@@ -6,12 +6,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { DisclaimerModal } from "@/components/disclaimer-modal";
 import Home from "@/pages/home";
 import Learn from "@/pages/learn";
-import Challenges from "@/pages/challenges";
+import Practice from "@/pages/practice";
 import EvalChallenge from "@/pages/eval-challenge";
-import Sandbox from "@/pages/sandbox";
 import Settings from "@/pages/settings";
 import About from "@/pages/about";
 import NotFound from "@/pages/not-found";
@@ -26,6 +24,18 @@ function ScrollToTop() {
   return null;
 }
 
+function RedirectToGuided() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation("/practice?tab=guided", { replace: true }); }, []);
+  return null;
+}
+
+function RedirectToOpen() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation("/practice?tab=open", { replace: true }); }, []);
+  return null;
+}
+
 function Router() {
   return (
     <>
@@ -33,9 +43,10 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/learn" component={Learn} />
-        <Route path="/challenges" component={Challenges} />
+        <Route path="/practice" component={Practice} />
         <Route path="/eval/:evalId" component={EvalChallenge} />
-        <Route path="/sandbox" component={Sandbox} />
+        <Route path="/challenges" component={RedirectToGuided} />
+        <Route path="/sandbox" component={RedirectToOpen} />
         <Route path="/settings" component={Settings} />
         <Route path="/about" component={About} />
         <Route component={NotFound} />
@@ -49,7 +60,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className="min-h-screen flex flex-col bg-background">
-          <DisclaimerModal />
           <Navbar />
           <main className="flex-1">
             <Router />

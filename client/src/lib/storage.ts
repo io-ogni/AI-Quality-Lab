@@ -6,16 +6,6 @@ const SAVED_CRITERIA_KEY = 'aiQualityLab_savedCriteria';
 
 const API_KEY_KEY = 'aiQualityLab_apiKey';
 const API_PROVIDER_KEY = 'aiQualityLab_provider';
-const DISCLAIMER_KEY = 'aiQualityLab_hasSeenDisclaimer';
-
-export function getHasSeenDisclaimer(): boolean {
-  return sessionStorage.getItem(DISCLAIMER_KEY) === 'true';
-}
-
-export function setHasSeenDisclaimer(): void {
-  sessionStorage.setItem(DISCLAIMER_KEY, 'true');
-}
-
 export function getAPISettings(): APISettings | null {
   const apiKey = sessionStorage.getItem(API_KEY_KEY);
   const provider = sessionStorage.getItem(API_PROVIDER_KEY) as 'openai' | 'anthropic' | null;

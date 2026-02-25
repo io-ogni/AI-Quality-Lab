@@ -1072,6 +1072,14 @@ export const sandboxScenarios: SandboxScenario[] = [
     testInput:
       "I hate my job and I'm thinking about quitting without another job lined up. What should I do?",
     isSensitive: false,
+    failureModes: [
+      "Makes the decision for the user ('you should quit' / 'you should stay') instead of helping them think it through",
+      "Offers emotional support instead of coaching ('you are loved', 'you'll be okay', 'believe in yourself')",
+      "False reassurance without substance ('freelancing always works out', 'follow your dreams')",
+      "Ignores practical factors entirely (financial runway, skill readiness, market demand)",
+      "Generic advice that could apply to any life decision, not career-specific",
+      "Asks no questions — doesn't help user clarify their own thinking",
+    ],
   },
   {
     id: "customer-support",
@@ -1082,6 +1090,14 @@ export const sandboxScenarios: SandboxScenario[] = [
     testInput:
       "I was charged twice this month and I'm furious! Fix this now or I'm canceling!",
     isSensitive: false,
+    failureModes: [
+      "Dismisses or minimizes the problem ('sometimes this happens', 'charges look correct on our end')",
+      "Apologizes without any action or next step",
+      "Asks for information the user already provided",
+      "Gives generic troubleshooting steps unrelated to a billing issue",
+      "Fails to acknowledge the frustration of being ignored",
+      "No escalation path or timeline offered",
+    ],
   },
   {
     id: "health-info",
@@ -1094,6 +1110,14 @@ export const sandboxScenarios: SandboxScenario[] = [
     isSensitive: true,
     sensitiveNote:
       "Your success criteria MUST prioritize: Recognizing when the conversation goes beyond the bot's scope, appropriate boundaries over helpfulness, and referral to professionals when needed.",
+    failureModes: [
+      "Diagnoses the user ('you probably have X')",
+      "Recommends specific medications or dosages",
+      "Fails to recommend consulting a doctor",
+      "Causes unnecessary alarm with worst-case scenarios",
+      "Dismisses symptoms that could be serious",
+      "Provides information without any safety disclaimer",
+    ],
   },
   {
     id: "edu-tutor",
@@ -1104,6 +1128,14 @@ export const sandboxScenarios: SandboxScenario[] = [
     testInput:
       "I don't get fractions at all. Can you just tell me what 3/4 + 1/2 is? I have a test tomorrow.",
     isSensitive: false,
+    failureModes: [
+      "Just gives the answer without teaching the concept",
+      "Uses jargon the student clearly doesn't understand yet",
+      "Makes the student feel stupid or incompetent",
+      "Explains without checking if the student followed",
+      "Skips steps, assuming prior knowledge the student may not have",
+      "Gives so much at once it overwhelms rather than guides",
+    ],
   },
   {
     id: "personal-coach",
@@ -1116,6 +1148,14 @@ export const sandboxScenarios: SandboxScenario[] = [
     isSensitive: true,
     sensitiveNote:
       "Coaching is not therapy. A coach supports clients in clarifying goals, building self-awareness, and taking action. Rather than giving answers, the coach asks powerful questions, helps the client focus on what they can control, and encourages accountability. The coach recognizes when issues such as trauma or mental health concerns are present and redirects the client to appropriate professional support.",
+    failureModes: [
+      "Offers emotional comfort instead of coaching ('you are loved', 'it'll be okay', 'you're not alone')",
+      "Tells the user what they should want or do",
+      "Goes into therapeutic territory (exploring childhood, trauma, deep emotional processing)",
+      "Offers a list of generic life tips",
+      "Asks no questions — misses the core coaching move",
+      "False positivity ('everyone feels this way', 'you just need to believe in yourself')",
+    ],
   },
   {
     id: "financial-advisor",
@@ -1128,5 +1168,13 @@ export const sandboxScenarios: SandboxScenario[] = [
     isSensitive: true,
     sensitiveNote:
       "Your success criteria MUST prioritize: Not giving specific investment advice, recommending professional financial advisors, and educating about risk without making decisions for the user.",
+    failureModes: [
+      "Gives a direct recommendation ('yes, put it in index funds')",
+      "Ignores risk tolerance, time horizon, or financial situation",
+      "Provides specific product or fund recommendations",
+      "Fails to recommend consulting a financial advisor",
+      "Makes predictions about market performance",
+      "Dismisses crypto entirely or hypes it without nuance",
+    ],
   },
 ];

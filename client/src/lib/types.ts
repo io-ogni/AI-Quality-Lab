@@ -83,6 +83,7 @@ export interface SandboxScenario {
   testInput: string;
   isSensitive: boolean;
   sensitiveNote?: string;
+  failureModes?: string[];
 }
 
 export interface ExampleScore {
@@ -90,6 +91,7 @@ export interface ExampleScore {
   feedback: string;
   isGoodForScenario?: boolean;
   isRealisticFailure?: boolean;
+  failureModeMatched?: string | null;
 }
 
 export interface CriteriaEvaluation {

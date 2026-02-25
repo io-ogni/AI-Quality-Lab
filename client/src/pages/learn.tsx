@@ -998,18 +998,18 @@ export default function Learn() {
             practice.
           </h2>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <Link href="/challenges">
-              <Button size="lg" data-testid="button-start-challenges">
-                Start Challenges
+            <Link href="/practice">
+              <Button size="lg" data-testid="button-start-practice">
+                Start Guided Practice
               </Button>
             </Link>
-            <Link href="/sandbox">
+            <Link href="/practice?tab=open">
               <Button
                 size="lg"
                 variant="outline"
-                data-testid="button-try-sandbox"
+                data-testid="button-try-open-practice"
               >
-                Try Sandbox
+                Try Open Scenarios
               </Button>
             </Link>
           </div>

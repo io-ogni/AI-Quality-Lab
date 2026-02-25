@@ -128,6 +128,17 @@ export default function Settings() {
             </CardContent>
           </Card>
 
+          <Card className="border-amber-500/20 bg-amber-500/5">
+            <CardContent className="p-5">
+              <div className="flex items-start gap-3">
+                <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-muted-foreground">
+                  <strong className="text-foreground">Tip:</strong> Generate a dedicated API key just for this app. Delete it when you're done learning.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader className="pb-4">
               <CardTitle>API Configuration</CardTitle>

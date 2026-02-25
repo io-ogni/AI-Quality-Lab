@@ -23,8 +23,7 @@ import {
 
 const navLinks = [
   { href: '/learn', label: 'Learn' },
-  { href: '/challenges', label: 'Challenges' },
-  { href: '/sandbox', label: 'Sandbox' },
+  { href: '/practice', label: 'Practice' },
   { href: '/about', label: 'About' },
   { href: '/settings', label: 'Settings' },
 ];
@@ -58,16 +57,13 @@ export function Navbar() {
                 key={link.href} 
                 href={link.href}
                 className={`px-3 py-2 text-sm font-medium rounded-md transition-colors hover-elevate ${
-                  location === link.href
+                  location === link.href || (link.href === '/practice' && (location.startsWith('/practice') || location.startsWith('/eval/')))
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
                 data-testid={`link-${link.label.toLowerCase()}`}
               >
                 {link.label}
-                {link.label === 'Sandbox' && (
-                  <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800 align-middle">Beta</span>
-                )}
               </Link>
             ))}
           </div>
@@ -121,7 +117,7 @@ export function Navbar() {
                 key={link.href} 
                 href={link.href}
                 className={`block px-3 py-2 text-sm font-medium rounded-md ${
-                  location === link.href
+                  location === link.href || (link.href === '/practice' && (location.startsWith('/practice') || location.startsWith('/eval/')))
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
@@ -129,9 +125,6 @@ export function Navbar() {
                 data-testid={`link-mobile-${link.label.toLowerCase()}`}
               >
                 {link.label}
-                {link.label === 'Sandbox' && (
-                  <span className="ml-1.5 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Beta</span>
-                )}
               </Link>
             ))}
           </div>
