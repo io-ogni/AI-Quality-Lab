@@ -670,7 +670,7 @@ function OpenTab() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <p className="font-medium mb-3" data-testid="text-section-criteria">Your Criteria</p>
+                    <p className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3" data-testid="text-section-criteria">Your Criteria</p>
                     <div className="grid gap-3 sm:grid-cols-3">
                       <div className="p-3 rounded-lg bg-muted/50">
                         <div className="flex items-center justify-between mb-1">
@@ -707,7 +707,7 @@ function OpenTab() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <p className="font-medium mb-3" data-testid="text-section-good-example">Your Good Example</p>
+                      <p className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3" data-testid="text-section-good-example">Your Good Example</p>
                       <div className="p-3 rounded-lg bg-muted/50 space-y-2">
                         <div className="flex items-center justify-between">
                           <span>Score</span>
@@ -726,7 +726,7 @@ function OpenTab() {
                     </div>
 
                     <div>
-                      <p className="font-medium mb-3" data-testid="text-section-bad-example">Your Bad Example</p>
+                      <p className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3" data-testid="text-section-bad-example">Your Bad Example</p>
                       <div className="p-3 rounded-lg bg-muted/50 space-y-2">
                         <div className="flex items-center justify-between">
                           <span>Score</span>
