@@ -34,7 +34,7 @@ const deterministicVsAI = [
     why: 'Pattern matching in browser — catches variations like "1diot" and "f*ck", no data sent anywhere',
   },
   {
-    task: "Judge if examples match the criteria",
+    task: "Judge if examples match the provided scenario",
     who: "LLM",
     icon: Brain,
     why: "Requires understanding scenario context",
@@ -68,7 +68,8 @@ const techStack = [
   },
   {
     component: "Content Moderation",
-    technology: "Pattern matching (runs locally in browser) — Criteria Lab only",
+    technology:
+      "Pattern matching (runs locally in browser) — Criteria Lab only",
   },
   {
     component: "Error Analysis Lab",
@@ -141,14 +142,22 @@ export default function About() {
                 </p>
                 <ol className="text-muted-foreground space-y-2 list-decimal pl-5">
                   <li>
-                    <strong className="text-foreground">Defining quality criteria</strong> — What does "good" look like for a given scenario? (Criteria Lab)
+                    <strong className="text-foreground">
+                      Defining quality criteria
+                    </strong>{" "}
+                    — What does "good" look like for a given scenario? (Criteria
+                    Lab)
                   </li>
                   <li>
-                    <strong className="text-foreground">Error analysis</strong> — Reviewing AI outputs, diagnosing failures, and finding patterns. (Error Analysis Lab)
+                    <strong className="text-foreground">Error analysis</strong>{" "}
+                    — Reviewing AI outputs, diagnosing failures, and finding
+                    patterns. (Error Analysis Lab)
                   </li>
                 </ol>
                 <p className="text-muted-foreground">
-                  The Criteria Lab uses AI to evaluate your work — and that evaluation itself is an example of the challenge. How do you reliably judge whether someone's criteria are good?
+                  The Criteria Lab uses AI to evaluate your work — and that
+                  evaluation itself is an example of the challenge. How do you
+                  reliably judge whether someone's criteria are good?
                 </p>
                 <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                   <p className="font-medium">
@@ -160,7 +169,9 @@ export default function About() {
           </div>
 
           <div className="pt-4">
-            <h2 className="text-2xl font-bold mb-8 pb-2 border-b">Criteria Lab</h2>
+            <h2 className="text-2xl font-bold mb-8 pb-2 border-b">
+              Criteria Lab
+            </h2>
             <div className="space-y-12">
               <div>
                 <h3
@@ -181,17 +192,27 @@ export default function About() {
                           Layer 1
                         </Badge>
                         <div>
-                          <p className="font-medium mb-1">Code Pre-Validation</p>
+                          <p className="font-medium mb-1">
+                            Code Pre-Validation
+                          </p>
                           <p className="text-muted-foreground mb-2">
-                            Runs BEFORE the LLM. Catches obvious problems instantly
-                            and for free.
+                            Runs BEFORE the LLM. Catches obvious problems
+                            instantly and for free.
                           </p>
                           <ul className="text-muted-foreground space-y-1.5">
                             <li>Garbage detection (input too short?)</li>
-                            <li>Copy-paste detection (did you paste criteria as example?)</li>
+                            <li>
+                              Copy-paste detection (did you paste criteria as
+                              example?)
+                            </li>
                             <li>Identical examples detection</li>
-                            <li>Format detection (examples look like bullet lists?)</li>
-                            <li>Offensive content detection (pattern matching)</li>
+                            <li>
+                              Format detection (examples look like bullet
+                              lists?)
+                            </li>
+                            <li>
+                              Offensive content detection (pattern matching)
+                            </li>
                           </ul>
                           <p className="text-sm text-muted-foreground mt-2 italic">
                             If FAIL — Return immediately, don't call the LLM.
@@ -222,7 +243,10 @@ export default function About() {
                           <ul className="text-muted-foreground space-y-1.5">
                             <li>Are your criteria specific enough?</li>
                             <li>Are they relevant to the scenario?</li>
-                            <li>Do your examples actually demonstrate the criteria?</li>
+                            <li>
+                              Do your examples actually demonstrate the
+                              criteria?
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -243,13 +267,20 @@ export default function About() {
                           Layer 3
                         </Badge>
                         <div>
-                          <p className="font-medium mb-1">Code Post-Validation</p>
+                          <p className="font-medium mb-1">
+                            Code Post-Validation
+                          </p>
                           <p className="text-muted-foreground mb-2">
                             Runs AFTER the LLM. Catches cases the LLM missed.
                           </p>
                           <ul className="text-muted-foreground space-y-1.5">
-                            <li>Did the LLM miss offensive content? Override.</li>
-                            <li>Did the LLM score copy-pasted text too high? Override.</li>
+                            <li>
+                              Did the LLM miss offensive content? Override.
+                            </li>
+                            <li>
+                              Did the LLM score copy-pasted text too high?
+                              Override.
+                            </li>
                             <li>Recalculate final score if needed.</li>
                           </ul>
                         </div>
@@ -274,24 +305,32 @@ export default function About() {
                         <thead>
                           <tr className="border-b bg-muted/50">
                             <th className="text-left p-3 font-medium">Task</th>
-                            <th className="text-left p-3 font-medium whitespace-nowrap">Who Does It</th>
+                            <th className="text-left p-3 font-medium whitespace-nowrap">
+                              Who Does It
+                            </th>
                             <th className="text-left p-3 font-medium">Why</th>
                           </tr>
                         </thead>
                         <tbody>
                           {deterministicVsAI.map((row, i) => (
                             <tr key={i} className="border-b last:border-b-0">
-                              <td className="p-3 text-muted-foreground">{row.task}</td>
+                              <td className="p-3 text-muted-foreground">
+                                {row.task}
+                              </td>
                               <td className="p-3">
                                 <Badge
-                                  variant={row.who === "LLM" ? "default" : "secondary"}
+                                  variant={
+                                    row.who === "LLM" ? "default" : "secondary"
+                                  }
                                   className="gap-1"
                                 >
                                   <row.icon className="h-3 w-3" />
                                   {row.who}
                                 </Badge>
                               </td>
-                              <td className="p-3 text-muted-foreground">{row.why}</td>
+                              <td className="p-3 text-muted-foreground">
+                                {row.why}
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -312,12 +351,12 @@ export default function About() {
                 <Card className="bg-card/50">
                   <CardContent className="p-6 space-y-4">
                     <p className="text-muted-foreground">
-                      The 33 guided exercises have pre-defined "expert criteria" — the
-                      answers we're looking for.
+                      The 33 guided exercises have pre-defined "expert criteria"
+                      — the answers we're looking for.
                     </p>
                     <p className="text-muted-foreground">
-                      Before calling any LLM, we check if your answer matches using
-                      synonym tables:
+                      Before calling any LLM, we check if your answer matches
+                      using synonym tables:
                     </p>
                     <div className="p-4 rounded-lg bg-muted/50 text-muted-foreground space-y-1 font-mono">
                       <p>"professional" = "formal" = "business-like"</p>
@@ -327,12 +366,19 @@ export default function About() {
                       Why? It's instant, free, 100% reliable, and consistent.
                     </p>
                     <p className="text-muted-foreground">
-                      The LLM only runs when we need semantic judgment that synonyms
-                      can't capture.
+                      The LLM only runs when we need semantic judgment that
+                      synonyms can't capture.
                     </p>
                     <div className="pt-2 mt-2 border-t border-border/50">
                       <p className="text-muted-foreground">
-                        The 6 open scenarios work differently. There are no pre-defined answers — instead, the LLM evaluates everything you submit: your criteria, your passing example, and your failing example. Each is scored on multiple dimensions (e.g., is the bad example a realistic failure? Does it match a known failure mode for that scenario?). Code still runs before and after the LLM to catch obvious problems and override mistakes.
+                        The 6 open scenarios work differently. There are no
+                        pre-defined answers — instead, the LLM evaluates
+                        everything you submit: your criteria, your passing
+                        example, and your failing example. Each is scored on
+                        multiple dimensions (e.g., is the bad example a
+                        realistic failure? Does it match a known failure mode
+                        for that scenario?). Code still runs before and after
+                        the LLM to catch obvious problems and override mistakes.
                       </p>
                     </div>
                   </CardContent>
@@ -350,8 +396,8 @@ export default function About() {
                 <Card className="bg-card/50">
                   <CardContent className="p-6 space-y-4">
                     <p className="text-muted-foreground">
-                      We use pattern matching to detect offensive content. This is
-                      important:
+                      We use pattern matching to detect offensive content. This
+                      is important:
                     </p>
                     <ul className="text-muted-foreground space-y-2">
                       <li className="flex items-start gap-2">
@@ -372,8 +418,8 @@ export default function About() {
                       </li>
                     </ul>
                     <p className="text-muted-foreground">
-                      We never send your text to a moderation API. Your input stays
-                      on your device.
+                      We never send your text to a moderation API. Your input
+                      stays on your device.
                     </p>
                   </CardContent>
                 </Card>
@@ -406,7 +452,9 @@ export default function About() {
           </div>
 
           <div className="pt-4">
-            <h2 className="text-2xl font-bold mb-8 pb-2 border-b">Error Analysis Lab</h2>
+            <h2 className="text-2xl font-bold mb-8 pb-2 border-b">
+              Error Analysis Lab
+            </h2>
             <div className="space-y-12">
               <div>
                 <h3
@@ -419,31 +467,45 @@ export default function About() {
                 <Card className="bg-card/50">
                   <CardContent className="p-6 space-y-4">
                     <p className="text-muted-foreground">
-                      The Error Analysis Lab is completely different from the Criteria Lab. There's no LLM, no API key, no AI evaluation of your work.
+                      The Error Analysis Lab is completely different from the
+                      Criteria Lab. There's no LLM, no API key, no AI evaluation
+                      of your work.
                     </p>
                     <p className="text-muted-foreground">
-                      You review 25 pre-written conversations from a fictional AI assistant (TaskPilot) and practice the error analysis process:
+                      You review 25 pre-written conversations from a fictional
+                      AI assistant (TaskPilot) and practice the error analysis
+                      process:
                     </p>
                     <div className="space-y-3">
                       <div className="p-4 rounded-lg bg-muted/50">
                         <p className="font-medium mb-1">Phase 1: Review</p>
                         <p className="text-muted-foreground">
-                          Read each conversation. Decide: Pass or Fail. If Fail, write down what's wrong. After each trace, see what an expert evaluator thought.
+                          Read each conversation. Decide: Pass or Fail. If Fail,
+                          write down what's wrong. After each trace, see what an
+                          expert evaluator thought.
                         </p>
                       </div>
                       <div className="p-4 rounded-lg bg-muted/50">
-                        <p className="font-medium mb-1">Phase 2: Build Your Taxonomy</p>
+                        <p className="font-medium mb-1">
+                          Phase 2: Build Your Taxonomy
+                        </p>
                         <p className="text-muted-foreground">
-                          Take all your failure notes and group them into categories. Then compare your categories to the expert's taxonomy.
+                          Take all your failure notes and group them into
+                          categories. Then compare your categories to the
+                          expert's taxonomy.
                         </p>
                       </div>
                     </div>
                     <p className="text-muted-foreground">
-                      Everything runs locally in your browser. Your progress is saved in localStorage. No data is sent anywhere.
+                      Everything runs locally in your browser. Your progress is
+                      saved in localStorage. No data is sent anywhere.
                     </p>
                     <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                       <p className="font-medium">
-                        Why no AI? Because error analysis is a human skill. The whole point is that YOU review the outputs and find the patterns — not an algorithm. This is exactly how it works in production.
+                        Why no AI? Because error analysis is a human skill. The
+                        whole point is that you review the outputs and find the
+                        patterns — not an algorithm. This is exactly how it
+                        works in production.
                       </p>
                     </div>
                   </CardContent>
@@ -498,10 +560,9 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6">
                 <p className="text-muted-foreground">
-                  Content moderation (offensive language detection) works best
-                  for English text. Non-English offensive content may not be
-                  detected, as the pattern matching is built around English
-                  patterns.
+                  The app is built around English language, including the
+                  pattern matching and basic content moderation (offensive
+                  language detection).
                 </p>
               </CardContent>
             </Card>
@@ -551,7 +612,10 @@ export default function About() {
                     </Button>
                   </Link>
                   <Link href="/error-analysis">
-                    <Button variant="outline" data-testid="link-about-error-analysis">
+                    <Button
+                      variant="outline"
+                      data-testid="link-about-error-analysis"
+                    >
                       Try Error Analysis Lab
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </Button>
