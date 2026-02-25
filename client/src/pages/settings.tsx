@@ -175,8 +175,8 @@ export default function Settings() {
                 <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
                 <p className="text-muted-foreground">
                   <strong className="text-foreground">Tip:</strong> Generate a
-                  dedicated API key just for this app. Delete it when you're
-                  done learning.
+                  dedicated API key just for this app. Set a spending limit,
+                  and delete it when you're done learning.
                 </p>
               </div>
             </CardContent>
