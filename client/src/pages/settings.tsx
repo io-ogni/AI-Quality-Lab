@@ -252,7 +252,7 @@ export default function Settings() {
                 <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
                 <p className="text-sm text-muted-foreground">
                   Each evaluation uses{" "}
-                  {provider === "anthropic" ? "Claude Sonnet" : "GPT-4o"}.
+                  {provider === "anthropic" ? "Claude Haiku" : "GPT-4o"}.
                   Monitor your usage at{" "}
                   {provider === "anthropic" ? (
                     <a
