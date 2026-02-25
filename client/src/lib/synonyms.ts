@@ -417,6 +417,25 @@ export const synonymTable: Record<string, CriteriaSynonyms> = {
   }
 };
 
+const NEGATION_WORDS = new Set([
+  'not', 'no', "isn't", "doesn't", "don't", 'never', 'without',
+  'lack', 'lacking', 'lacks', 'missing', 'absent', 'hardly', 'barely',
+  "won't", "shouldn't", "can't", 'cannot', "wasn't", "weren't",
+]);
+
+function hasNegationBefore(text: string, matchIndex: number): boolean {
+  const before = text.substring(0, matchIndex).trim();
+  const words = before.split(/\s+/).filter(Boolean);
+  const lastFew = words.slice(-3);
+
+  for (const w of lastFew) {
+    const cleaned = w.replace(/[.,;:!?]/g, '');
+    if (NEGATION_WORDS.has(cleaned)) return true;
+    if (cleaned.startsWith('non-') || cleaned === 'non') return true;
+  }
+  return false;
+}
+
 export function matchSynonyms(
   challengeId: string,
   level: number,
@@ -436,11 +455,14 @@ export function matchSynonyms(
     if (pattern instanceof RegExp) {
       const match = userLower.match(pattern);
       if (match) {
+        if (hasNegationBefore(userLower, match.index ?? 0)) continue;
         return { matched: true, matchedPhrase: match[0] };
       }
     } else {
-      if (userLower.includes(pattern.toLowerCase())) {
-        const idx = userLower.indexOf(pattern.toLowerCase());
+      const patternLower = pattern.toLowerCase();
+      if (userLower.includes(patternLower)) {
+        const idx = userLower.indexOf(patternLower);
+        if (hasNegationBefore(userLower, idx)) continue;
         const start = Math.max(0, userLower.lastIndexOf('\n', idx) + 1);
         const end = userLower.indexOf('\n', idx);
         const phrase = userInput.substring(start, end === -1 ? undefined : end).trim();
