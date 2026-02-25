@@ -406,7 +406,7 @@ export default function ErrorAnalysis() {
 
             <div className="aspect-video mb-8 rounded-lg overflow-hidden border bg-black">
               <iframe
-                src="https://www.youtube.com/embed/se3F91Esueg"
+                src="https://www.youtube.com/embed/BJbddhHhGPg"
                 title="Error Analysis — The Skill That Actually Matters"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
