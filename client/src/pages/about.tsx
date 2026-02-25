@@ -144,7 +144,7 @@ export default function About() {
                     <strong className="text-foreground">Defining quality criteria</strong> — What does "good" look like for a given scenario? (Criteria Lab)
                   </li>
                   <li>
-                    <strong className="text-foreground">Error analysis</strong> — Reviewing real AI outputs, diagnosing failures, and finding patterns. (Error Analysis Lab)
+                    <strong className="text-foreground">Error analysis</strong> — Reviewing AI outputs, diagnosing failures, and finding patterns. (Error Analysis Lab)
                   </li>
                 </ol>
                 <p className="text-muted-foreground">

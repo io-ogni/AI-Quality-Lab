@@ -518,7 +518,7 @@ export const PHASE2_INTRO_TEXT =
   'You\'ve been spotting individual problems. Now look for patterns.\n\nBelow are all your failure notes from Phase 1. Group them into categories — give each group a name you\'d use in a real team discussion.\n\nThere\'s no "right" taxonomy. But some are more useful than others. A good category is specific enough to act on: "Hallucinated pricing" beats "accuracy issues."';
 
 export const LANDING_INTRO_TEXT =
-  "You'll review 25 real conversations from a fictional AI assistant called TaskPilot, decide which responses are good enough to ship, and build your own failure taxonomy.";
+  "You'll review 25 simulated conversations from a fictional AI assistant called TaskPilot, decide which responses are good enough to ship, and build your own failure taxonomy.";
 
 export const PRODUCT_BRIEFING_NOTE =
   "Read this carefully. You'll need it to evaluate the AI's responses. You can always re-open this info during the lab.";

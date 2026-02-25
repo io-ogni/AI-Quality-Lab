@@ -97,7 +97,7 @@ export default function Learn() {
                 <li>
                   <p className="font-medium">Find failure patterns</p>
                   <p className="text-muted-foreground mt-1">
-                    Review real AI conversations, diagnose what's wrong, and group
+                    Review AI conversations, diagnose what's wrong, and group
                     failures into categories you can act on.
                   </p>
                   <p className="text-muted-foreground mt-1">
