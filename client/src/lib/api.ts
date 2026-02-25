@@ -372,6 +372,15 @@ NEVER put the same text in both arrays. If a user criterion matched an expert cr
 1. Did NOT match any expert criterion, AND
 2. Are too vague to be useful (e.g., "be helpful", "respond nicely")
 
+SPECIFICITY SCORING (1-5):
+Score based on the SUBSTANCE and INTENT of the criteria, NOT spelling or grammar.
+5 = All criteria are specific and measurable (e.g., "exactly 2 sentences", "does not contain the word X")
+4 = Mostly specific with minor vagueness
+3 = Mix of specific and vague criteria
+2 = Mostly vague
+1 = All criteria are vague or meaningless
+Typos, misspellings, and informal language should NOT reduce the specificity score. Judge the intent.
+
 Respond in JSON format only:
 {
   "matches": [
