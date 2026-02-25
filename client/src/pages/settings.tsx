@@ -374,45 +374,6 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-4">
-              <CardTitle>Privacy & About</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-muted-foreground">
-              <p>
-                <strong className="text-foreground">AI Quality Lab</strong> is a
-                learning tool, not a production system. Once you master these
-                concepts, you'll be able to write better AI feature specs and
-                know what questions to ask about quality.
-              </p>
-              <p>Built for learning. Your data stays in your browser.</p>
-
-              <div className="pt-4 border-t space-y-3">
-                <div className="flex items-start gap-2">
-                  <Info className="h-4 w-4 mt-0.5 shrink-0" />
-                  <p>
-                    <strong className="text-foreground">
-                      What we DON'T store:
-                    </strong>{" "}
-                    Your API key (session only, never server), your prompts or
-                    outputs (never sent to us), your challenge attempts (browser
-                    only). This app has no backend database. Everything stays in
-                    your browser.
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-2">
-                  <Lightbulb className="h-4 w-4 mt-0.5 shrink-0" />
-                  <p>
-                    <strong className="text-foreground">Tip:</strong> For extra
-                    privacy, use this app in an incognito/private browser
-                    window. When you close it, everything is automatically
-                    deleted.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
     </div>
