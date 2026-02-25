@@ -226,6 +226,10 @@ export default function ErrorAnalysis() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [screen]);
+
+  useEffect(() => {
     const p = getErrorAnalysisProgress();
     setProgress(p);
 
