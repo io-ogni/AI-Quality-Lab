@@ -59,37 +59,19 @@ function isPlaceholder(text: string): boolean {
   return !trimmed || PLACEHOLDER_PATTERNS.some(pattern => pattern.test(trimmed));
 }
 
-const COMMON_WORDS_4PLUS = new Set([
-  'about', 'accuracy', 'accurate', 'action', 'actually', 'after', 'also',
-  'always', 'answer', 'appropriate', 'avoid', 'avoids', 'back', 'because',
-  'been', 'before', 'both', 'case', 'check', 'clear', 'come', 'complete',
-  'concise', 'contain', 'contains', 'content', 'correct', 'could', 'criteria',
-  'criterion', 'data', 'description', 'does', 'each', 'ensure', 'error',
-  'errors', 'eval', 'evaluate', 'even', 'every', 'example', 'fact', 'facts',
-  'fail', 'failure', 'first', 'follow', 'follows', 'format', 'from', 'give',
-  'good', 'groundedness', 'hallucination', 'harm', 'harmful', 'have', 'help',
-  'helpful', 'include', 'includes', 'information', 'input', 'instruction',
-  'instructions', 'into', 'just', 'keep', 'know', 'lack', 'language', 'like',
-  'look', 'maintain', 'make', 'match', 'message', 'might', 'model', 'more',
-  'most', 'much', 'must', 'need', 'never', 'next', 'note', 'offensive',
-  'only', 'other', 'output', 'over', 'pass', 'people', 'please', 'point',
-  'professional', 'prompt', 'provide', 'quality', 'query', 'question',
-  'relevant', 'request', 'response', 'result', 'right', 'safe', 'same',
-  'says', 'scenario', 'sentence', 'sentences', 'should', 'some', 'source',
-  'specific', 'stay', 'still', 'style', 'such', 'take', 'task', 'tell',
-  'test', 'text', 'than', 'that', 'them', 'then', 'there', 'these', 'they',
-  'thing', 'think', 'this', 'tone', 'topic', 'toxic', 'toxicity', 'true',
-  'type', 'under', 'used', 'user', 'uses', 'using', 'very', 'want', 'well',
-  'what', 'when', 'where', 'which', 'will', 'with', 'without', 'word',
-  'words', 'work', 'would', 'wrong', 'your',
-]);
+function looksLikeWord(s: string): boolean {
+  if (!/^[a-z]+$/.test(s)) return false;
+  if (/([^aeiou]{4,})/.test(s)) return false;
+  if (!/[aeiou]/.test(s)) return false;
+  return true;
+}
 
 export function hasEnoughRealWords(text: string): boolean {
   const words = text.trim().toLowerCase().split(/\s+/);
   let count = 0;
   for (const w of words) {
     const cleaned = w.replace(/[^a-z]/g, '');
-    if (cleaned.length >= 4 && COMMON_WORDS_4PLUS.has(cleaned)) {
+    if (cleaned.length >= 4 && looksLikeWord(cleaned)) {
       count++;
       if (count >= 3) return true;
     }
