@@ -11,6 +11,7 @@ import {
   Eye,
   Lock,
   MessageCircle,
+  ClipboardCheck,
 } from "lucide-react";
 
 const deterministicVsAI = [
@@ -63,11 +64,15 @@ const techStack = [
   { component: "Styling", technology: "Tailwind CSS + shadcn/ui" },
   {
     component: "LLM Calls",
-    technology: "OpenAI API or Anthropic API (your key)",
+    technology: "OpenAI API or Anthropic API (your key) — Criteria Lab only",
   },
   {
     component: "Content Moderation",
-    technology: "Pattern matching (runs locally in browser)",
+    technology: "Pattern matching (runs locally in browser) — Criteria Lab only",
+  },
+  {
+    component: "Error Analysis Lab",
+    technology: "Static content + localStorage (no API calls)",
   },
   { component: "Storage", technology: "Browser localStorage" },
 ];
@@ -132,20 +137,22 @@ export default function About() {
             <Card className="bg-card/50">
               <CardContent className="p-6 space-y-4">
                 <p className="text-muted-foreground">
-                  How do we evaluate what you write? Simple text matching won't
-                  work — if you write "be professional" and the expert answer
-                  says "maintain a formal tone," a keyword check would mark you
-                  wrong.
+                  AI Quality Lab teaches two core PM skills:
                 </p>
+                <ol className="text-muted-foreground space-y-2 list-decimal pl-5">
+                  <li>
+                    <strong className="text-foreground">Defining quality criteria</strong> — What does "good" look like for a given scenario? (Criteria Lab)
+                  </li>
+                  <li>
+                    <strong className="text-foreground">Error analysis</strong> — Reviewing real AI outputs, diagnosing failures, and finding patterns. (Error Analysis Lab)
+                  </li>
+                </ol>
                 <p className="text-muted-foreground">
-                  But we can't blindly trust an LLM to judge either — they can
-                  be inconsistent or manipulated, or they can easily
-                  hallucinate. So we combine both.
+                  The Criteria Lab uses AI to evaluate your work — and that evaluation itself is an example of the challenge. How do you reliably judge whether someone's criteria are good?
                 </p>
                 <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
                   <p className="font-medium">
-                    Our solution: Don't trust the LLM alone. Use{" "}
-                    <strong>code + LLM + code</strong>.
+                    Below is how we solved that problem under the hood.
                   </p>
                 </div>
               </CardContent>
@@ -314,12 +321,12 @@ export default function About() {
               data-testid="text-section-challenges-mode"
             >
               <Code2 className="h-6 w-6 text-primary" />
-              How Challenges Work
+              How the Criteria Lab Works
             </h2>
             <Card className="bg-card/50">
               <CardContent className="p-6 space-y-4">
                 <p className="text-muted-foreground">
-                  The 33 challenges have pre-defined "expert criteria" — the
+                  The 33 guided exercises have pre-defined "expert criteria" — the
                   answers we're looking for.
                 </p>
                 <p className="text-muted-foreground">
@@ -403,6 +410,48 @@ export default function About() {
                 </Card>
               ))}
             </div>
+          </div>
+
+          <div>
+            <h2
+              className="text-2xl font-semibold mb-4 flex items-center gap-2"
+              data-testid="text-section-error-analysis"
+            >
+              <ClipboardCheck className="h-6 w-6 text-primary" />
+              How the Error Analysis Lab Works
+            </h2>
+            <Card className="bg-card/50">
+              <CardContent className="p-6 space-y-4">
+                <p className="text-muted-foreground">
+                  The Error Analysis Lab is completely different from the Criteria Lab. There's no LLM, no API key, no AI evaluation of your work.
+                </p>
+                <p className="text-muted-foreground">
+                  You review 25 pre-written conversations from a fictional AI assistant (TaskPilot) and practice the error analysis process:
+                </p>
+                <div className="space-y-3">
+                  <div className="p-4 rounded-lg bg-muted/50">
+                    <p className="font-medium mb-1">Phase 1: Review</p>
+                    <p className="text-muted-foreground">
+                      Read each conversation. Decide: Pass or Fail. If Fail, write down what's wrong. After each trace, see what an expert evaluator thought.
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/50">
+                    <p className="font-medium mb-1">Phase 2: Build Your Taxonomy</p>
+                    <p className="text-muted-foreground">
+                      Take all your failure notes and group them into categories. Then compare your categories to the expert's taxonomy.
+                    </p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground">
+                  Everything runs locally in your browser. Your progress is saved in localStorage. No data is sent anywhere.
+                </p>
+                <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                  <p className="font-medium">
+                    Why no AI? Because error analysis is a human skill. The whole point is that YOU review the outputs and find the patterns — not an algorithm. This is exactly how it works in production.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div>
@@ -495,7 +544,7 @@ export default function About() {
                 <p className="text-muted-foreground">
                   Now you know how it works under the hood.
                 </p>
-                <p className="font-medium">Ready to practice?</p>
+                <p className="font-medium">Ready to get started?</p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <Link href="/criteria-lab">
                     <Button data-testid="link-about-criteria-lab">
