@@ -825,10 +825,9 @@ export default function Practice() {
           <p className="text-muted-foreground">
             Define what "good" looks like. Practice writing quality criteria through guided challenges and open scenarios.
           </p>
-          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1.5">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
+          <span className="inline-block mt-2 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
             Uses your LLM API key
-          </p>
+          </span>
         </div>
       </section>
 

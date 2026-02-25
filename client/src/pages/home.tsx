@@ -98,10 +98,10 @@ export default function Home() {
                 </p>
                 <div className="space-y-2 pt-2 border-t border-border/50">
                   <p>
-                    <strong className="text-foreground">Criteria Lab</strong> — Practice defining quality criteria across 11 dimensions. 33 guided exercises + 6 open scenarios. <span className="text-xs">(LLM API key required)</span>
+                    <strong className="text-foreground">Criteria Lab</strong> — Practice defining quality criteria across 11 dimensions. 33 guided exercises + 6 open scenarios. <span className="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium align-middle ml-1">LLM API key required</span>
                   </p>
                   <p>
-                    <strong className="text-foreground">Error Analysis Lab</strong> — Review 25 AI conversations, spot failures, and build your first failure taxonomy. <span className="text-xs">(No API key needed)</span>
+                    <strong className="text-foreground">Error Analysis Lab</strong> — Review 25 AI conversations, spot failures, and build your first failure taxonomy. <span className="inline-block px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs font-medium align-middle ml-1">No API key needed</span>
                   </p>
                 </div>
               </div>
