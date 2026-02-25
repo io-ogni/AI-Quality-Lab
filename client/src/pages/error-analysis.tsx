@@ -894,14 +894,30 @@ export default function ErrorAnalysis() {
               </div>
             )}
 
-            <Button
-              size="lg"
-              onClick={handleDone}
-              disabled={!allCategorized}
-              data-testid="button-done-taxonomy"
-            >
-              Done — Show Results
-            </Button>
+            <div className="flex items-center gap-4">
+              <Button
+                size="lg"
+                onClick={handleDone}
+                disabled={!allCategorized}
+                data-testid="button-done-taxonomy"
+              >
+                Done — Show Results
+              </Button>
+              <button
+                onClick={() => {
+                  resetPhase1();
+                  setProgress(getErrorAnalysisProgress());
+                  setScreen("phase1");
+                  setUserVerdict(null);
+                  setFailNotes("");
+                  setNotesSubmitted(false);
+                }}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                data-testid="button-restart-phase1-from-phase2"
+              >
+                <RotateCcw className="h-3 w-3" /> Restart Phase 1
+              </button>
+            </div>
           </div>
         </section>
       </div>
@@ -1034,18 +1050,34 @@ export default function ErrorAnalysis() {
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                resetPhase2();
-                setProgress(getErrorAnalysisProgress());
-                setTaxonomyMap({});
-                setScreen("phase2");
-              }}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-              data-testid="button-restart-phase2"
-            >
-              <RotateCcw className="h-3 w-3" /> Restart Phase 2
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => {
+                  resetPhase2();
+                  setProgress(getErrorAnalysisProgress());
+                  setTaxonomyMap({});
+                  setScreen("phase2");
+                }}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                data-testid="button-restart-phase2"
+              >
+                <RotateCcw className="h-3 w-3" /> Restart Phase 2
+              </button>
+              <button
+                onClick={() => {
+                  resetPhase1();
+                  setProgress(getErrorAnalysisProgress());
+                  setScreen("phase1");
+                  setUserVerdict(null);
+                  setFailNotes("");
+                  setNotesSubmitted(false);
+                }}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                data-testid="button-restart-phase1-from-summary"
+              >
+                <RotateCcw className="h-3 w-3" /> Restart Phase 1
+              </button>
+            </div>
           </div>
         </section>
       </div>
