@@ -25,7 +25,7 @@ const pathStops = [
     icon: Target,
     label: "Criteria Lab",
     sublabel: "Define what \"good\" looks like",
-    badge: "Requires API key",
+    badge: "LLM API key needed",
     badgeVariant: "secondary" as const,
   },
   {
