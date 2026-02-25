@@ -583,7 +583,7 @@ function OpenTab() {
 
                 <Button
                   onClick={handleSubmit}
-                  disabled={!hasKey || isSubmitting || criteria.length > 1000 || goodExample.length > 2000 || badExample.length > 2000}
+                  disabled={!hasKey || isSubmitting || criteria.length >= 1000 || goodExample.length >= 2000 || badExample.length >= 2000}
                   className="w-full sm:w-auto"
                   data-testid="button-run-evaluation"
                 >

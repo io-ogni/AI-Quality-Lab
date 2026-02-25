@@ -93,7 +93,7 @@ export default function EvalChallenge() {
   };
 
   const handleSubmit = async () => {
-    if (!userCriteria.trim() || !hasKey || userCriteria.length > 1000) return;
+    if (!userCriteria.trim() || !hasKey || userCriteria.length >= 1000) return;
 
     const attack = detectWrongInputType(userCriteria);
     if (attack?.isAttack) {
@@ -350,7 +350,7 @@ export default function EvalChallenge() {
                           <span className="inline-block">
                             <Button
                               onClick={handleSubmit}
-                              disabled={!userCriteria.trim() || !hasKey || isSubmitting || userCriteria.length > 1000}
+                              disabled={!userCriteria.trim() || !hasKey || isSubmitting || userCriteria.length >= 1000}
                               className="w-full sm:w-auto"
                               data-testid="button-submit-criteria"
                             >
