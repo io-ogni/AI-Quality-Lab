@@ -837,13 +837,13 @@ export default function Practice() {
 
       <section className="py-8">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex gap-1 p-1 rounded-lg bg-muted mb-4" data-testid="tabs-practice">
+          <div className="inline-flex gap-1 p-1 rounded-lg bg-muted/80 border mb-4" data-testid="tabs-practice">
             <button
               onClick={() => setActiveTab('guided')}
-              className={`px-5 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-medium rounded-md transition-colors ${
                 activeTab === 'guided'
-                  ? 'bg-background text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-foreground hover:bg-accent'
               }`}
               data-testid="tab-guided"
             >
@@ -851,10 +851,10 @@ export default function Practice() {
             </button>
             <button
               onClick={() => setActiveTab('open')}
-              className={`px-5 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-medium rounded-md transition-colors ${
                 activeTab === 'open'
-                  ? 'bg-background text-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-foreground hover:bg-accent'
               }`}
               data-testid="tab-open"
             >
