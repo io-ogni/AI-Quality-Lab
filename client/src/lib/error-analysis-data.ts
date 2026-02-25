@@ -506,7 +506,7 @@ export const WHATS_NEXT = {
     {
       title: "Ship Fast, Learn Fast",
       url: "https://www.youtube.com/watch?v=YTJQoEUeTEQ",
-      description: "Video",
+      description: "Video, covering latency, cost, and model selection tradeoffs",
     },
   ] as WhatsNextResource[],
 };
