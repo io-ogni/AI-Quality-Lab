@@ -505,31 +505,6 @@ export default function Learn() {
       </section>
 
 
-      <section className="py-12 bg-primary/5 border-t">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-semibold mb-3">
-            You've learned the dimensions, the tools, and the tradeoffs. Time to
-            practice.
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <Link href="/criteria-lab">
-              <Button size="lg" data-testid="button-start-criteria-lab">
-                Go to Criteria Lab
-              </Button>
-            </Link>
-            <Link href="/criteria-lab?tab=open">
-              <Button
-                size="lg"
-                variant="outline"
-                data-testid="button-try-open-scenarios"
-              >
-                Try Open Scenarios
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="py-12 bg-muted/30">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2
@@ -557,6 +532,31 @@ export default function Learn() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="py-12 bg-primary/5 border-t">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl font-semibold mb-3">
+            You've learned the dimensions, the tools, and the tradeoffs. Time to
+            practice.
+          </h2>
+          <div className="flex flex-wrap justify-center gap-4 mt-6">
+            <Link href="/criteria-lab">
+              <Button size="lg" data-testid="button-start-criteria-lab">
+                Go to Criteria Lab
+              </Button>
+            </Link>
+            <Link href="/criteria-lab?tab=open">
+              <Button
+                size="lg"
+                variant="outline"
+                data-testid="button-try-open-scenarios"
+              >
+                Try Open Scenarios
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
