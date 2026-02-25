@@ -23,7 +23,7 @@ import {
 
 const navLinks = [
   { href: '/learn', label: 'Learn' },
-  { href: '/practice', label: 'Practice' },
+  { href: '/criteria-lab', label: 'Criteria Lab' },
   { href: '/error-analysis', label: 'Error Analysis' },
   { href: '/about', label: 'About' },
   { href: '/settings', label: 'Settings' },
@@ -58,7 +58,7 @@ export function Navbar() {
                 key={link.href} 
                 href={link.href}
                 className={`px-3 py-2 text-sm font-medium rounded-md transition-colors hover-elevate ${
-                  location === link.href || (link.href === '/practice' && (location.startsWith('/practice') || location.startsWith('/eval/'))) || (link.href === '/error-analysis' && location.startsWith('/error-analysis'))
+                  location === link.href || (link.href === '/criteria-lab' && (location.startsWith('/criteria-lab') || location.startsWith('/eval/'))) || (link.href === '/error-analysis' && location.startsWith('/error-analysis'))
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
@@ -118,7 +118,7 @@ export function Navbar() {
                 key={link.href} 
                 href={link.href}
                 className={`block px-3 py-2 text-sm font-medium rounded-md ${
-                  location === link.href || (link.href === '/practice' && (location.startsWith('/practice') || location.startsWith('/eval/'))) || (link.href === '/error-analysis' && location.startsWith('/error-analysis'))
+                  location === link.href || (link.href === '/criteria-lab' && (location.startsWith('/criteria-lab') || location.startsWith('/eval/'))) || (link.href === '/error-analysis' && location.startsWith('/error-analysis'))
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}

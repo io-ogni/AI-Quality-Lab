@@ -120,6 +120,12 @@ export default function Learn() {
                   and articulating what makes them good or bad.
                 </p>
               </div>
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                <p className="font-medium mb-1">Next step: Error Analysis Lab</p>
+                <p className="text-muted-foreground">
+                  Once you can define quality criteria, the next skill is reviewing real AI outputs and finding patterns. The Error Analysis Lab walks you through this with 25 pre-built conversations — no API key needed.
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -535,38 +541,32 @@ export default function Learn() {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left py-2 pr-4 font-medium">
-                          Here
+                          In the Criteria Lab
                         </th>
                         <th className="text-left py-2 font-medium">
-                          Production
+                          In Production
                         </th>
                       </tr>
                     </thead>
                     <tbody className="text-muted-foreground">
                       <tr className="border-b">
                         <td className="py-2 pr-4">
-                          You look at scenario + bot response
+                          You define what "good" looks like
                         </td>
                         <td className="py-2">
-                          You look at real user queries + bot responses
+                          You define evaluator criteria
                         </td>
                       </tr>
                       <tr className="border-b">
                         <td className="py-2 pr-4">
-                          You articulate what's good/bad
+                          You review pre-made scenarios
                         </td>
-                        <td className="py-2">You articulate what's good/bad</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="py-2 pr-4">You write criteria</td>
-                        <td className="py-2">
-                          You write criteria (which become evaluators)
-                        </td>
+                        <td className="py-2">You review real user conversations</td>
                       </tr>
                       <tr>
-                        <td className="py-2 pr-4">We evaluate your criteria</td>
+                        <td className="py-2 pr-4">You compare to expert criteria</td>
                         <td className="py-2">
-                          Your evaluators run on every response
+                          You build a failure taxonomy
                         </td>
                       </tr>
                     </tbody>
@@ -998,16 +998,16 @@ export default function Learn() {
             practice.
           </h2>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <Link href="/practice">
-              <Button size="lg" data-testid="button-start-practice">
-                Start Guided Practice
+            <Link href="/criteria-lab">
+              <Button size="lg" data-testid="button-start-criteria-lab">
+                Go to Criteria Lab
               </Button>
             </Link>
-            <Link href="/practice?tab=open">
+            <Link href="/criteria-lab?tab=open">
               <Button
                 size="lg"
                 variant="outline"
-                data-testid="button-try-open-practice"
+                data-testid="button-try-open-scenarios"
               >
                 Try Open Scenarios
               </Button>

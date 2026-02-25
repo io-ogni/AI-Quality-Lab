@@ -8,7 +8,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import Home from "@/pages/home";
 import Learn from "@/pages/learn";
-import Practice from "@/pages/practice";
+import CriteriaLab from "@/pages/practice";
 import EvalChallenge from "@/pages/eval-challenge";
 import Settings from "@/pages/settings";
 import ErrorAnalysis from "@/pages/error-analysis";
@@ -27,13 +27,19 @@ function ScrollToTop() {
 
 function RedirectToGuided() {
   const [, setLocation] = useLocation();
-  useEffect(() => { setLocation("/practice?tab=guided", { replace: true }); }, []);
+  useEffect(() => { setLocation("/criteria-lab?tab=guided", { replace: true }); }, []);
   return null;
 }
 
 function RedirectToOpen() {
   const [, setLocation] = useLocation();
-  useEffect(() => { setLocation("/practice?tab=open", { replace: true }); }, []);
+  useEffect(() => { setLocation("/criteria-lab?tab=open", { replace: true }); }, []);
+  return null;
+}
+
+function RedirectToCriteriaLab() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation("/criteria-lab", { replace: true }); }, []);
   return null;
 }
 
@@ -44,9 +50,10 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/learn" component={Learn} />
-        <Route path="/practice" component={Practice} />
+        <Route path="/criteria-lab" component={CriteriaLab} />
         <Route path="/eval/:evalId" component={EvalChallenge} />
         <Route path="/error-analysis" component={ErrorAnalysis} />
+        <Route path="/practice" component={RedirectToCriteriaLab} />
         <Route path="/challenges" component={RedirectToGuided} />
         <Route path="/sandbox" component={RedirectToOpen} />
         <Route path="/settings" component={Settings} />

@@ -21,10 +21,10 @@ const pathStops = [
     badgeVariant: "default" as const,
   },
   {
-    href: "/practice",
+    href: "/criteria-lab",
     icon: Target,
-    label: "Practice",
-    sublabel: "Guided exercises + open scenarios",
+    label: "Criteria Lab",
+    sublabel: "Define what \"good\" looks like",
     badge: "Requires API key",
     badgeVariant: "secondary" as const,
   },
@@ -78,7 +78,7 @@ export default function Home() {
             className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto"
             data-testid="text-hero-subtitle"
           >
-            Master the basics of evals and guardrails for AI products
+            Learn to evaluate AI outputs — from defining quality criteria to diagnosing failures
           </p>
         </div>
       </section>

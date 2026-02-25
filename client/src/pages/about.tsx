@@ -497,15 +497,15 @@ export default function About() {
                 </p>
                 <p className="font-medium">Ready to practice?</p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  <Link href="/challenges">
-                    <Button data-testid="link-about-challenges">
-                      Start Challenges
+                  <Link href="/criteria-lab">
+                    <Button data-testid="link-about-criteria-lab">
+                      Start Criteria Lab
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </Button>
                   </Link>
-                  <Link href="/sandbox">
-                    <Button variant="outline" data-testid="link-about-sandbox">
-                      Try Sandbox
+                  <Link href="/error-analysis">
+                    <Button variant="outline" data-testid="link-about-error-analysis">
+                      Try Error Analysis Lab
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </Button>
                   </Link>

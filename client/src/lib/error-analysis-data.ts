@@ -381,7 +381,7 @@ export interface WhatsNextResource {
 
 export const WHATS_NEXT = {
   header: "You've Got the Foundation. Here's What Comes Next.",
-  intro: "You've learned the vocabulary (quality dimensions), practiced defining criteria (guided and open exercises), and worked through the error analysis process (this lab).\n\nHere's what this looks like when you do it for real — on your own product, with real user conversations.",
+  intro: "You've learned the vocabulary (quality dimensions), practiced defining criteria (guided and open exercises in the Criteria Lab), and worked through the error analysis process (this lab).\n\nHere's what this looks like when you do it for real — on your own product, with real user conversations.",
   steps: [
     {
       title: "1. Run your first real error analysis",
@@ -442,4 +442,4 @@ export const LANDING_INTRO_TEXT = "You'll review 25 real conversations from a fi
 
 export const PRODUCT_BRIEFING_NOTE = "Read this carefully. You'll need it to evaluate the AI's responses. You can always re-open this info during the lab.";
 
-export const FINAL_INSIGHT_TEXT = "This is what real eval teams do. You just completed a mini error analysis cycle:\n\n1. **Reviewed traces** — Pass/Fail on 25 outputs\n2. **Wrote observations** — specific notes on every failure\n3. **Built a failure taxonomy** — grouped observations into categories\n\nIn production, you'd do this with 50-100 real outputs, then decide which failure modes deserve automated checks. The quality dimensions you learned in Practice? They're your starting vocabulary. The taxonomy you just built? That's your product-specific addition.";
+export const FINAL_INSIGHT_TEXT = "This is what real eval teams do. You just completed a mini error analysis cycle:\n\n1. **Reviewed traces** — Pass/Fail on 25 outputs\n2. **Wrote observations** — specific notes on every failure\n3. **Built a failure taxonomy** — grouped observations into categories\n\nIn production, you'd do this with 50-100 real outputs, then decide which failure modes deserve automated checks. The quality dimensions you learned in the Criteria Lab? They're your starting vocabulary. The taxonomy you just built? That's your product-specific addition.";

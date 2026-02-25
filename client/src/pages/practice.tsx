@@ -827,10 +827,10 @@ export default function Practice() {
       <section className="py-10 border-b">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight mb-2" data-testid="text-practice-title">
-            Practice
+            Criteria Lab
           </h1>
           <p className="text-muted-foreground">
-            Learn by doing. Build your evaluation skills through guided challenges and open scenarios.
+            Define what "good" looks like. Practice writing quality criteria through guided challenges and open scenarios.
           </p>
         </div>
       </section>

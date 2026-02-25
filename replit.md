@@ -25,7 +25,7 @@ client/
 │   └── pages/
 │       ├── home.tsx            # Learning path landing page (3-step path)
 │       ├── learn.tsx           # Educational content
-│       ├── practice.tsx        # Combined Practice page with Guided + Open tabs
+│       ├── practice.tsx        # Criteria Lab page with Guided + Open tabs
 │       ├── eval-challenge.tsx  # Level-based challenge playground
 │       ├── error-analysis.tsx  # Error Analysis Lab (2 phases, 25 traces)
 │       ├── about.tsx           # How the app works (architecture)
@@ -37,12 +37,13 @@ server/
 
 ## Navigation Structure
 ```
-Learn | Practice | Error Analysis | About | Settings
+Learn | Criteria Lab | Error Analysis | About | Settings
 ```
-- Practice page has two tabs: Guided (33 challenges) and Open (6 sandbox scenarios)
-- `/practice` defaults to Guided tab
-- `/practice?tab=open` links directly to Open tab
-- `/challenges` and `/sandbox` redirect to `/practice` for backward compatibility
+- Criteria Lab page has two tabs: Guided (33 challenges) and Open (6 sandbox scenarios)
+- `/criteria-lab` defaults to Guided tab
+- `/criteria-lab?tab=open` links directly to Open tab
+- `/practice` redirects to `/criteria-lab` for backward compatibility
+- `/challenges` and `/sandbox` redirect to `/criteria-lab` for backward compatibility
 - `/error-analysis` — Error Analysis Lab (no API key needed)
 
 ## Key Features
@@ -56,7 +57,7 @@ Learn | Practice | Error Analysis | About | Settings
 2. **Deterministic Synonym Matching**: Fast, accurate keyword matching from synonym tables
 3. **LLM Validation**: Fallback for complex semantic matching with hallucination prevention
 
-### Three-Layer Validation Pipeline (Open Practice)
+### Three-Layer Validation Pipeline (Open Scenarios)
 1. **Pre-Validation (Code)**: Garbage, copy-paste, identical examples, format, offensive content detection — runs BEFORE LLM
 2. **LLM Evaluation**: Scenario-aware judge with per-scenario failure modes, 3-dimension bad example scoring
 3. **Post-Validation (Code)**: Override LLM scores if it missed offensive content, copy-paste, or hallucination — runs AFTER LLM
