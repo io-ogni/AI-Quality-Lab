@@ -88,32 +88,21 @@ export default function Home() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Card className="bg-card/50">
             <CardContent className="p-6">
-              <h2 className="font-semibold text-lg mb-3">What is this?</h2>
-              <div className="space-y-3 text-muted-foreground">
+              <div className="space-y-4 text-muted-foreground">
                 <p className="font-medium text-foreground">
-                  A basic introduction to AI quality control — for Product
-                  Managers.
+                  Learn the basics of AI quality — hands-on. For PMs who want to get their hands dirty before shipping AI features themselves.
                 </p>
-                <p>
-                  If you're a PM wanting to know more about delivering AI
-                  features and wondering "what even are evals?" — this is for
-                  you.
+                <p className="font-medium text-foreground">
+                  Two labs. No code. No ML background needed.
                 </p>
-                <p>
-                  This app teaches the{" "}
-                  <strong className="text-foreground">basic concepts</strong>{" "}
-                  you need to:
-                </p>
-                <ul className="list-disc pl-6 space-y-1.5">
-                  <li>Write better specs for AI features</li>
-                  <li>
-                    Have informed conversations with engineering about quality
-                  </li>
-                  <li>Know what questions to ask about evals and guardrails</li>
-                </ul>
-                <p className="pt-2 border-t border-border/50">
-                  No code. No ML background required. Just hands-on practice.
-                </p>
+                <div className="space-y-2 pt-2 border-t border-border/50">
+                  <p>
+                    <strong className="text-foreground">Criteria Lab</strong> — Practice defining quality criteria across 11 dimensions. 33 guided exercises + 6 open scenarios. <span className="text-xs">(LLM API key required)</span>
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Error Analysis Lab</strong> — Review 25 AI conversations, spot failures, and build your first failure taxonomy. <span className="text-xs">(No API key needed)</span>
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
