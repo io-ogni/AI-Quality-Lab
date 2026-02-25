@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   BookOpen,
   Target,
-  BarChart3,
+  SearchCheck,
   FlaskConical,
   ArrowDown,
 } from "lucide-react";
@@ -29,11 +29,11 @@ const pathStops = [
     badgeVariant: "secondary" as const,
   },
   {
-    href: "/practice",
-    icon: BarChart3,
-    label: "Progress",
-    sublabel: "Track your learning",
-    badge: null,
+    href: "/error-analysis",
+    icon: SearchCheck,
+    label: "Error Analysis Lab",
+    sublabel: "Review, diagnose, categorize",
+    badge: "No API key needed",
     badgeVariant: "secondary" as const,
   },
 ];
@@ -52,6 +52,7 @@ export default function Home() {
     if (index === 1 && progress.totalCompleted > 0) {
       return `${progress.totalCompleted}/33 complete`;
     }
+    if (index === 2) return "No API key needed";
     return null;
   };
 

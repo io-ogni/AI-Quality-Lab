@@ -11,6 +11,7 @@ import Learn from "@/pages/learn";
 import Practice from "@/pages/practice";
 import EvalChallenge from "@/pages/eval-challenge";
 import Settings from "@/pages/settings";
+import ErrorAnalysis from "@/pages/error-analysis";
 import About from "@/pages/about";
 import NotFound from "@/pages/not-found";
 
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/learn" component={Learn} />
         <Route path="/practice" component={Practice} />
         <Route path="/eval/:evalId" component={EvalChallenge} />
+        <Route path="/error-analysis" component={ErrorAnalysis} />
         <Route path="/challenges" component={RedirectToGuided} />
         <Route path="/sandbox" component={RedirectToOpen} />
         <Route path="/settings" component={Settings} />
