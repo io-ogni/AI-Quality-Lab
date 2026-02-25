@@ -14,10 +14,11 @@ import {
   HelpCircle,
   ChevronRight,
   ChevronDown,
-  Zap,
   ArrowRight,
+  ExternalLink,
 } from "lucide-react";
 import { Link } from "wouter";
+import { WHATS_NEXT } from "@/lib/error-analysis-data";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -619,374 +620,32 @@ export default function Learn() {
       <section className="py-12 bg-muted/30">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <h2
-            className="text-2xl font-semibold mb-2"
-            data-testid="text-shipping-decisions-title"
+            className="text-2xl font-semibold mb-6"
+            data-testid="text-recommended-resources-title"
           >
-            Beyond Quality — Shipping Decisions
+            Recommended Resources
           </h2>
-          <p className="text-lg font-medium text-muted-foreground mb-6">
-            Quality Isn't Everything
-          </p>
-
-          <Card
-            className="bg-green-50 dark:bg-green-950/30 border-green-300 dark:border-green-800 mb-8"
-            data-testid="card-the-loop"
-          >
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold text-green-800 dark:text-green-300 mb-4">
-                The Loop
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Forget big upfront planning. Here's how shipping AI actually
-                works:
-              </p>
-              <ol className="space-y-2.5 text-green-800 dark:text-green-300">
-                {[
-                  "Start with the smallest model that might work",
-                  'Define "good enough" — your best hypothesis',
-                  "Build a few evals early (even 5-10 test cases)",
-                  "Ship to a small audience fast (5% rollout, beta, dogfooding)",
-                  "Watch real behavior — latency, cost, quality in the wild",
-                  "Adjust based on data — upgrade or downgrade as needed",
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="font-semibold text-green-600 dark:text-green-400 shrink-0">
-                      {i + 1}.
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ol>
-              <p className="text-green-700 dark:text-green-400 mt-4 italic">
-                You won't know the right model, the right latency budget, or the
-                right quality bar until you try. The goal is to learn fast, not
-                plan perfectly.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              Watch: Ship Fast, Learn Fast
-            </h3>
-            <div className="aspect-video rounded-lg overflow-hidden border bg-black">
-              <iframe
-                src="https://www.youtube.com/embed/YTJQoEUeTEQ"
-                title="Ship Fast, Learn Fast"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                data-testid="video-shipping-decisions"
-              />
-            </div>
-            <p className="text-muted-foreground mt-3">
-              Want the details? Expand the sections below.
-            </p>
-          </div>
-
           <div className="space-y-3">
-            <ExpandableSection
-              title="Why Start With the Smallest Model?"
-              testId="section-why-start-small"
-            >
-              <div className="space-y-4 text-muted-foreground">
-                <p>Because you don't know what you need yet.</p>
-                <p>
-                  Most teams start with the biggest model "just to be safe" and
-                  never optimize. Smart teams start small and upgrade WHERE
-                  needed.
-                </p>
-                <div>
-                  <p className="font-medium text-foreground mb-2">
-                    The discovery process:
-                  </p>
-                  <ol className="list-decimal pl-5 space-y-1">
-                    <li>Ship with a small/cheap model (Haiku, GPT-4o-mini)</li>
-                    <li>Watch where it fails</li>
-                    <li>Upgrade ONLY the parts that need it</li>
-                    <li>Keep the cheap model for everything else</li>
-                  </ol>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground mb-2">
-                    You might discover:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>80% of requests work fine with the small model</li>
-                    <li>Only complex queries need the big model</li>
-                    <li>
-                      Some failures are prompt problems, not model problems
-                    </li>
-                  </ul>
-                </div>
-                <p className="italic">
-                  You can't discover this by planning. You discover it by
-                  shipping.
-                </p>
-              </div>
-            </ExpandableSection>
-
-            <ExpandableSection
-              title="Model Tiers: A Quick Reference"
-              testId="section-model-tiers"
-            >
-              <div className="space-y-4">
-                <p className="text-muted-foreground">
-                  When you need to pick a starting point or consider an upgrade:
-                </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left py-2 pr-4 font-medium">
-                          Tier
-                        </th>
-                        <th className="text-left py-2 pr-4 font-medium">
-                          Models
-                        </th>
-                        <th className="text-left py-2 pr-4 font-medium">
-                          Typical Use
-                        </th>
-                        <th className="text-left py-2 font-medium">
-                          Rough Cost*
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-muted-foreground">
-                      <tr className="border-b">
-                        <td className="py-2 pr-4">Small</td>
-                        <td className="py-2 pr-4">Haiku, GPT-4o-mini</td>
-                        <td className="py-2 pr-4">
-                          High-volume, speed-critical
-                        </td>
-                        <td className="py-2">$0.10-0.50/1K calls</td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="py-2 pr-4">Medium</td>
-                        <td className="py-2 pr-4">Sonnet, GPT-4o</td>
-                        <td className="py-2 pr-4">Balanced quality/cost</td>
-                        <td className="py-2">$1-5/1K calls</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2 pr-4">Large</td>
-                        <td className="py-2 pr-4">Opus, GPT-4</td>
-                        <td className="py-2 pr-4">
-                          Complex reasoning, high-stakes
-                        </td>
-                        <td className="py-2">$10-30/1K calls</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  *Assuming ~500 tokens/call. Prices change constantly.
-                </p>
-                <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <p className="text-muted-foreground">
-                    <strong className="text-foreground">
-                      Don't use this table to pick your model upfront.
-                    </strong>{" "}
-                    Use it when you've shipped, seen real data, and are deciding
-                    whether to upgrade or downgrade.
-                  </p>
-                </div>
-              </div>
-            </ExpandableSection>
-
-            <ExpandableSection
-              title="How Different Products Landed"
-              testId="section-real-examples"
-            >
-              <div className="space-y-5 text-muted-foreground">
-                <p>
-                  These teams didn't plan their way here. They shipped and
-                  learned.
-                </p>
-                <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">
-                    Customer support chatbot
-                  </p>
-                  <ul className="space-y-1">
-                    <li>
-                      <strong>Started with:</strong> Sonnet (playing it safe)
-                    </li>
-                    <li>
-                      <strong>Discovered:</strong> 85% of queries were simple
-                      FAQs
-                    </li>
-                    <li>
-                      <strong>Ended with:</strong> Haiku for FAQs, Sonnet for
-                      complex issues
-                    </li>
-                    <li>
-                      <strong>Result:</strong> 60% cost reduction, same quality
-                    </li>
-                  </ul>
-                </div>
-                <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">
-                    Legal document analyzer
-                  </p>
-                  <ul className="space-y-1">
-                    <li>
-                      <strong>Started with:</strong> GPT-4o-mini (cost concerns)
-                    </li>
-                    <li>
-                      <strong>Discovered:</strong> Missing critical clauses in
-                      edge cases
-                    </li>
-                    <li>
-                      <strong>Ended with:</strong> GPT-4 for all analysis
-                    </li>
-                    <li>
-                      <strong>Result:</strong> Higher cost, but acceptable for
-                      the use case
-                    </li>
-                  </ul>
-                </div>
-                <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-2">
-                    Email draft suggestions
-                  </p>
-                  <ul className="space-y-1">
-                    <li>
-                      <strong>Started with:</strong> Sonnet
-                    </li>
-                    <li>
-                      <strong>Discovered:</strong> Users edited most suggestions
-                      anyway
-                    </li>
-                    <li>
-                      <strong>Ended with:</strong> Haiku
-                    </li>
-                    <li>
-                      <strong>Result:</strong> Faster suggestions, users didn't
-                      notice quality drop
-                    </li>
-                  </ul>
-                </div>
-                <p className="italic">
-                  The pattern: Start somewhere, measure what matters, adjust.
-                </p>
-              </div>
-            </ExpandableSection>
-
-            <ExpandableSection
-              title="Questions for Your Retrospective"
-              testId="section-retrospective"
-            >
-              <div className="space-y-4 text-muted-foreground">
-                <p>After you've shipped and collected data, ask:</p>
-                <div>
-                  <p className="font-medium text-foreground mb-1">
-                    About latency:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>Are users abandoning because it's too slow?</li>
-                    <li>
-                      Where's the latency coming from (model? network?
-                      processing)?
-                    </li>
-                    <li>Would users wait longer for better quality?</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground mb-1">
-                    About cost:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>What's our cost per user/session/task?</li>
-                    <li>Which queries are most expensive?</li>
-                    <li>Can we route simple queries to a cheaper model?</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground mb-1">
-                    About quality:
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1">
-                    <li>Where are users complaining?</li>
-                    <li>
-                      What are the actual failure modes? (not hypothetical ones)
-                    </li>
-                    <li>
-                      Would a bigger model fix this, or is it a prompt problem?
-                    </li>
-                  </ul>
-                </div>
-                <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <p>
-                    <strong className="text-foreground">
-                      The key insight:
-                    </strong>{" "}
-                    These questions are unanswerable before you ship. Don't try
-                    to answer them in a planning doc.
-                  </p>
-                </div>
-              </div>
-            </ExpandableSection>
-
-            <ExpandableSection
-              title="Advanced: Using Multiple Models"
-              testId="section-model-routing"
-            >
-              <div className="space-y-4 text-muted-foreground">
-                <p>
-                  Once you have data, you might route different requests to
-                  different models.
-                </p>
-                <div className="p-4 rounded-lg border">
-                  <p className="font-medium text-foreground mb-3">
-                    Example: Customer support
-                  </p>
-                  <div className="space-y-2">
-                    <div className="flex items-start gap-2">
-                      <Badge variant="secondary" className="shrink-0 text-xs">
-                        Tier 1
-                      </Badge>
-                      <p>
-                        <strong className="text-foreground">Haiku:</strong>{" "}
-                        Intent classification, simple FAQs — 80% of requests
-                      </p>
+            {WHATS_NEXT.resources.map((resource, i) => (
+              <a
+                key={i}
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+                data-testid={`link-resource-${i}`}
+              >
+                <Card className="bg-card/50 hover:bg-accent/50 transition-colors">
+                  <CardContent className="p-4 flex items-start gap-3">
+                    <ExternalLink className="h-4 w-4 text-primary shrink-0 mt-1" />
+                    <div>
+                      <p className="font-medium">{resource.title}</p>
+                      <p className="text-sm text-muted-foreground">{resource.description}</p>
                     </div>
-                    <div className="flex items-start gap-2">
-                      <Badge variant="secondary" className="shrink-0 text-xs">
-                        Tier 2
-                      </Badge>
-                      <p>
-                        <strong className="text-foreground">Sonnet:</strong>{" "}
-                        Complex questions, policy explanations — 15%
-                      </p>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Badge variant="secondary" className="shrink-0 text-xs">
-                        Tier 3
-                      </Badge>
-                      <p>
-                        <strong className="text-foreground">Opus:</strong>{" "}
-                        Escalations, sensitive situations — 5%
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground mb-2">
-                    How to get there:
-                  </p>
-                  <ol className="list-decimal pl-5 space-y-1">
-                    <li>Ship with one model</li>
-                    <li>Identify which queries fail and which succeed</li>
-                    <li>Build a classifier to route queries</li>
-                    <li>Gradually shift traffic</li>
-                  </ol>
-                </div>
-                <p className="italic">
-                  Don't design this upfront. You won't know your tiers until
-                  you've seen real traffic patterns.
-                </p>
-              </div>
-            </ExpandableSection>
+                  </CardContent>
+                </Card>
+              </a>
+            ))}
           </div>
         </div>
       </section>
