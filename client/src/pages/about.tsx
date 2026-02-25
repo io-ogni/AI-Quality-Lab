@@ -274,7 +274,7 @@ export default function About() {
                         <thead>
                           <tr className="border-b bg-muted/50">
                             <th className="text-left p-3 font-medium">Task</th>
-                            <th className="text-left p-3 font-medium">Who Does It</th>
+                            <th className="text-left p-3 font-medium whitespace-nowrap">Who Does It</th>
                             <th className="text-left p-3 font-medium">Why</th>
                           </tr>
                         </thead>
