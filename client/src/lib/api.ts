@@ -3,6 +3,22 @@ import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
 import { preValidateSandboxSubmission, postValidateLLMResponse, hasEnoughRealWords } from './content-moderation';
 
+function extractJSON(text: string): Record<string, unknown> | null {
+  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fenceMatch) {
+    try { return JSON.parse(fenceMatch[1].trim()); } catch {}
+  }
+
+  const braceMatch = text.match(/\{[\s\S]*\}/);
+  if (braceMatch) {
+    try { return JSON.parse(braceMatch[0]); } catch {}
+  }
+
+  try { return JSON.parse(text.trim()); } catch {}
+
+  return null;
+}
+
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
   if (trimmed.length < 10) return true;
@@ -376,12 +392,8 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
     
     let parsed;
     try {
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        parsed = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found');
-      }
+      parsed = extractJSON(response);
+      if (!parsed) throw new Error('No JSON found');
     } catch {
       return {
         garbageDetected: false,
@@ -664,12 +676,8 @@ Evaluate the quality of their criteria definition.`;
     
     let parsed;
     try {
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        parsed = JSON.parse(jsonMatch[0]);
-      } else {
-        throw new Error('No JSON found');
-      }
+      parsed = extractJSON(response);
+      if (!parsed) throw new Error('No JSON found');
     } catch {
       const fallback = { score: 3, feedback: 'Unable to evaluate' };
       return {
