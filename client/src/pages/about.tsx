@@ -34,10 +34,10 @@ const deterministicVsAI = [
     why: 'Pattern matching in browser — catches variations like "1diot" and "f*ck", no data sent anywhere',
   },
   {
-    task: 'Match "polite" to "professional"',
+    task: "Judge if a bad example is a realistic failure",
     who: "LLM",
     icon: Brain,
-    why: "Requires semantic understanding",
+    why: "Requires understanding scenario context",
   },
   {
     task: "Judge if criteria are complete",
@@ -330,6 +330,11 @@ export default function About() {
                       The LLM only runs when we need semantic judgment that synonyms
                       can't capture.
                     </p>
+                    <div className="pt-2 mt-2 border-t border-border/50">
+                      <p className="text-muted-foreground">
+                        The 6 open scenarios work differently. There are no pre-defined answers — instead, the LLM evaluates everything you submit: your criteria, your passing example, and your failing example. Each is scored on multiple dimensions (e.g., is the bad example a realistic failure? Does it match a known failure mode for that scenario?). Code still runs before and after the LLM to catch obvious problems and override mistakes.
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
