@@ -499,7 +499,7 @@ export const WHATS_NEXT = {
         "By Hamel Husain. Practical FAQ covering why evals matter, how to build them, and common mistakes.",
     },
     {
-      title: "How to Build AI Agents That Actually Work",
+      title: "From Noob to Automated Evals In A Week (as a PM)",
       url: "https://www.youtube.com/watch?v=N-qAOv_PNPc",
       description: "Video, by Teresa Torres",
     },
