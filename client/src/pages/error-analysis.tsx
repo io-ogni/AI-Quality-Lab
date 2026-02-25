@@ -137,14 +137,6 @@ function ExpertFeedback({
         </CardContent>
       </Card>
       <div className={`grid gap-3 ${userVerdict === "fail" && userNotes ? "md:grid-cols-2" : ""}`}>
-        {userVerdict === "fail" && userNotes && (
-          <Card className="bg-muted/30">
-            <CardContent className="p-4">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Your notes</p>
-              <p className="text-sm">{userNotes}</p>
-            </CardContent>
-          </Card>
-        )}
         <Card className="bg-muted/30">
           <CardContent className="p-4">
             <p className="text-xs font-medium text-muted-foreground mb-2">Expert notes</p>
@@ -154,6 +146,14 @@ function ExpertFeedback({
             )}
           </CardContent>
         </Card>
+        {userVerdict === "fail" && userNotes && (
+          <Card className="bg-muted/30">
+            <CardContent className="p-4">
+              <p className="text-xs font-medium text-muted-foreground mb-2">Your notes</p>
+              <p className="text-sm">{userNotes}</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
@@ -703,16 +703,16 @@ export default function ErrorAnalysis() {
                         <CardContent className="p-4">
                           <p className="font-medium text-sm mb-2">Trace {r.traceId}: "{trace.userQuery}"</p>
                           <div className="grid gap-3 md:grid-cols-2">
+                            <div className="bg-muted/30 rounded-md p-3">
+                              <p className="text-xs font-medium text-muted-foreground mb-1">Expert notes</p>
+                              <p className="text-sm">{trace.expertNotes}</p>
+                            </div>
                             {r.userNotes && (
                               <div className="bg-muted/30 rounded-md p-3">
                                 <p className="text-xs font-medium text-muted-foreground mb-1">Your notes</p>
                                 <p className="text-sm">{r.userNotes}</p>
                               </div>
                             )}
-                            <div className="bg-muted/30 rounded-md p-3">
-                              <p className="text-xs font-medium text-muted-foreground mb-1">Expert notes</p>
-                              <p className="text-sm">{trace.expertNotes}</p>
-                            </div>
                           </div>
                         </CardContent>
                       </Card>
