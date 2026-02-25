@@ -80,53 +80,37 @@ export default function Learn() {
           <Card className="bg-card/50">
             <CardContent className="p-6 space-y-5">
               <p className="text-muted-foreground">
-                This app teaches you to think systematically about AI quality.
+                This app teaches two skills, in order:
               </p>
-              <div>
-                <p className="font-medium mb-2">
-                  The Foundation (what we teach):
-                </p>
-                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
-                  <li>
-                    <strong>Vocabulary</strong> — words to describe what's wrong
-                    with an AI output
-                  </li>
-                  <li>
-                    <strong>Mental models</strong> — 11 lenses to examine
-                    quality through
-                  </li>
-                  <li>
-                    <strong>The skill</strong> — articulating what "good" looks
-                    like for a given scenario
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <p className="font-medium mb-2">What Production Adds:</p>
-                <p className="text-muted-foreground mb-2">
-                  In the real world, you'll also discover criteria specific to
-                  your product:
-                </p>
-                <ul className="text-muted-foreground space-y-1.5 ml-4 list-disc">
-                  <li>A real estate bot might need "client persona match"</li>
-                  <li>
-                    A finance bot might need "regulatory disclaimer present"
-                  </li>
-                  <li>A support bot might need "escalation timing"</li>
-                </ul>
-                <p className="text-muted-foreground mt-3">
-                  These custom criteria aren't replacements for the 11
-                  dimensions — they're additions. And you'll define them using
-                  exactly the skill you're practicing here: looking at outputs
-                  and articulating what makes them good or bad.
-                </p>
-              </div>
-              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                <p className="font-medium mb-1">Next step: Error Analysis Lab</p>
-                <p className="text-muted-foreground">
-                  Once you can define quality criteria, the next skill is reviewing real AI outputs and finding patterns. The Error Analysis Lab walks you through this with 25 pre-built conversations — no API key needed.
-                </p>
-              </div>
+              <ol className="space-y-4 list-decimal pl-5">
+                <li>
+                  <p className="font-medium">Define quality criteria</p>
+                  <p className="text-muted-foreground mt-1">
+                    Look at an AI output and articulate what makes it good or bad.
+                    You'll practice this across 11 quality dimensions — from
+                    "did it follow instructions?" to "can users trick it?"
+                  </p>
+                  <p className="text-muted-foreground mt-1">
+                    → <Link href="/criteria-lab" className="text-primary hover:underline">Criteria Lab</Link>
+                  </p>
+                </li>
+                <li>
+                  <p className="font-medium">Find failure patterns</p>
+                  <p className="text-muted-foreground mt-1">
+                    Review real AI conversations, diagnose what's wrong, and group
+                    failures into categories you can act on.
+                  </p>
+                  <p className="text-muted-foreground mt-1">
+                    → <Link href="/error-analysis" className="text-primary hover:underline">Error Analysis Lab</Link> (no API key needed)
+                  </p>
+                </li>
+              </ol>
+              <p className="text-muted-foreground">
+                In production, you'll use the same skills on your own product.
+                The dimensions here are your starting vocabulary — you'll discover
+                more that are specific to your use case (like "regulatory disclaimer
+                present" for a finance bot, or "escalation timing" for support).
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -520,102 +504,6 @@ export default function Learn() {
         </div>
       </section>
 
-      <section className="py-12">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2
-            className="text-2xl font-semibold mb-6"
-            data-testid="text-learning-to-production"
-          >
-            From Learning to Production
-          </h2>
-          <Card className="bg-card/50">
-            <CardContent className="p-6 space-y-5">
-              <p className="text-muted-foreground">
-                The gap between what this app teaches and production evals is
-                actually not that big.
-              </p>
-
-              <div>
-                <p className="font-medium mb-3">Same skill, different data:</p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left py-2 pr-4 font-medium">
-                          In the Criteria Lab
-                        </th>
-                        <th className="text-left py-2 font-medium">
-                          In Production
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-muted-foreground">
-                      <tr className="border-b">
-                        <td className="py-2 pr-4">
-                          You define what "good" looks like
-                        </td>
-                        <td className="py-2">
-                          You define evaluator criteria
-                        </td>
-                      </tr>
-                      <tr className="border-b">
-                        <td className="py-2 pr-4">
-                          You review pre-made scenarios
-                        </td>
-                        <td className="py-2">You review real user conversations</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2 pr-4">You compare to expert criteria</td>
-                        <td className="py-2">
-                          You build a failure taxonomy
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div>
-                <p className="font-medium mb-3">What changes in production:</p>
-                <ol className="text-muted-foreground space-y-3 list-decimal pl-5">
-                  <li>
-                    <strong className="text-foreground">
-                      You discover custom criteria
-                    </strong>{" "}
-                    — Through "error analysis" (reviewing real outputs and
-                    noting patterns), you'll find failure modes specific to your
-                    product.
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      You build evaluators
-                    </strong>{" "}
-                    — Your criteria become code checks or LLM-as-judge prompts
-                    that run automatically.
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      You use pass/fail
-                    </strong>{" "}
-                    — Production evals typically use binary (pass/fail) rather
-                    than 1-5 scales, because it forces clearer thinking.
-                  </li>
-                </ol>
-              </div>
-
-              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                <p>
-                  <strong>The foundation stays the same:</strong> The skill of
-                  looking at an output and articulating "this is wrong because
-                  X" — that's what you're practicing here. That's what you'll do
-                  in production. The vocabulary of these 11 dimensions gives you
-                  a head start.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
 
       <section className="py-12 bg-muted/30">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">

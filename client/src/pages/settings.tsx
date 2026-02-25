@@ -117,9 +117,10 @@ export default function Settings() {
 
   const handleClearProgress = () => {
     clearProgress();
+    localStorage.removeItem("errorAnalysisProgress");
     toast({
       title: "Progress cleared",
-      description: "All your challenge progress has been reset.",
+      description: "All your progress has been reset.",
     });
   };
 
@@ -358,7 +359,7 @@ export default function Settings() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Clear All Progress?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will reset all your challenge progress. This cannot
+                        This will reset all your progress in both the Criteria Lab and the Error Analysis Lab. This cannot
                         be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
