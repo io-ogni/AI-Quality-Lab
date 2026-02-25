@@ -92,7 +92,7 @@ export default function Home() {
                 <p className="font-medium text-foreground">
                   Learn the basics of AI quality — hands-on. For PMs who want to get their hands dirty before shipping AI features themselves.
                 </p>
-                <p className="font-medium text-foreground">
+                <p>
                   Two labs. No code. No ML background needed.
                 </p>
                 <div className="space-y-2 pt-2 border-t border-border/50">
