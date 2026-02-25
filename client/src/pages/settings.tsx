@@ -1,14 +1,34 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Lock, Eye, EyeOff, Check, X, Loader2, Lightbulb, Info } from 'lucide-react';
-import { getAPISettings, setAPISettings, clearAPIKey, clearProgress } from '@/lib/storage';
-import { useToast } from '@/hooks/use-toast';
-import { testAPIConnection } from '@/lib/api';
-import { MODEL_FOR_PROVIDER } from '@/lib/types';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+  Loader2,
+  Lightbulb,
+  Info,
+} from "lucide-react";
+import {
+  getAPISettings,
+  setAPISettings,
+  clearAPIKey,
+  clearProgress,
+} from "@/lib/storage";
+import { useToast } from "@/hooks/use-toast";
+import { testAPIConnection } from "@/lib/api";
+import { MODEL_FOR_PROVIDER } from "@/lib/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,13 +39,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 export default function Settings() {
-  const [provider, setProvider] = useState<'openai' | 'anthropic'>('openai');
-  const [apiKey, setApiKey] = useState('');
+  const [provider, setProvider] = useState<"openai" | "anthropic">("openai");
+  const [apiKey, setApiKey] = useState("");
   const [showKey, setShowKey] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
-  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [testResult, setTestResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -39,40 +62,44 @@ export default function Settings() {
   const handleSave = () => {
     if (!apiKey.trim()) {
       toast({
-        title: 'API key required',
-        description: 'Please enter your API key.',
-        variant: 'destructive',
+        title: "API key required",
+        description: "Please enter your API key.",
+        variant: "destructive",
       });
       return;
     }
 
     setAPISettings({ provider, apiKey });
     setTestResult(null);
-    
+
     toast({
-      title: 'API key saved',
-      description: 'Saved to this session. It will be cleared when you close the tab.',
+      title: "API key saved",
+      description:
+        "Saved to this session. It will be cleared when you close the tab.",
     });
   };
 
   const handleTest = async () => {
     if (!apiKey.trim()) {
       toast({
-        title: 'Save API key first',
-        description: 'Please save your API key before testing.',
-        variant: 'destructive',
+        title: "Save API key first",
+        description: "Please save your API key before testing.",
+        variant: "destructive",
       });
       return;
     }
 
     setIsTesting(true);
     setTestResult(null);
-    
+
     try {
       const result = await testAPIConnection({ provider, apiKey });
       setTestResult(result);
     } catch (error) {
-      setTestResult({ success: false, message: 'Connection failed. Check your key.' });
+      setTestResult({
+        success: false,
+        message: "Connection failed. Check your key.",
+      });
     } finally {
       setIsTesting(false);
     }
@@ -80,19 +107,19 @@ export default function Settings() {
 
   const handleClearKey = () => {
     clearAPIKey();
-    setApiKey('');
+    setApiKey("");
     setTestResult(null);
     toast({
-      title: 'API key cleared',
-      description: 'Your API key has been removed from this session.',
+      title: "API key cleared",
+      description: "Your API key has been removed from this session.",
     });
   };
 
   const handleClearProgress = () => {
     clearProgress();
     toast({
-      title: 'Progress cleared',
-      description: 'All your challenge progress has been reset.',
+      title: "Progress cleared",
+      description: "All your challenge progress has been reset.",
     });
   };
 
@@ -100,7 +127,10 @@ export default function Settings() {
     <div className="min-h-[calc(100vh-8rem)]">
       <section className="py-10 border-b">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight mb-2" data-testid="text-settings-title">
+          <h1
+            className="text-3xl font-bold tracking-tight mb-2"
+            data-testid="text-settings-title"
+          >
             Settings
           </h1>
         </div>
@@ -115,13 +145,23 @@ export default function Settings() {
                 <div className="space-y-2">
                   <h3 className="font-medium">Your API Key Security</h3>
                   <ul className="text-muted-foreground space-y-1.5">
-                    <li>• Your key is stored ONLY in your browser's session storage</li>
+                    <li>
+                      • Your key is stored ONLY in your browser's session
+                      storage
+                    </li>
                     <li>• Your key is NEVER sent to our servers</li>
-                    <li>• Your key is AUTOMATICALLY DELETED when you close this browser tab</li>
-                    <li>• API calls go directly from your browser to OpenAI/Anthropic</li>
+                    <li>
+                      • Your key is AUTOMATICALLY DELETED when you close this
+                      browser tab
+                    </li>
+                    <li>
+                      • API calls go directly from your browser to
+                      OpenAI/Anthropic
+                    </li>
                   </ul>
                   <p className="font-medium pt-2">
-                    We cannot see, access, or store your API key. You're in full control.
+                    We cannot see, access, or store your API key. You're in full
+                    control.
                   </p>
                 </div>
               </div>
@@ -133,7 +173,9 @@ export default function Settings() {
               <div className="flex items-start gap-3">
                 <Lightbulb className="h-5 w-5 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
                 <p className="text-muted-foreground">
-                  <strong className="text-foreground">Tip:</strong> Generate a dedicated API key just for this app. Delete it when you're done learning.
+                  <strong className="text-foreground">Tip:</strong> Generate a
+                  dedicated API key just for this app. Delete it when you're
+                  done learning.
                 </p>
               </div>
             </CardContent>
@@ -146,7 +188,12 @@ export default function Settings() {
             <CardContent className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="provider">API Provider</Label>
-                <Select value={provider} onValueChange={(v) => setProvider(v as 'openai' | 'anthropic')}>
+                <Select
+                  value={provider}
+                  onValueChange={(v) =>
+                    setProvider(v as "openai" | "anthropic")
+                  }
+                >
                   <SelectTrigger id="provider" data-testid="select-provider">
                     <SelectValue />
                   </SelectTrigger>
@@ -156,7 +203,10 @@ export default function Settings() {
                   </SelectContent>
                 </Select>
                 <p className="text-sm text-muted-foreground mt-1.5">
-                  Model: <span className="font-medium text-foreground">{MODEL_FOR_PROVIDER[provider]}</span>
+                  Model:{" "}
+                  <span className="font-medium text-foreground">
+                    {MODEL_FOR_PROVIDER[provider]}
+                  </span>
                 </p>
               </div>
 
@@ -165,7 +215,7 @@ export default function Settings() {
                 <div className="relative">
                   <Input
                     id="apiKey"
-                    type={showKey ? 'text' : 'password'}
+                    type={showKey ? "text" : "password"}
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                     placeholder="Paste your API key here"
@@ -180,11 +230,16 @@ export default function Settings() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     data-testid="button-toggle-key-visibility"
                   >
-                    {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showKey ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Key is stored in session only — will be cleared when you close the tab
+                  Key is stored in session only — will be cleared when you close
+                  the tab
                 </p>
               </div>
 
@@ -195,13 +250,25 @@ export default function Settings() {
               <div className="flex items-start gap-2 pt-2">
                 <Info className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
                 <p className="text-sm text-muted-foreground">
-                  Each evaluation uses {provider === 'anthropic' ? 'Claude Sonnet' : 'GPT-4o'}. Monitor your usage at{' '}
-                  {provider === 'anthropic' ? (
-                    <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                  Each evaluation uses{" "}
+                  {provider === "anthropic" ? "Claude Sonnet" : "GPT-4o"}.
+                  Monitor your usage at{" "}
+                  {provider === "anthropic" ? (
+                    <a
+                      href="https://console.anthropic.com/settings/billing"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-foreground transition-colors"
+                    >
                       console.anthropic.com/settings/billing
                     </a>
                   ) : (
-                    <a href="https://platform.openai.com/usage" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                    <a
+                      href="https://platform.openai.com/usage"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-foreground transition-colors"
+                    >
                       platform.openai.com/usage
                     </a>
                   )}
@@ -219,13 +286,26 @@ export default function Settings() {
                 Make a minimal API call to verify your key works.
               </p>
               <div className="flex items-center gap-4">
-                <Button onClick={handleTest} disabled={isTesting || !apiKey} variant="outline" data-testid="button-test-connection">
-                  {isTesting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                <Button
+                  onClick={handleTest}
+                  disabled={isTesting || !apiKey}
+                  variant="outline"
+                  data-testid="button-test-connection"
+                >
+                  {isTesting && (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  )}
                   Test Connection
                 </Button>
                 {testResult && (
-                  <div className={`flex items-center gap-2 text-sm ${testResult.success ? 'text-green-600' : 'text-red-600'}`}>
-                    {testResult.success ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                  <div
+                    className={`flex items-center gap-2 text-sm ${testResult.success ? "text-green-600" : "text-red-600"}`}
+                  >
+                    {testResult.success ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <X className="h-4 w-4" />
+                    )}
                     {testResult.message}
                   </div>
                 )}
@@ -241,7 +321,10 @@ export default function Settings() {
               <div className="flex flex-wrap gap-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="outline" data-testid="button-clear-api-key">
+                    <Button
+                      variant="outline"
+                      data-testid="button-clear-api-key"
+                    >
                       Clear API Key Now
                     </Button>
                   </AlertDialogTrigger>
@@ -249,19 +332,25 @@ export default function Settings() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Clear API Key?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will remove your API key from session storage immediately.
+                        This will remove your API key from session storage
+                        immediately.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleClearKey}>Clear Key</AlertDialogAction>
+                      <AlertDialogAction onClick={handleClearKey}>
+                        Clear Key
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="outline" data-testid="button-clear-progress">
+                    <Button
+                      variant="outline"
+                      data-testid="button-clear-progress"
+                    >
                       Clear All Progress
                     </Button>
                   </AlertDialogTrigger>
@@ -269,12 +358,15 @@ export default function Settings() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Clear All Progress?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will reset all your challenge progress. This cannot be undone.
+                        This will reset all your challenge progress. This cannot
+                        be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleClearProgress}>Clear Progress</AlertDialogAction>
+                      <AlertDialogAction onClick={handleClearProgress}>
+                        Clear Progress
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -288,28 +380,34 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                <strong className="text-foreground">AI Quality Lab</strong> is a learning tool, not a production system. 
-                Once you master these concepts, you'll be able to write better AI feature specs 
-                and know what questions to ask about quality.
+                <strong className="text-foreground">AI Quality Lab</strong> is a
+                learning tool, not a production system. Once you master these
+                concepts, you'll be able to write better AI feature specs and
+                know what questions to ask about quality.
               </p>
-              <p>Complete all 33 challenges to master the fundamentals.</p>
               <p>Built for learning. Your data stays in your browser.</p>
-              
+
               <div className="pt-4 border-t space-y-3">
                 <div className="flex items-start gap-2">
                   <Info className="h-4 w-4 mt-0.5 shrink-0" />
                   <p>
-                    <strong className="text-foreground">What we DON'T store:</strong> Your API key (session only, never server), 
-                    your prompts or outputs (never sent to us), your challenge attempts (browser only).
-                    This app has no backend database. Everything stays in your browser.
+                    <strong className="text-foreground">
+                      What we DON'T store:
+                    </strong>{" "}
+                    Your API key (session only, never server), your prompts or
+                    outputs (never sent to us), your challenge attempts (browser
+                    only). This app has no backend database. Everything stays in
+                    your browser.
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-2">
                   <Lightbulb className="h-4 w-4 mt-0.5 shrink-0" />
                   <p>
-                    <strong className="text-foreground">Tip:</strong> For extra privacy, use this app in an incognito/private 
-                    browser window. When you close it, everything is automatically deleted.
+                    <strong className="text-foreground">Tip:</strong> For extra
+                    privacy, use this app in an incognito/private browser
+                    window. When you close it, everything is automatically
+                    deleted.
                   </p>
                 </div>
               </div>

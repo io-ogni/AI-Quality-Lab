@@ -3,8 +3,7 @@ export function Footer() {
     <footer className="border-t py-6 mt-auto">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-sm text-muted-foreground" data-testid="text-footer">
-          Made by Ioana Ognibeni with Claude & Replit
-          <span className="block text-xs mt-1">(& ChatGPT & Gemini to keep Claude true), & a bit of Notebook LM</span>
+          Made by Ioana Ognibeni with Claude & Replit & NotebookLM
         </p>
       </div>
     </footer>
