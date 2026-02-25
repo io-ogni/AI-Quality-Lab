@@ -49,8 +49,9 @@ export default function Home() {
 
   const getStopBadge = (index: number) => {
     if (index === 0) return "Start here";
-    if (index === 1 && progress.totalCompleted > 0) {
-      return `${progress.totalCompleted}/33 complete`;
+    if (index === 1) {
+      if (progress.totalCompleted > 0) return `${progress.totalCompleted}/33 complete`;
+      return "LLM API key needed";
     }
     if (index === 2) return "No API key needed";
     return null;
