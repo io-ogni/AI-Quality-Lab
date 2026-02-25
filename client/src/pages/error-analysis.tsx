@@ -747,7 +747,7 @@ export default function ErrorAnalysis() {
                 onClick={() => {
                   resetPhase1();
                   setProgress(getErrorAnalysisProgress());
-                  setScreen("phase1");
+                  setScreen("landing");
                   setUserVerdict(null);
                   setFailNotes("");
                   setNotesSubmitted(false);
@@ -824,7 +824,7 @@ export default function ErrorAnalysis() {
                 onClick={() => {
                   resetPhase1();
                   setProgress(getErrorAnalysisProgress());
-                  setScreen("phase1");
+                  setScreen("landing");
                   setUserVerdict(null);
                   setFailNotes("");
                   setNotesSubmitted(false);
@@ -907,7 +907,7 @@ export default function ErrorAnalysis() {
                 onClick={() => {
                   resetPhase1();
                   setProgress(getErrorAnalysisProgress());
-                  setScreen("phase1");
+                  setScreen("landing");
                   setUserVerdict(null);
                   setFailNotes("");
                   setNotesSubmitted(false);
@@ -1068,7 +1068,7 @@ export default function ErrorAnalysis() {
                 onClick={() => {
                   resetPhase1();
                   setProgress(getErrorAnalysisProgress());
-                  setScreen("phase1");
+                  setScreen("landing");
                   setUserVerdict(null);
                   setFailNotes("");
                   setNotesSubmitted(false);
