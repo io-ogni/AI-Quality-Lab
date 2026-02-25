@@ -25,7 +25,7 @@ const pathStops = [
     icon: Target,
     label: "Practice",
     sublabel: "Guided exercises + open scenarios",
-    badge: null,
+    badge: "Requires API key",
     badgeVariant: "secondary" as const,
   },
   {
