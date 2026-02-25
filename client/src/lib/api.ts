@@ -4,12 +4,42 @@ import { getAPISettings } from './storage';
 import { matchSynonyms } from './synonyms';
 import { preValidateSandboxSubmission, postValidateLLMResponse } from './content-moderation';
 
+const COMMON_ENGLISH_WORDS = new Set([
+  'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
+  'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
+  'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
+  'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
+  'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
+  'when', 'make', 'can', 'like', 'no', 'just', 'him', 'know', 'take',
+  'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see',
+  'other', 'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over',
+  'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work',
+  'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these',
+  'give', 'day', 'most', 'us', 'is', 'are', 'was', 'were', 'been', 'has',
+  'had', 'did', 'does', 'should', 'must', 'need', 'may', 'might',
+  'response', 'output', 'answer', 'text', 'tone', 'format', 'user', 'query',
+  'question', 'correct', 'accurate', 'relevant', 'complete', 'clear',
+  'professional', 'appropriate', 'specific', 'concise', 'helpful', 'safe',
+  'follow', 'follows', 'include', 'includes', 'contain', 'contains',
+  'avoid', 'avoids', 'check', 'ensure', 'maintain', 'provide', 'match',
+  'criteria', 'criterion', 'quality', 'instruction', 'instructions',
+  'language', 'content', 'information', 'word', 'words', 'sentence',
+  'sentences', 'topic', 'message', 'request', 'data', 'source', 'fact',
+  'facts', 'error', 'errors', 'wrong', 'right', 'bad', 'input',
+]);
+
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
   if (trimmed.length < 10) return true;
   const letters = trimmed.replace(/[^a-zA-Z]/g, '').length;
   if (letters < trimmed.length * 0.5) return true;
   if (!trimmed.includes(' ')) return true;
+
+  const words = trimmed.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  if (words.length === 0) return true;
+  const recognizedCount = words.filter(w => COMMON_ENGLISH_WORDS.has(w.replace(/[^a-z]/g, ''))).length;
+  if (recognizedCount / words.length < 0.3) return true;
+
   return false;
 }
 
@@ -247,7 +277,7 @@ export async function evaluateCriteria(
       coverageScore: 0,
       specificityScore: 1,
       passed: false,
-      feedback: 'Please enter actual evaluation criteria, not random text.',
+      feedback: "This doesn't look like a real criterion. Try describing what makes a good or bad AI response.",
     };
   }
 

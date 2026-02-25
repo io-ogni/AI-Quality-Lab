@@ -59,9 +59,40 @@ function isPlaceholder(text: string): boolean {
   return !trimmed || PLACEHOLDER_PATTERNS.some(pattern => pattern.test(trimmed));
 }
 
+const COMMON_ENGLISH_WORDS = new Set([
+  'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i',
+  'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at',
+  'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she',
+  'or', 'an', 'will', 'my', 'one', 'all', 'would', 'there', 'their', 'what',
+  'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me',
+  'when', 'make', 'can', 'like', 'no', 'just', 'him', 'know', 'take',
+  'people', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see',
+  'other', 'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over',
+  'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work',
+  'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these',
+  'give', 'day', 'most', 'us', 'is', 'are', 'was', 'were', 'been', 'has',
+  'had', 'did', 'does', 'should', 'must', 'need', 'may', 'might',
+  'response', 'output', 'answer', 'text', 'tone', 'format', 'user', 'query',
+  'question', 'correct', 'accurate', 'relevant', 'complete', 'clear',
+  'professional', 'appropriate', 'specific', 'concise', 'helpful', 'safe',
+  'follow', 'follows', 'include', 'includes', 'contain', 'contains',
+  'avoid', 'avoids', 'check', 'ensure', 'maintain', 'provide', 'match',
+  'criteria', 'criterion', 'quality', 'instruction', 'instructions',
+  'language', 'content', 'information', 'word', 'words', 'sentence',
+  'sentences', 'topic', 'message', 'request', 'data', 'source', 'fact',
+  'facts', 'error', 'errors', 'wrong', 'right', 'bad', 'input',
+]);
+
+function isGarbageText(text: string): boolean {
+  const words = text.trim().toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  if (words.length === 0) return true;
+  const recognized = words.filter(w => COMMON_ENGLISH_WORDS.has(w.replace(/[^a-z]/g, ''))).length;
+  return recognized / words.length < 0.3;
+}
+
 export interface PreValidationError {
   field: 'criteria' | 'good_example' | 'bad_example' | 'both';
-  issue: 'too_short' | 'too_long' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive' | 'placeholder';
+  issue: 'too_short' | 'too_long' | 'copy_paste' | 'identical' | 'looks_like_criteria' | 'offensive' | 'placeholder' | 'garbage';
   message: string;
 }
 
@@ -98,6 +129,8 @@ export function preValidateSandboxSubmission(
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Criteria is too short. Please describe what makes a good response.' });
   } else if (criteria.trim().split(/\s+/).length < 3) {
     errors.push({ field: 'criteria', issue: 'too_short', message: 'Please provide more detailed criteria (at least a few words).' });
+  } else if (isGarbageText(criteria)) {
+    errors.push({ field: 'criteria', issue: 'garbage', message: "This doesn't look like a real criterion. Try describing what makes a good or bad AI response." });
   }
 
   if (goodExample.length > 2000) {
