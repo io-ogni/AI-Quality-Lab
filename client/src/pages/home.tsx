@@ -88,10 +88,9 @@ export default function Home() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Card className="bg-card/50">
             <CardContent className="p-6">
-              <h2 className="font-semibold text-lg mb-3">What is this?</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p className="font-medium text-foreground">
-                  A practical introduction to AI quality. For PMs who want hands-on experience before shipping AI features.
+                  Learn the basics of AI quality — hands-on. For PMs who want to get their hands dirty before shipping AI features themselves.
                 </p>
                 <p>
                   Two labs. No code. No ML background needed.

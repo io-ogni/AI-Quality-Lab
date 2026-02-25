@@ -316,10 +316,13 @@ export default function EvalChallenge() {
                         ref={criteriaTextareaRef}
                         value={userCriteria}
                         onChange={(e) => {
-                          const value = e.target.value;
-                          setUserCriteria(value);
-                          setPiiWarning(hasPotentialPII(value));
+                          if (e.target.value.length <= 1000) {
+                            const value = e.target.value;
+                            setUserCriteria(value);
+                            setPiiWarning(hasPotentialPII(value));
+                          }
                         }}
+                        maxLength={1000}
                         placeholder={`List what a GOOD response should do, e.g.:\n- Responds directly to the question\n- Keeps response under 100 words\n- Acknowledges the user's concern`}
                         className="min-h-[150px] resize-none"
                         autoComplete="off"
@@ -327,6 +330,9 @@ export default function EvalChallenge() {
                         data-gramm_editor="false"
                         data-testid="textarea-criteria"
                       />
+                      {userCriteria.length >= 1000 && (
+                        <p className="text-sm text-red-500 mt-1">Limit reached</p>
+                      )}
                       {piiWarning && (
                         <div className="flex items-start gap-2 text-xs text-yellow-600 dark:text-yellow-500 p-2 rounded bg-yellow-500/10 border border-yellow-500/20">
                           <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
