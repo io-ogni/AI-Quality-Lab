@@ -430,11 +430,15 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       return matchedWords.length / words.length >= 0.5;
     }).map((m: any) => {
       const llmExpert = (m.expert_criterion || '').toLowerCase().trim();
-      const realCriterion = needsLLMEval.find(c =>
-        c.text.toLowerCase().trim() === llmExpert ||
-        c.text.toLowerCase().includes(llmExpert) ||
-        llmExpert.includes(c.text.toLowerCase())
-      );
+      const realCriterion = needsLLMEval.find(c => {
+        const ct = c.text.toLowerCase().trim();
+        if (ct === llmExpert) return true;
+        if (ct.includes(llmExpert) || llmExpert.includes(ct)) return true;
+        const ctWords = ct.split(/\s+/).filter((w: string) => w.length > 3);
+        const llmWords = llmExpert.split(/\s+/).filter((w: string) => w.length > 3);
+        const overlap = ctWords.filter((w: string) => llmWords.includes(w)).length;
+        return ctWords.length > 0 && overlap / ctWords.length >= 0.5;
+      });
       return {
         expertCriterion: realCriterion ? realCriterion.text : m.expert_criterion,
         userVersion: m.user_version,
