@@ -350,7 +350,7 @@ export default function EvalChallenge() {
                           <span className="inline-block">
                             <Button
                               onClick={handleSubmit}
-                              disabled={!userCriteria.trim() || !hasKey || isSubmitting}
+                              disabled={!userCriteria.trim() || !hasKey || isSubmitting || userCriteria.length > 1000}
                               className="w-full sm:w-auto"
                               data-testid="button-submit-criteria"
                             >
