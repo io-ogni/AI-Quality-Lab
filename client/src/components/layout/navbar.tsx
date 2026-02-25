@@ -24,7 +24,7 @@ import {
 const navLinks = [
   { href: '/learn', label: 'Learn' },
   { href: '/criteria-lab', label: 'Criteria Lab' },
-  { href: '/error-analysis', label: 'Error Analysis' },
+  { href: '/error-analysis', label: 'Error Analysis Lab' },
   { href: '/about', label: 'About' },
   { href: '/settings', label: 'Settings' },
 ];
