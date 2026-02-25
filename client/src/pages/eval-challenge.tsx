@@ -93,7 +93,7 @@ export default function EvalChallenge() {
   };
 
   const handleSubmit = async () => {
-    if (!userCriteria.trim() || !hasKey) return;
+    if (!userCriteria.trim() || !hasKey || userCriteria.length > 1000) return;
 
     const attack = detectWrongInputType(userCriteria);
     if (attack?.isAttack) {
