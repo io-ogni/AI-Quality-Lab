@@ -87,6 +87,7 @@ function handleHttpError(status: number): APIError {
     502: { errorType: 'SERVER_ERROR', userMessage: 'API service temporarily unavailable. Try again shortly.' },
     503: { errorType: 'SERVER_ERROR', userMessage: 'API service temporarily unavailable. Try again shortly.' },
     504: { errorType: 'SERVER_ERROR', userMessage: 'API request timed out. Try again.' },
+    529: { errorType: 'SERVER_ERROR', userMessage: 'The AI service is busy right now. Wait a moment and try again.' },
   };
 
   const err = errors[status] || { errorType: 'UNKNOWN_ERROR' as APIErrorType, userMessage: `API error (${status}). Try again.` };
