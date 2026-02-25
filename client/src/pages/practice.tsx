@@ -837,28 +837,28 @@ export default function Practice() {
 
       <section className="py-8">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1 mb-2 border-b" data-testid="tabs-practice">
+          <div className="inline-flex gap-1 p-1 rounded-lg bg-muted mb-4" data-testid="tabs-practice">
             <button
               onClick={() => setActiveTab('guided')}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+              className={`px-5 py-2 text-sm font-medium rounded-md transition-colors ${
                 activeTab === 'guided'
-                  ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
               data-testid="tab-guided"
             >
-              Guided
+              Guided Exercises
             </button>
             <button
               onClick={() => setActiveTab('open')}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+              className={`px-5 py-2 text-sm font-medium rounded-md transition-colors ${
                 activeTab === 'open'
-                  ? 'border-primary text-foreground'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/30'
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
               data-testid="tab-open"
             >
-              Open
+              Open Scenarios
             </button>
           </div>
           <p className="text-sm text-muted-foreground mb-6">
