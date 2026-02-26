@@ -22,6 +22,18 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+app.get("/health", (_req, res) => {
+  res.status(200).send("ok");
+});
+
+let appReady = false;
+app.use((req, res, next) => {
+  if (!appReady && !req.path.startsWith("/api") && req.path !== "/health") {
+    return res.status(200).send("Loading...");
+  }
+  next();
+});
+
 const isProduction = process.env.NODE_ENV === "production";
 app.use((_req, res, next) => {
   const scriptSrc = isProduction
@@ -108,6 +120,7 @@ app.use((req, res, next) => {
     const { setupVite } = await import("./vite");
     await setupVite(httpServer, app);
   }
+  appReady = true;
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.

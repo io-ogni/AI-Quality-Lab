@@ -1,0 +1,176 @@
+2026-02-26 09:48:54.32
+efcbc5a3
+User
+8:48:54 AM [express] serving on port 5000
+2026-02-26 09:50:11.42
+4441ef27
+System
+system: received signal terminated
+2026-02-26 09:50:11.42
+4441ef27
+System
+command finished with error [node ./dist/index.cjs]: signal: terminated
+2026-02-26 09:50:11.44
+4441ef27
+System
+main done, exiting
+2026-02-26 10:42:48.03
+efcbc5a3
+System
+system: received signal terminated
+2026-02-26 10:42:48.04
+efcbc5a3
+System
+command finished with error [node ./dist/index.cjs]: signal: terminated
+2026-02-26 10:42:48.12
+efcbc5a3
+System
+main done, exiting
+2026-02-26 10:44:51.64
+efcbc5a3
+System
+starting up user application
+2026-02-26 10:44:51.64
+efcbc5a3
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2026-02-26 10:44:51.64
+efcbc5a3
+System
+metasidecar: loaded enterprise status from environment is_enterprise=false
+2026-02-26 10:44:51.64
+efcbc5a3
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused
+2026-02-26 10:44:51.65
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 10:44:51.67
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 10:44:51.69
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 10:44:51.77
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 10:44:51.81
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 10:44:51.98
+efcbc5a3
+User
+9:44:51 AM [express] serving on port 5000
+2026-02-26 10:59:58.04
+efcbc5a3
+System
+system: received signal terminated
+2026-02-26 10:59:58.05
+efcbc5a3
+System
+command finished with error [node ./dist/index.cjs]: signal: terminated
+2026-02-26 10:59:58.07
+efcbc5a3
+System
+main done, exiting
+2026-02-26 11:28:25.58
+efcbc5a3
+System
+starting up user application
+2026-02-26 11:28:25.58
+efcbc5a3
+System
+metasidecar: loaded enterprise status from environment is_enterprise=false
+2026-02-26 11:28:25.58
+efcbc5a3
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2026-02-26 11:28:25.58
+efcbc5a3
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused
+2026-02-26 11:28:25.59
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:28:25.59
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:28:25.60
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:28:25.65
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:28:25.66
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:28:25.88
+efcbc5a3
+User
+10:28:25 AM [express] serving on port 5000
+2026-02-26 11:48:38.05
+efcbc5a3
+System
+system: received signal terminated
+2026-02-26 11:48:38.06
+efcbc5a3
+System
+command finished with error [node ./dist/index.cjs]: signal: terminated
+2026-02-26 11:48:38.06
+efcbc5a3
+System
+main done, exiting
+2026-02-26 11:57:56.51
+efcbc5a3
+System
+metasidecar: loaded enterprise status from environment is_enterprise=false
+2026-02-26 11:57:56.51
+efcbc5a3
+System
+starting up user application
+2026-02-26 11:57:56.51
+efcbc5a3
+System
+forwarding local port 5000 to external port 80 (mapped as 1104)
+2026-02-26 11:57:56.52
+efcbc5a3
+System
+healthcheck failed error=healthcheck /: Get "http://127.0.0.1:1104/": dial tcp 127.0.0.1:1104: connect: connection refused
+2026-02-26 11:57:56.53
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.55
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.58
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.60
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.62
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.82
+efcbc5a3
+System
+healthcheck failed error=healthcheck / returned status 500
+2026-02-26 11:57:56.89
+efcbc5a3
+User
+10:57:56 AM [express] serving on port 5000
