@@ -275,7 +275,8 @@ export default function About() {
                           </p>
                           <ul className="text-muted-foreground space-y-1.5">
                             <li>
-                              Did the LLM miss offensive content? Override.
+                              Did the LLM hallucinate answers that were not
+                              given? Ignore.
                             </li>
                             <li>
                               Did the LLM score copy-pasted text too high?
