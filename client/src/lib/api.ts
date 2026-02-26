@@ -262,7 +262,7 @@ export async function evaluateCriteria(
       missed: levelData.expertCriteria.map(c => c.text),
       vague: [],
       coverageScore: 0,
-      specificityScore: 1,
+      specificityScore: 0,
       passed: false,
       feedback: "This doesn't look like a real criterion. Try describing what makes a good or bad AI response.",
     };
