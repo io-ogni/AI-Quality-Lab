@@ -183,10 +183,15 @@ function CategoryInput({
         ref={inputRef}
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length <= 65) {
+            onChange(e.target.value);
+          }
+        }}
         onFocus={() => setShowSuggestions(true)}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
         placeholder="Type a category name..."
+        maxLength={65}
         className="w-full px-3 py-1.5 text-sm border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
         data-testid={`input-category-trace-${traceId}`}
       />
@@ -571,7 +576,11 @@ export default function ErrorAnalysis() {
                 <Textarea
                   ref={textareaRef}
                   value={failNotes}
-                  onChange={(e) => setFailNotes(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 700) {
+                      setFailNotes(e.target.value);
+                    }
+                  }}
                   placeholder="What's wrong with this response? Be specific."
                   className="min-h-[100px]"
                   onKeyDown={(e) => {
@@ -582,13 +591,18 @@ export default function ErrorAnalysis() {
                   }}
                   data-testid="textarea-fail-notes"
                 />
-                <Button
-                  onClick={handleSubmitNotes}
-                  disabled={!failNotes.trim()}
-                  data-testid="button-submit-notes"
-                >
-                  Submit
-                </Button>
+                <div className="flex items-center justify-between">
+                  <Button
+                    onClick={handleSubmitNotes}
+                    disabled={!failNotes.trim() || failNotes.length >= 700}
+                    data-testid="button-submit-notes"
+                  >
+                    Submit
+                  </Button>
+                  <span className={`text-xs ${failNotes.length >= 650 ? "text-destructive" : "text-muted-foreground"}`}>
+                    {failNotes.length}/700
+                  </span>
+                </div>
               </div>
             )}
 
