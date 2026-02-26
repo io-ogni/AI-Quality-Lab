@@ -151,7 +151,11 @@ export default function Home() {
                                     variant={
                                       index === 0 ? "default" : "secondary"
                                     }
-                                    className="text-xs"
+                                    className={
+                                      index === 1 && badge === "LLM API key needed"
+                                        ? "text-xs bg-primary/10 text-primary hover:bg-primary/10"
+                                        : "text-xs"
+                                    }
                                   >
                                     {badge}
                                   </Badge>
