@@ -177,18 +177,9 @@ export default function Privacy() {
                 Fonts
               </h2>
               <p className="text-muted-foreground">
-                The app loads web fonts from Google Fonts. When a font is
-                requested, your IP address is transmitted to Google's servers to
-                serve it. See the{" "}
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline underline-offset-2"
-                >
-                  Google Privacy Policy
-                </a>
-                .
+                Fonts are hosted on this site itself — no third-party font
+                services are used, so loading the app sends no data to Google or
+                any other font provider.
               </p>
             </CardContent>
           </Card>
