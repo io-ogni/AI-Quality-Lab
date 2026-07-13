@@ -25,6 +25,15 @@ export function Footer() {
           >
             Impressum
           </a>
+          {" · "}
+          <a
+            href="https://ioana-ognibeni.eu/privacy-policy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground transition-colors"
+          >
+            Privacy Policy
+          </a>
         </p>
       </div>
     </footer>
