@@ -462,6 +462,11 @@ export function matchSynonyms(
       const patternLower = pattern.toLowerCase();
       if (userLower.includes(patternLower)) {
         const idx = userLower.indexOf(patternLower);
+        // Require a word boundary before the match so short tokens don't match
+        // mid-word ("tip" in "stipulate", "professional" in "unprofessional").
+        // Only the start is checked, so open-ended stems like "empath" still
+        // match "empathetic".
+        if (idx > 0 && /[a-z0-9]/.test(userLower[idx - 1])) continue;
         if (hasNegationBefore(userLower, idx)) continue;
         const start = Math.max(0, userLower.lastIndexOf('\n', idx) + 1);
         const end = userLower.indexOf('\n', idx);

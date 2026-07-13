@@ -156,10 +156,8 @@ export function preValidateSandboxSubmission(
     errors.push({ field: 'bad_example', issue: 'looks_like_criteria', message: 'Your bad example looks like a list of criteria, not a bot response. Examples should read like actual responses.' });
   }
 
-  const criteriaOffensive = detectOffensiveContent(criteria);
-  if (criteriaOffensive.isOffensive) {
-    errors.push({ field: 'criteria', issue: 'offensive', message: `Your criteria contains offensive language ("${criteriaOffensive.flaggedText}"). Please use professional language.` });
-  }
+  // Offensive check is scoped to examples only. Criteria legitimately name bad
+  // words ("must not call the user stupid"), so flagging criteria punished correct answers.
   const goodOffensive = detectOffensiveContent(goodExample);
   if (goodOffensive.isOffensive) {
     errors.push({ field: 'good_example', issue: 'offensive', message: `Your good example contains offensive language ("${goodOffensive.flaggedText}"). A good example should demonstrate a proper response.` });
@@ -237,14 +235,8 @@ export function postValidateLLMResponse(
     result.criticalGaps.push('Bad example contains offensive language.');
   }
 
-  const criteriaOffensive = detectOffensiveContent(criteria);
-  if (criteriaOffensive.isOffensive) {
-    result.scores.specificity = {
-      score: 1,
-      feedback: `Your criteria contains offensive language ("${criteriaOffensive.flaggedText}"). Please use professional language.`,
-    };
-    result.criticalGaps.push('Criteria contains offensive language.');
-  }
+  // Offensive check on criteria removed — criteria that reference a bad word
+  // ("must not insult the user") are legitimate; only examples are checked.
 
   if (wordSimilarity(goodExample, badExample) > 0.85 && result.scores.goodExample.score > 2) {
     result.scores.goodExample = {

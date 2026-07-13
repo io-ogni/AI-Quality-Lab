@@ -22,9 +22,9 @@ function extractJSON(text: string): Record<string, unknown> | null {
 function isGarbage(userInput: string): boolean {
   const trimmed = userInput.trim();
   if (trimmed.length < 10) return true;
-  const letters = trimmed.replace(/[^a-zA-Z]/g, '').length;
-  if (letters < trimmed.length * 0.5) return true;
   if (!trimmed.includes(' ')) return true;
+  // Note: no letter-density check — measurable criteria are number-heavy
+  // ("<= 15 words", "exactly 2 sentences") and must not be flagged as garbage.
   if (!hasEnoughRealWords(trimmed)) return true;
   return false;
 }
@@ -70,13 +70,9 @@ export function detectWrongInputType(input: string): { isAttack: boolean; confid
     };
   }
 
-  const startsWithImperative = /^(ignore|forget|pretend|act|be|become|transform|switch)/i.test(trimmed);
-  const isShort = trimmed.split(/\s+/).length < 15;
-
-  if (startsWithImperative && isShort && !trimmed.includes('should') && !trimmed.includes('must')) {
-    return { isAttack: true, confidence: 'medium' };
-  }
-
+  // Only the explicit, anchored ATTACK_PATTERNS above flag an attack. The old
+  // fuzzy "starts with an imperative verb" guess was dropped — it flagged valid
+  // criteria like "be concise" as injections. Subtle attacks are left to the LLM judge.
   return null;
 }
 
@@ -131,6 +127,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
         body: JSON.stringify({
           model: settings.model,
           max_tokens: 2000,
+          temperature: 0,
           system: systemPrompt,
           messages: [{ role: 'user', content: userPrompt }],
         }),
@@ -146,6 +143,7 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
         body: JSON.stringify({
           model: settings.model,
           max_tokens: 2000,
+          temperature: 0,
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
