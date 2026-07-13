@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Security headers. GitHub Pages can't set HTTP response headers, so these live in the
+         document. Ported from the old Express CSP; connect-src is the key protection — it stops
+         the browser from sending the user's API key anywhere except OpenAI/Anthropic. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qOXo0MguefbVEzWDECHLC4t6Ip6qHnv4pYyX2rT8Jy4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.openai.com https://api.anthropic.com; frame-src https://www.youtube.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- Clickjacking guard. frame-ancestors can't be set via a meta CSP, so we fail closed:
+         the page is hidden until confirmed top-level. If framed, we break out; if break-out is
+         blocked (sandboxed iframe), the page simply stays hidden so the key form is never usable. -->
+    <style>html{display:none}</style>
+    <script>if(self===top){document.documentElement.style.display=''}else{top.location=self.location}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>AI Quality Lab - Master evals and guardrails for AI products</title>
     <meta name="description" content="A gamified learning app where Product Managers complete challenges to understand how to measure and control LLM output quality through evals and guardrails." />
