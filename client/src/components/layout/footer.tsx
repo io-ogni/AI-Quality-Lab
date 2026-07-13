@@ -16,6 +16,16 @@ export function Footer() {
             LinkedIn
           </a>
         </p>
+        <p className="text-center text-sm text-muted-foreground mt-2" data-testid="text-footer-legal">
+          <a
+            href="https://ioana-ognibeni.eu/impressum"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground transition-colors"
+          >
+            Impressum
+          </a>
+        </p>
       </div>
     </footer>
   );
