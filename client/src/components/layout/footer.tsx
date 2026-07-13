@@ -1,3 +1,5 @@
+import { Link } from "wouter";
+
 export function Footer() {
   return (
     <footer className="border-t py-6 mt-auto">
@@ -26,14 +28,12 @@ export function Footer() {
             Impressum
           </a>
           {" · "}
-          <a
-            href="https://ioana-ognibeni.eu/privacy-policy/"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/privacy"
             className="underline hover:text-foreground transition-colors"
           >
             Privacy Policy
-          </a>
+          </Link>
         </p>
       </div>
     </footer>

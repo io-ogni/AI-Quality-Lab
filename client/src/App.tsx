@@ -13,6 +13,7 @@ import EvalChallenge from "@/pages/eval-challenge";
 import Settings from "@/pages/settings";
 import ErrorAnalysis from "@/pages/error-analysis";
 import About from "@/pages/about";
+import Privacy from "@/pages/privacy";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -58,6 +59,7 @@ function Router() {
         <Route path="/sandbox" component={RedirectToOpen} />
         <Route path="/settings" component={Settings} />
         <Route path="/about" component={About} />
+        <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
     </>
