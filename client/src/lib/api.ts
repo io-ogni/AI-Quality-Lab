@@ -445,22 +445,30 @@ Evaluate how well the user's criteria match the expert criteria. Be strict but f
       const matchedWords = words.filter((w: string) => actualLower.includes(w));
       return matchedWords.length / words.length >= 0.5;
     }).map((m: any) => {
-      const llmExpert = (m.expert_criterion || '').toLowerCase().trim();
+      // Normalize punctuation before reconciling. Criterion text like Has a "languages" key
+      // carries quotes the LLM drops, so a raw word comparison never lines up.
+      const norm = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+      const llmExpert = norm(m.expert_criterion);
       const realCriterion = needsLLMEval.find(c => {
-        const ct = c.text.toLowerCase().trim();
+        const ct = norm(c.text);
         if (ct === llmExpert) return true;
         if (ct.includes(llmExpert) || llmExpert.includes(ct)) return true;
-        const ctWords = ct.split(/\s+/).filter((w: string) => w.length > 3);
-        const llmWords = llmExpert.split(/\s+/).filter((w: string) => w.length > 3);
+        const ctWords = ct.split(' ').filter((w: string) => w.length > 3);
+        const llmWords = llmExpert.split(' ').filter((w: string) => w.length > 3);
         const overlap = ctWords.filter((w: string) => llmWords.includes(w)).length;
         return ctWords.length > 0 && overlap / ctWords.length >= 0.5;
       });
+      // Only keep matches we can map back to a real expert criterion. The old fallback to
+      // the LLM's raw expert_criterion string left matches that missed[] (which keys off the
+      // canonical text) couldn't reconcile — so the same criterion showed as BOTH identified
+      // and missed. Drop unmappable matches instead of inventing a criterion name.
+      if (!realCriterion) return null;
       return {
-        expertCriterion: realCriterion ? realCriterion.text : m.expert_criterion,
+        expertCriterion: realCriterion.text,
         userVersion: m.user_version,
         matchType: 'llm_validated' as const,
       };
-    });
+    }).filter((m: any): m is { expertCriterion: string; userVersion: string; matchType: 'llm_validated' } => m !== null);
 
     const combinedMatches = [...deterministicMatches, ...llmMatches];
     const seen = new Set<string>();
