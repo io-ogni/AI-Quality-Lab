@@ -121,9 +121,11 @@ export default function Privacy() {
               </ul>
               <p className="text-muted-foreground">
                 Both providers are based in the United States, so submitting text
-                involves a transfer of data outside the EU/EEA. That transfer is
-                governed by the provider's data-processing terms and Standard
-                Contractual Clauses. Please don't enter personal or confidential
+                involves a transfer of data outside the EU/EEA (a third-country
+                transfer under Chapter V GDPR). That transfer is governed by the
+                provider's data-processing terms, relying on Standard Contractual
+                Clauses and/or the EU–US Data Privacy Framework where the provider
+                is certified. Please don't enter personal or confidential
                 information you wouldn't want a third-party AI service to process.
               </p>
             </CardContent>
@@ -153,10 +155,13 @@ export default function Privacy() {
                 Hosting
               </h2>
               <p className="text-muted-foreground">
-                The site is hosted on GitHub Pages (GitHub, Inc.). When your
-                browser loads the app, GitHub's servers may process technical
-                data such as your IP address in standard server logs to deliver
-                the page. See the{" "}
+                The site is hosted on GitHub Pages (GitHub, Inc., a US company).
+                When your browser loads the app, GitHub's servers process
+                technical data such as your IP address in standard server logs to
+                deliver and secure the page. As GitHub is US-based, this is a
+                third-country transfer under Chapter V GDPR; it is covered by the
+                EU–US Data Privacy Framework, under which GitHub's parent
+                (Microsoft) is certified. See the{" "}
                 <a
                   href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement"
                   target="_blank"
