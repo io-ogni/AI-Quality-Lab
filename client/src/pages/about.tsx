@@ -75,7 +75,11 @@ const techStack = [
     component: "Error Analysis Lab",
     technology: "Static content + localStorage (no API calls)",
   },
-  { component: "Storage", technology: "Browser localStorage" },
+  {
+    component: "Storage",
+    technology:
+      "sessionStorage (your API key — auto-cleared when you close the tab) + localStorage (progress & saved work)",
+  },
 ];
 
 const lessons = [
